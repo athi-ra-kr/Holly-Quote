@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | HollyBlue Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        :root{
+            --hb-blue-deep:#1e3a8a;
+            --hb-blue-bright:#2a5298;
+            --hb-blue-soft:#dbeafe;
+            --hb-dark:#0f172a;
+            --hb-light:#fdfdfe;
+            --hb-sidebar:#ffffff;
+            --text-muted:#64748b;
+
+            --transition-smooth:all .6s cubic-bezier(.34,1.56,.64,1);
+
+            --shadow-sm:0 4px 12px rgba(0,0,0,.03);
+            --shadow-md:0 10px 30px rgba(42,82,152,.08);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Plus Jakarta Sans',sans-serif;
+        }
+
+        html,
+        body{
+            background:#fdfdfe !important;
+        }
+
+        body{
+            display:flex;
+            min-height:100vh;
+            color:var(--hb-dark);
+            overflow-x:hidden;
+        }
+
+        /* ================= MOBILE BLOCK SCREEN ================= */
+        .mobile-block {
+            display: none; /* Hidden by default on desktop */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #fdfdfe;
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .mobile-block-box {
+            max-width: 400px;
+        }
+
+        .mobile-block i {
+            font-size: 50px;
+            color: var(--hb-blue-bright);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .mobile-block h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--hb-dark);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .mobile-block p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar{
+            width:280px;
+            background:#ffffff;
+
+            padding:40px 20px;
+
+            display:flex;
+            flex-direction:column;
+
+            border-right:1px solid #f1f5f9;
+
+            position:fixed;
+            left:0;
+            top:0;
+
+            height:100vh;
+
+            z-index:100;
+
+            transform:translateX(-100%);
+            transition:transform .8s cubic-bezier(.7,0,.3,1);
+        }
+
+        .loaded .sidebar{
+            transform:translateX(0);
+        }
+
+        .sidebar-logo{
+            width:150px;
+            margin:0 auto 50px auto;
+            display:block;
+
+            filter:drop-shadow(0 4px 6px rgba(0,0,0,.05));
+        }
+
+        .sidebar nav{
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            flex-grow:1;
+        }
+
+        .sidebar a{
+            display:flex;
+            align-items:center;
+            gap:14px;
+
+            padding:14px 18px;
+
+            border-radius:14px;
+
+            text-decoration:none;
+
+            color:#64748b;
+
+            font-size:14px;
+            font-weight:600;
+
+            transition:var(--transition-smooth);
+        }
+
+        .sidebar a i{
+            width:20px;
+            text-align:center;
+            font-size:18px;
+        }
+
+        .sidebar a:hover{
+            background:var(--hb-blue-soft);
+            color:var(--hb-blue-bright);
+        }
+
+        .sidebar a.active{
+            background:var(--hb-blue-bright);
+            color:white;
+
+            box-shadow:0 10px 20px rgba(42,82,152,.20);
+        }
+
+        /* ================= LOGOUT ================= */
+
+        .sidebar-logout{
+            margin-top:auto;
+            padding-bottom:10px;
+        }
+
+        .logout-link{
+            display:flex;
+            align-items:center;
+            gap:14px;
+
+            padding:14px 18px;
+
+            border-radius:14px;
+
+            text-decoration:none;
+
+            color:#94a3b8;
+
+            font-size:14px;
+            font-weight:700;
+
+            transition:.3s ease;
+        }
+
+        .logout-link i{
+            color:#ef4444;
+            opacity:.7;
+        }
+
+        .logout-link:hover{
+            background:#fff5f5;
+            color:#ef4444;
+
+            transform:translateX(5px);
+        }
+
+        .logout-link:hover i{
+            opacity:1;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main-container{
+            flex:1;
+
+            margin-left:280px;
+
+            display:flex;
+            flex-direction:column;
+
+            min-height:100vh;
+
+            background:#fdfdfe !important;
+        }
+
+        .main-content{
+            flex:1;
+
+            padding:40px 50px;
+
+            background:transparent !important;
+
+            opacity:0;
+            transform:translateY(30px);
+
+            transition:
+                opacity .8s ease,
+                transform .8s cubic-bezier(.2,.8,.2,1);
+        }
+
+        .loaded .main-content{
+            opacity:1;
+            transform:translateY(0);
+        }
+
+        /* ================= TOPBAR ================= */
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            margin-bottom:40px;
+        }
+
+        .topbar h1{
+            font-size:30px;
+            font-weight:800;
+
+            background:linear-gradient(
+                135deg,
+                var(--hb-dark) 0%,
+                var(--hb-blue-bright) 100%
+            );
+
+            -webkit-background-clip:text;
+            background-clip:text;
+            -webkit-text-fill-color:transparent;
+
+            letter-spacing:-1px;
+        }
+
+        .page-title{
+            font-size:24px;
+            font-weight:700;
+            margin-bottom:20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            margin: 40px 0 20px 0;
+        }
+
+        /* ================= OVERVIEW CARDS (REDUCED SIZE) ================= */
+
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+            gap:20px;
+        }
+
+        .card{
+            background:#ffffff;
+            padding:20px 24px;
+            border-radius:18px;
+            border:1px solid #f1f5f9;
+            box-shadow:var(--shadow-sm);
+            transition:var(--transition-smooth);
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+            box-shadow:var(--shadow-md);
+            border-color:var(--hb-blue-soft);
+        }
+
+        .card h3{
+            color:var(--text-muted);
+            font-size:11px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            margin-bottom:8px;
+        }
+
+        .card p{
+            color:var(--hb-blue-deep);
+            font-size:26px;
+            font-weight:800;
+            letter-spacing:-0.5px;
+        }
+
+        /* ================= MATCHING CUSTOMER CARD GRID STYLES ================= */
+
+        .customer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 5px;
+            align-items: stretch;
+        }
+
+        .customer-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .customer-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 20px;
+            border: 1px solid #f1f5f9;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
+        }
+
+        .customer-card:hover {
+            border-color: #2a5298;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(15, 23, 42, 0.08);
+        }
+
+        .unit-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            color: #2a5298;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .customer-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1e293b;
+            word-break: break-word;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-item {
+            font-size: 12px;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-item i {
+            color: #94a3b8;
+            font-size: 12px;
+            width: 14px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #f8fafc;
+        }
+
+        .action-square {
+            width: 34px;
+            height: 34px;
+            background: #f8fafc;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-square { color: #2a5298; }
+        .edit-square:hover { background: #2a5298; color: #fff; }
+
+        .delete-square { color: #ef4444; }
+        .delete-square:hover { background: #ef4444; color: #fff; }
+
+        /* ================= FOOTER ================= */
+
+        .footer{
+            background:transparent !important;
+            background-color:transparent !important;
+
+            border:none !important;
+            box-shadow:none !important;
+
+            margin:0 !important;
+
+            padding:15px 0 20px;
+
+            text-align:center;
+
+            color:#94a3b8;
+
+            font-size:12px;
+            font-weight:500;
+
+            opacity:0;
+            transform:translateY(10px);
+
+            transition:all .6s ease;
+        }
+
+        .loaded .footer{
+            opacity:1;
+            transform:translateY(0);
+        }
+
+        .footer strong{
+            color:var(--hb-blue-bright);
+            font-weight:700;
+        }
+
+        .footer::before,
+        .footer::after{
+            display:none !important;
+            content:none !important;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width:1024px){
+
+            .sidebar{
+                width:90px;
+                padding:40px 15px;
+            }
+
+            .sidebar-logo{
+                width:50px;
+            }
+
+            .sidebar a span,
+            .logout-link span{
+                display:none;
+            }
+
+            .main-container{
+                margin-left:90px;
+            }
+        }
+
+        /* CRITICAL: Triggered when the user is on mobile screens (768px and down) */
+        @media(max-width:768px){
+            /* Hide the actual webpage layout entirely */
+            .sidebar, 
+            .main-container {
+                display: none !important;
+            }
+
+            /* Force display the block screen container */
+            .mobile-block {
+                display: flex !important;
+            }
+            
+            body {
+                overflow: hidden !important; /* Disables scrolling on phone screens */
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="mobile-block">
+        <div class="mobile-block-box">
+            <i class="bi bi-laptop"></i>
+            <h2>Desktop View Only</h2>
+            <p>To view your HollyBlue Premium dashboard, please switch to a desktop computer or a larger screen. Thank you!</p>
+        </div>
+    </div>
+
+    <aside class="sidebar">
+
+        <img src="/static/media/hollylogo.png"
+             class="sidebar-logo"
+             alt="HollyBlue">
+
+        <nav>
+
+            <a href="{% url 'dashboard' %}"
+               class="{% if request.path == '/dashboard/' %}active{% endif %}">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'unit_list' %}"
+               class="{% if '/units' in request.path or '/unit/' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Units</span>
+            </a>
+
+            <a href="{% url 'subunit_list' %}"
+               class="{% if '/subunits' in request.path or '/subunit/' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Sub Units</span>
+            </a>
+
+            <a href="{% url 'item_list' %}"
+               class="{% if '/items' in request.path or '/item/' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-couch"></i>
+                <span>Items</span>
+            </a>
+
+            <a href="{% url 'material_list' %}"
+               class="{% if '/materials' in request.path or '/material/' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-brush"></i>
+                <span>Materials</span>
+            </a>
+
+            <a href="{% url 'customer_list' %}"
+               class="{% if '/customer' in request.path or '/quotation' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>Customers</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-logout">
+
+            <a href="{% url 'logout' %}" class="logout-link">
+                <i class="fa-solid fa-power-off"></i>
+                <span>Log Out</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+    <div class="main-container">
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    {% block header %}{% endblock %}
+                </div>
+            </header>
+
+            {% block content %}
+
+            <h2 class="page-title">Overview</h2>
+
+            <div class="cards">
+
+                <div class="card">
+                    <h3>Total Quotations</h3>
+                    <p>25</p>
+                </div>
+
+                <div class="card">
+                    <h3>Submitted</h3>
+                    <p>17</p>
+                </div>
+
+                <div class="card">
+                    <h3>Drafts</h3>
+                    <p>08</p>
+                </div>
+
+            </div>
+
+            <h2 class="section-title">Recent Customers</h2>
+            
+            <div class="customer-grid">
+                {% for customer in recent_customers %}
+                <div class="customer-card">
+                    <a href="{% url 'quotation_list' customer.id %}" class="customer-card-link">
+                        <div>
+                            <div class="unit-meta">
+                                <i class="fa-solid fa-user-tie"></i> Client Profile
+                            </div>
+                            <div class="customer-name">{{ customer.name }}</div>
+                            <div class="card-body">
+                                <div class="info-item">
+                                    <i class="fa-solid fa-phone"></i> {{ customer.mobile }}
+                                </div>
+                                <div class="info-item">
+                                    <i class="fa-solid fa-calendar"></i> {{ customer.created_at }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="card-actions">
+                        <a href="{% url 'customer_edit' customer.id %}" class="action-square edit-square" title="Edit Customer">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a href="{% url 'customer_delete' customer.id %}" class="action-square delete-square" title="Remove Customer" onclick="return confirm('Delete customer record?')">
+                            <i class="bi bi-trash3-fill"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px 20px; background: #fff; border-radius: 18px; border: 2px dashed #f1f5f9; color: #94a3b8;">
+                    <i class="bi bi-box-seam" style="font-size: 30px; margin-bottom: 8px; display: block; opacity: 0.5;"></i>
+                    <p style="font-weight: 700; color: #64748b; font-size: 14px;">No customer records registered yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% endblock %}
+
+        </main>
+
+        <footer class="footer">
+            © 2026 <strong>HollyBlue Interio</strong>. All Rights Reserved.
+        </footer>
+
+    </div>
+
+    <script>
+
+        window.addEventListener('load', () => {
+
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 100);
+
+        });
+
+    </script>
+
+</body>
+</html>

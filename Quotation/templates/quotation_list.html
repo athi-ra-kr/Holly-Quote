@@ -1,0 +1,381 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+:root {
+    --primary-dark: #1e293b; 
+    --accent-blue: #3b82f6;  
+    --light-bg: #fdfdfd;
+    --border-color: #e2e8f0;
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --white: #ffffff;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.page-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    letter-spacing: 0.5px;
+}
+
+.customer-meta {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-container {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    outline: none;
+    font-size: 14px;
+    background: var(--white);
+}
+
+.search-btn {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.clear-btn {
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--white);
+}
+
+.add-btn {
+    background: var(--primary-dark);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    position: relative; 
+    transition: all 0.3s ease;
+    cursor: pointer; 
+}
+
+.card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.card-actions {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+    z-index: 20; 
+}
+
+.card-actions a {
+    text-decoration: none;
+    font-size: 14px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: 0.3s;
+    background: #f8fafc;
+}
+
+.icon-edit { color: var(--accent-blue); }
+.icon-edit:hover { background: #dbeafe; }
+
+.icon-delete { color: #ef4444; }
+.icon-delete:hover { background: #fee2e2; }
+
+.quotation-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.main-link::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1; 
+}
+
+.card h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    max-width: 80%;
+    color: var(--primary-dark);
+}
+
+.card h3 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.info-box {
+    margin-bottom: 10px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.label { color: var(--text-muted); }
+.value { color: var(--text-main); font-weight: 500; }
+
+.pagination {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.step-links a, .current-page {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* PREMIUM MODAL STYLES */
+.custom-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content-box {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+}
+
+.modal-header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header-box h3 {
+    font-size: 18px;
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+.form-control-modal {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    outline: none;
+    font-size: 14px;
+}
+
+.form-submit-btn {
+    width: 100%;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+</style>
+
+<div class="page-header">
+    <h2>Quotations for {{ customer.name }}</h2>
+    <button onclick="openQuotationModal()" class="add-btn">+ Create New</button>
+</div>
+<div class="customer-meta">
+    <span><i class="fa-solid fa-phone" style="margin-right: 6px;"></i> {{ customer.mobile }}</span>
+</div>
+
+<form method="GET" action="{% url 'quotation_list' customer.id %}" class="search-container">
+    <input type="text" name="search" placeholder="Search quotation ID or project type..." class="search-input" value="{{ query|default:'' }}">
+    <button type="submit" class="search-btn">Search</button>
+    {% if query %}
+        <a href="{% url 'quotation_list' customer.id %}" class="clear-btn">Clear</a>
+    {% endif %}
+</form>
+
+<div class="card-container">
+    {% for q in quotations %}
+    <div class="card">
+        <div class="card-actions">
+            <a href="{% url 'quotation_edit' q.id %}" class="icon-edit" title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            <a href="{% url 'quotation_delete' q.id %}" class="icon-delete" title="Delete" onclick="return confirm('Are you sure you want to delete this quotation?')">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+        </div>
+
+        <!-- We grab the first quotation number belonging to this specific customer so it matches across all cards -->
+        <span class="quotation-tag">{{ customer.quotations.all.first.quotation_no }}</span>
+        
+        <h3><a href="{% url 'quotation_detail' q.id %}" class="main-link">{{ customer.name|upper }}</a></h3>
+
+        <div class="info-box">
+            <div class="info-item">
+                <span class="label">Project</span>
+                <span class="value">{{ q.project_type }}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Date</span>
+                <span class="value">{{ q.date }}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Mobile</span>
+                <span class="value">{{ customer.mobile }}</span>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No quotations found for this customer.</p>
+    {% endfor %}
+</div>
+
+{% if quotations.has_other_pages %}
+<div class="pagination">
+    <div class="step-links">
+        {% if quotations.has_previous %}
+            <a href="?page={{ quotations.previous_page_number }}{% if query %}&search={{ query }}{% endif %}">&laquo;</a>
+        {% endif %}
+        <span class="current-page">{{ quotations.number }}</span>
+        {% if quotations.has_next %}
+            <a href="?page={{ quotations.next_page_number }}{% if query %}&search={{ query }}{% endif %}">&raquo;</a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<!-- NEW MINIMALIST QUOTATION POPUP MODAL -->
+<div id="quotationModal" class="custom-modal">
+    <div class="modal-content-box">
+        <div class="modal-header-box">
+            <h3>Create New Quotation</h3>
+            <button onclick="closeQuotationModal()" class="close-modal-btn">&times;</button>
+        </div>
+        <form method="POST" action="{% url 'quotation_add' customer.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Project Type</label>
+                <input type="text" name="project_type" class="form-control-modal" required placeholder="e.g., Kitchen, Wardrobe">
+            </div>
+            <button type="submit" class="form-submit-btn">Save Quotation</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function openQuotationModal() {
+    document.getElementById('quotationModal').style.display = 'flex';
+}
+
+function closeQuotationModal() {
+    document.getElementById('quotationModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    let modal = document.getElementById('quotationModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+{% endblock %}

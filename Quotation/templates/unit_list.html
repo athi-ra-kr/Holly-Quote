@@ -1,0 +1,426 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    /* ✅ FIX: Force the global footer to stay transparent always */
+    footer, .footer {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* --- HEADER SECTION --- */
+    .header-section {
+        margin-bottom: 30px; /* Reduced from 45px */
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .page-header-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .page-title {
+        font-size: 26px; /* Made title smaller from 32px */
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -1.2px;
+        margin-bottom: 4px;
+    }
+
+    .page-caption {
+        color: #64748b;
+        font-size: 13px; /* Made caption smaller from 15px */
+        font-weight: 500;
+        line-height: 1.5;
+        max-width: 600px;
+    }
+
+    /* --- SEARCH & ACTION BAR --- */
+    .controls-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 20px; /* Reduced from 30px */
+        width: 100%;
+    }
+
+    .search-container {
+        position: relative;
+        flex: 1;
+        max-width: 350px; /* Made search bar slightly narrower */
+    }
+
+    .search-container i.bi-search {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        pointer-events: none;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px 40px 10px 42px; /* Reduced padding for compact look */
+        border: 2px solid #f1f5f9;
+        background: #ffffff;
+        border-radius: 12px; /* Slightly tighter corners */
+        font-size: 13px; /* Smaller text */
+        font-weight: 600;
+        outline: none;
+        transition: 0.3s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .search-input:focus {
+        border-color: #2a5298;
+        box-shadow: 0 10px 20px rgba(42, 82, 152, 0.05);
+    }
+
+    .clear-search {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        cursor: pointer;
+        display: none; 
+        transition: 0.2s;
+    }
+
+    .clear-search:hover { color: #ef4444; }
+
+    .btn-add {
+        background: #2a5298;
+        color: white;
+        border: none;
+        padding: 10px 20px; /* Made button smaller from 14px 28px */
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 13px; /* Smaller button text */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 20px rgba(42, 82, 152, 0.15);
+    }
+
+    .btn-add:hover {
+        background: #1e3c72;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(42, 82, 152, 0.25);
+    }
+
+    /* --- UNIT GRID --- */
+    .unit-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Made min-width smaller from 280px so more cards fit in a row */
+        gap: 20px; /* Reduced gap from 28px */
+        margin-top: 25px;
+        min-height: 300px;
+        /* ✅ FIX: Prevents cards from stretching vertically when there are few items */
+        grid-auto-rows: max-content;
+    }
+
+    .unit-card {
+        background: #ffffff;
+        border-radius: 18px; /* Softer, smaller radius from 28px */
+        padding: 20px; /* Reduced inside padding from 32px to make card smaller */
+        border: 1px solid #f1f5f9;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 130px; /* Lowered height from 180px */
+        position: relative;
+    }
+
+    .unit-card:hover {
+        border-color: #2a5298;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px -10px rgba(15, 23, 42, 0.08);
+    }
+
+    .unit-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 10px; /* Made meta text smaller from 11px */
+        font-weight: 800;
+        color: #2a5298;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .unit-name {
+        font-size: 18px; /* Made card title smaller from 24px */
+        font-weight: 800;
+        color: #1e293b;
+        word-break: break-word;
+        line-height: 1.2;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px; /* Reduced from 30px */
+        padding-top: 12px; /* Reduced from 20px */
+        border-top: 1px solid #f8fafc;
+    }
+
+    .action-square {
+        width: 34px; /* Made action buttons smaller from 42px */
+        height: 34px;
+        background: #f8fafc;
+        border-radius: 10px; /* Smaller corners */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 14px; /* Smaller icons inside buttons */
+        transition: all 0.3s ease;
+    }
+
+    .edit-square { color: #2a5298; }
+    .edit-square:hover { background: #2a5298; color: #fff; }
+
+    .delete-square { color: #ef4444; }
+    .delete-square:hover { background: #ef4444; color: #fff; }
+
+    /* --- PAGINATION --- */
+    .pagination-wrapper {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .nav-arrow {
+        font-size: 20px;
+        color: #2a5298;
+        cursor: pointer;
+        user-select: none;
+        transition: 0.3s;
+    }
+
+    .nav-arrow.disabled {
+        color: #cbd5e1;
+        cursor: not-allowed;
+    }
+
+    .current-page-num {
+        font-weight: 800;
+        font-size: 16px;
+        color: #0f172a;
+    }
+
+    /* --- MODALS --- */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0; top: 0; width: 100%; height: 100%;
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(12px);
+    }
+
+    .modal-content {
+        background: white;
+        width: 95%;
+        max-width: 400px;
+        margin: 10% auto;
+        padding: 35px;
+        border-radius: 25px;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+        animation: modalSlideUp 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    @keyframes modalSlideUp {
+        from { transform: translateY(40px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-title { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 20px; text-align: center; }
+
+    .form-input {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #f1f5f9;
+        background: #f8fafc;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: 600;
+        outline: none;
+        transition: 0.3s;
+        margin-bottom: 15px;
+    }
+
+    .form-input:focus { border-color: #2a5298; background: #fff; }
+
+    .save-btn { width: 100%; background: #2a5298; color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; }
+    .save-btn:hover { background: #1e3c72; }
+
+    .dismiss-link { display: block; text-align: center; margin-top: 15px; color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="header-section">
+    <div class="page-header-flex">
+        <div>
+            <h1 class="page-title">Units</h1>
+            <p class="page-caption">Manage the primary organizational units for your projects, from modular room spaces to curated interior accessories.</p>
+        </div>
+        <button class="btn-add" onclick="openAddModal()">
+            <i class="bi bi-plus-lg"></i> Add New Unit
+        </button>
+    </div>
+
+    <div class="controls-wrapper">
+        <div class="search-container">
+            <i class="bi bi-search"></i>
+            <input type="text" id="unitSearch" class="search-input" placeholder="Search by name...">
+            <i class="bi bi-x-circle-fill clear-search" id="clearBtn" title="Clear search"></i>
+        </div>
+    </div>
+</div>
+
+<div class="unit-grid" id="unitContainer">
+    {% for u in units %}
+    <div class="unit-card" data-name="{{ u.name|lower }}">
+        <div>
+            <div class="unit-meta">
+                <i class="bi bi-grid-1x2-fill"></i> Project Element
+            </div>
+            <div class="unit-name">{{ u.name }}</div>
+        </div>
+        
+        <div class="card-actions">
+            <a href="javascript:void(0)" class="action-square edit-square" title="Edit Unit" onclick="openEditModal('{{ u.id }}','{{ u.name }}')">
+                <i class="bi bi-pencil-fill"></i>
+            </a>
+            <a href="{% url 'unit_delete' u.id %}" class="action-square delete-square" title="Remove Unit" onclick="return confirm('Archive this project unit?')">
+                <i class="bi bi-trash3-fill"></i>
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div id="noUnits" style="grid-column: 1/-1; text-align: center; padding: 80px 20px; background: #fff; border-radius: 25px; border: 2px dashed #f1f5f9; color: #94a3b8;">
+        <i class="bi bi-app-indicator" style="font-size: 40px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+        <p style="font-weight: 700; color: #64748b; font-size: 16px;">No Units Registered</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div id="noResults" style="display:none; text-align: center; padding: 80px 20px; color: #94a3b8;">
+    <i class="bi bi-search" style="font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.3;"></i>
+    <p style="font-size: 14px;">No units match your search.</p>
+</div>
+
+<div class="pagination-wrapper" id="paginationBox">
+    <span class="nav-arrow" id="prevBtn">&laquo;</span>
+    <span class="current-page-num" id="pageNumber">1</span>
+    <span class="nav-arrow" id="nextBtn">&raquo;</span>
+</div>
+
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <h2 class="modal-title">Create New Unit</h2>
+        <form method="POST" action="{% url 'unit_add' %}">
+            {% csrf_token %}
+            <input type="text" name="name" class="form-input" placeholder="e.g. Master Bedroom or Lighting" required>
+            <button type="submit" class="save-btn">Save Unit</button>
+            <a class="dismiss-link" onclick="closeAddModal()">Dismiss</a>
+        </form>
+    </div>
+</div>
+
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h2 class="modal-title">Modify Unit</h2>
+        <form method="POST" id="editForm">
+            {% csrf_token %}
+            <input type="text" name="name" id="editName" class="form-input" required>
+            <button type="submit" class="save-btn">Update Details</button>
+            <a class="dismiss-link" onclick="closeEditModal()">Dismiss</a>
+        </form>
+    </div>
+</div>
+
+<script>
+// --- LIVE SEARCH & PAGINATION LOGIC ---
+const cardsPerPage = 12; // Increased from 6 so more small cards fit beautifully per page!
+let currentPage = 1;
+
+const searchInput = document.getElementById('unitSearch');
+const clearBtn = document.getElementById('clearBtn');
+const unitContainer = document.getElementById('unitContainer');
+const allCards = Array.from(unitContainer.getElementsByClassName('unit-card'));
+const noResults = document.getElementById('noResults');
+const paginationBox = document.getElementById('paginationBox');
+
+function filterAndPaginate() {
+    const filter = searchInput.value.toLowerCase();
+    clearBtn.style.display = filter.length > 0 ? 'block' : 'none';
+    const filtered = allCards.filter(card => card.getAttribute('data-name').includes(filter));
+
+    if (filtered.length === 0 && allCards.length > 0) {
+        noResults.style.display = 'block';
+        paginationBox.style.display = 'none';
+    } else {
+        noResults.style.display = 'none';
+        paginationBox.style.display = filtered.length > cardsPerPage ? 'flex' : 'none';
+    }
+
+    const totalPages = Math.ceil(filtered.length / cardsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages || 1;
+    const start = (currentPage - 1) * cardsPerPage;
+    const end = start + cardsPerPage;
+
+    allCards.forEach(card => card.style.display = 'none');
+    filtered.forEach((card, index) => {
+        if (index >= start && index < end) card.style.display = 'flex';
+    });
+
+    document.getElementById('pageNumber').innerText = currentPage;
+    document.getElementById('prevBtn').classList.toggle('disabled', currentPage === 1);
+    document.getElementById('nextBtn').classList.toggle('disabled', currentPage === totalPages || totalPages === 0);
+}
+
+searchInput.addEventListener('input', () => { currentPage = 1; filterAndPaginate(); });
+clearBtn.addEventListener('click', () => { searchInput.value = ''; currentPage = 1; filterAndPaginate(); searchInput.focus(); });
+document.getElementById('prevBtn').addEventListener('click', () => { if (currentPage > 1) { currentPage--; filterAndPaginate(); }});
+document.getElementById('nextBtn').addEventListener('click', () => {
+    const filter = searchInput.value.toLowerCase();
+    const filtered = allCards.filter(card => card.getAttribute('data-name').includes(filter));
+    const totalPages = Math.ceil(filtered.length / cardsPerPage);
+    if (currentPage < totalPages) { currentPage++; filterAndPaginate(); }
+});
+
+filterAndPaginate();
+
+// --- MODAL UTILITIES ---
+function openAddModal(){ document.getElementById('addModal').style.display='block'; }
+function closeAddModal(){ document.getElementById('addModal').style.display='none'; }
+function openEditModal(id,name){
+    document.getElementById('editModal').style.display='block';
+    document.getElementById('editName').value=name;
+    document.getElementById('editForm').action= '/unit/edit/' + id + '/';
+}
+function closeEditModal(){ document.getElementById('editModal').style.display='none'; }
+window.onclick = function(event) { if (event.target.className === 'modal') event.target.style.display = 'none'; }
+</script>
+
+{% endblock %}
