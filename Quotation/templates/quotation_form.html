@@ -50,11 +50,13 @@ button {
 <form method="POST">
 {% csrf_token %}
 
+<!-- We changed value to look inside q.customer.name -->
 <input type="text" name="client_name" placeholder="Client Name"
-       value="{{ q.client_name|default:'' }}" required>
+       value="{{ q.customer.name|default:'' }}" required>
 
+<!-- We changed value to look inside q.customer.mobile -->
 <input type="text" name="mobile" placeholder="Mobile Number"
-       value="{{ q.mobile|default:'' }}" required>
+       value="{{ q.customer.mobile|default:'' }}" required>
 
 <input type="text" name="project_type" placeholder="Project Type"
        value="{{ q.project_type|default:'' }}" required>

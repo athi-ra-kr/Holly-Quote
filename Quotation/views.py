@@ -73,7 +73,7 @@ def customer_edit(request, id):
         c.name, c.mobile, c.email = request.POST.get('name'), request.POST.get('mobile'), request.POST.get('email')
         c.save()
         return redirect('customer_list')
-    return render(request, 'customer_form.html', {'customer': c})
+    return render(request, 'customer_list.html', {'customer': c})
 
 def customer_delete(request, id):
     get_object_or_404(Customer, id=id).delete()
