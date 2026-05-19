@@ -13,7 +13,7 @@
 
     /* --- HEADER SECTION --- */
     .header-section {
-        margin-bottom: 30px; /* Reduced from 45px for a more compact feel */
+        margin-bottom: 30px;
         animation: fadeInDown 0.8s ease-out;
     }
 
@@ -26,7 +26,7 @@
     }
 
     .page-title {
-        font-size: 26px; /* Made title smaller from 32px */
+        font-size: 26px;
         font-weight: 800;
         color: #0f172a;
         letter-spacing: -1.2px;
@@ -35,7 +35,7 @@
 
     .page-caption {
         color: #64748b;
-        font-size: 13px; /* Made text smaller from 15px */
+        font-size: 13px;
         font-weight: 500;
         line-height: 1.5;
         max-width: 650px;
@@ -47,14 +47,14 @@
         align-items: center;
         justify-content: space-between;
         gap: 15px;
-        margin-top: 20px; /* Reduced from 30px */
+        margin-top: 20px;
         width: 100%;
     }
 
     .search-container {
         position: relative;
         flex: 1;
-        max-width: 350px; /* Slightly narrower to fit smaller layout */
+        max-width: 350px;
     }
 
     .search-container i.bi-search {
@@ -68,11 +68,11 @@
 
     .search-input {
         width: 100%;
-        padding: 10px 40px 10px 42px; /* Less padding for a compact look */
+        padding: 10px 40px 10px 42px;
         border: 2px solid #f1f5f9;
         background: #ffffff;
-        border-radius: 12px; /* Tighter rounded corners from 16px */
-        font-size: 13px; /* Smaller text size from 14px */
+        border-radius: 12px;
+        font-size: 13px;
         font-weight: 600;
         outline: none;
         transition: 0.3s;
@@ -101,10 +101,10 @@
         background: #2a5298;
         color: white;
         border: none;
-        padding: 10px 20px; /* Made button padding smaller from 14px 28px */
+        padding: 10px 20px;
         border-radius: 12px;
         font-weight: 700;
-        font-size: 13px; /* Smaller button text */
+        font-size: 13px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -122,25 +122,24 @@
     /* --- MATERIAL GRID --- */
     .material-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Changed from 280px so cards are smaller and more fit on one row */
-        gap: 20px; /* Reduced spacing between cards from 28px */
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
         margin-top: 25px;
         min-height: 300px;
         align-items: stretch;
-        /* ✅ FIX: Forces rows to match their true content height so cards remain uniformly short */
         grid-auto-rows: max-content;
     }
 
     .material-card {
         background: #ffffff;
-        border-radius: 18px; /* Tighter radius from 28px */
-        padding: 20px; /* Lowered card padding from 32px to make it smaller */
+        border-radius: 18px;
+        padding: 20px;
         border: 1px solid #f1f5f9;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 140px; /* Lowered from 200px */
+        min-height: 140px;
         position: relative;
     }
 
@@ -154,9 +153,9 @@
         display: inline-block;
         background: #eff6ff;
         color: #2a5298;
-        padding: 4px 10px; /* Made badge smaller */
+        padding: 4px 10px;
         border-radius: 30px;
-        font-size: 10px; /* Smaller text from 11px */
+        font-size: 10px;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.8px;
@@ -164,7 +163,7 @@
     }
 
     .material-name {
-        font-size: 18px; /* Shrunk title from 24px */
+        font-size: 18px;
         font-weight: 800;
         color: #1e293b;
         word-break: break-word;
@@ -173,7 +172,7 @@
     }
 
     .material-rate {
-        font-size: 15px; /* Smaller rate text from 18px */
+        font-size: 15px;
         font-weight: 700;
         color: #16a34a;
         display: flex;
@@ -184,24 +183,26 @@
     .card-actions {
         display: flex;
         gap: 12px;
-        margin-top: 15px; /* Reduced from 30px */
-        padding-top: 12px; /* Reduced from 20px */
+        margin-top: 15px;
+        padding-top: 12px;
         border-top: 1px solid #f8fafc;
     }
 
     .action-square {
-        width: 44px; /* Slightly adjusted to give that perfect pill/rounded square look from your image */
+        width: 44px;
         height: 44px;
-        border-radius: 14px; /* Softer, squircle corners just like your image */
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
         text-decoration: none;
         font-size: 16px; 
         transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
     }
 
-    /* 🌟 NEW EDIT BUTTON STYLE: Light grayish blue background with a strong blue pencil icon */
+    /* 🌟 EDIT BUTTON STYLE */
     .edit-square { 
         background: #f5f8ff; 
         color: #1e52b3; 
@@ -302,7 +303,7 @@
             <h1 class="page-title">Materials</h1>
             <p class="page-caption">Maintain a comprehensive catalog of surface finishes and core materials with standardized pricing for accurate project cost analysis.</p>
         </div>
-        <button class="btn-add" onclick="openAddModal()">
+        <button type="button" class="btn-add" id="openAddBtn">
             <i class="bi bi-plus-lg"></i> Add Material
         </button>
     </div>
@@ -328,9 +329,11 @@
         </div>
         
         <div class="card-actions">
-            <a href="javascript:void(0)" class="action-square edit-square" title="Edit Material" onclick="openEditModal('{{ m.id }}','{{ m.unit.id }}','{{ m.name }}','{{ m.rate }}')">
+            {# ✅ FIX: Use data-* attributes (Django auto-escapes) instead of inline onclick — safe for apostrophes / special chars #}
+            <button type="button" class="action-square edit-square edit-btn" title="Edit Material"
+                    data-id="{{ m.id }}" data-unit-id="{{ m.unit.id }}" data-name="{{ m.name }}" data-rate="{{ m.rate }}">
                 <i class="fa-solid fa-pencil"></i>
-            </a>
+            </button>
             <a href="{% url 'material_delete' m.id %}" class="action-square delete-square" title="Remove Material" onclick="return confirm('Archive this material?')">
                 <i class="bi bi-trash3-fill"></i>
             </a>
@@ -369,7 +372,7 @@
             <input type="text" name="name" class="form-input" placeholder="Material Name" required>
             <input type="number" step="0.01" name="rate" class="form-input" placeholder="Rate (₹)" required>
             <button type="submit" class="save-btn">Save Material</button>
-            <a class="dismiss-link" onclick="closeAddModal()">Dismiss</a>
+            <a class="dismiss-link" id="closeAddBtn">Dismiss</a>
         </form>
     </div>
 </div>
@@ -387,14 +390,14 @@
             <input type="text" name="name" id="editName" class="form-input" required>
             <input type="number" step="0.01" name="rate" id="editRate" class="form-input" required>
             <button type="submit" class="save-btn">Update Details</button>
-            <a class="dismiss-link" onclick="closeEditModal()">Dismiss</a>
+            <a class="dismiss-link" id="closeEditBtn">Dismiss</a>
         </form>
     </div>
 </div>
 
 <script>
 // --- LIVE SEARCH & PAGINATION LOGIC ---
-const cardsPerPage = 12; // 🌟 Updated from 6 to 12 so more small cards show up on a single page!
+const cardsPerPage = 12;
 let currentPage = 1;
 
 const searchInput = document.getElementById('materialSearch');
@@ -406,16 +409,10 @@ const paginationBox = document.getElementById('paginationBox');
 
 function filterAndPaginate() {
     const filter = searchInput.value.toLowerCase();
-    
-    // Toggle Clear Button
     clearBtn.style.display = filter.length > 0 ? 'block' : 'none';
 
-    // Filter cards
-    const filtered = allCards.filter(card => {
-        return card.getAttribute('data-name').includes(filter);
-    });
+    const filtered = allCards.filter(card => card.getAttribute('data-name').includes(filter));
 
-    // Handle Empty Results
     if (filtered.length === 0 && allCards.length > 0) {
         noResults.style.display = 'block';
         paginationBox.style.display = 'none';
@@ -424,7 +421,6 @@ function filterAndPaginate() {
         paginationBox.style.display = filtered.length > cardsPerPage ? 'flex' : 'none';
     }
 
-    // Pagination Calc
     const totalPages = Math.ceil(filtered.length / cardsPerPage);
     if (currentPage > totalPages) currentPage = totalPages || 1;
 
@@ -436,13 +432,11 @@ function filterAndPaginate() {
         if (index >= start && index < end) card.style.display = 'flex';
     });
 
-    // Update Nav UI
     document.getElementById('pageNumber').innerText = currentPage;
     document.getElementById('prevBtn').classList.toggle('disabled', currentPage === 1);
     document.getElementById('nextBtn').classList.toggle('disabled', currentPage === totalPages || totalPages === 0);
 }
 
-// Event Listeners
 searchInput.addEventListener('input', () => { currentPage = 1; filterAndPaginate(); });
 clearBtn.addEventListener('click', () => { searchInput.value = ''; currentPage = 1; filterAndPaginate(); searchInput.focus(); });
 
@@ -454,21 +448,42 @@ document.getElementById('nextBtn').addEventListener('click', () => {
     if (currentPage < totalPages) { currentPage++; filterAndPaginate(); }
 });
 
-// Initial Run
 filterAndPaginate();
 
 // --- MODAL HELPERS ---
-function openAddModal(){ document.getElementById('addModal').style.display='block'; }
-function closeAddModal(){ document.getElementById('addModal').style.display='none'; }
-function openEditModal(id, unitId, name, rate){
-    document.getElementById('editModal').style.display='block';
-    document.getElementById('editName').value = name;
-    document.getElementById('editUnit').value = unitId;
-    document.getElementById('editRate').value = rate;
-    document.getElementById('editForm').action = '/material/edit/' + id + '/';
-}
-function closeEditModal(){ document.getElementById('editModal').style.display='none'; }
-window.onclick = function(event) { if (event.target.className === 'modal') event.target.style.display = 'none'; }
+const addModal = document.getElementById('addModal');
+const editModal = document.getElementById('editModal');
+
+document.getElementById('openAddBtn').addEventListener('click', () => {
+    addModal.style.display = 'block';
+});
+document.getElementById('closeAddBtn').addEventListener('click', () => {
+    addModal.style.display = 'none';
+});
+document.getElementById('closeEditBtn').addEventListener('click', () => {
+    editModal.style.display = 'none';
+});
+
+// ✅ FIX: Attach edit handlers via event listeners using data-* attributes (safe for apostrophes / special chars)
+document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const unitId = this.getAttribute('data-unit-id');
+        const name = this.getAttribute('data-name');
+        const rate = this.getAttribute('data-rate');
+        document.getElementById('editName').value = name;
+        document.getElementById('editUnit').value = unitId;
+        document.getElementById('editRate').value = rate;
+        document.getElementById('editForm').action = '/material/edit/' + id + '/';
+        editModal.style.display = 'block';
+    });
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    if (event.target === addModal) addModal.style.display = 'none';
+    if (event.target === editModal) editModal.style.display = 'none';
+});
 </script>
 
 {% endblock %}

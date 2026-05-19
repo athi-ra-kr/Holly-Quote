@@ -12,7 +12,7 @@
 
     /* --- HEADER SECTION --- */
     .header-section {
-        margin-bottom: 30px; /* Reduced from 45px for a tighter look */
+        margin-bottom: 30px;
         animation: fadeInDown 0.8s ease-out;
     }
 
@@ -25,7 +25,7 @@
     }
 
     .page-title {
-        font-size: 26px; /* Shrunk from 32px */
+        font-size: 26px;
         font-weight: 800;
         color: #0f172a;
         letter-spacing: -1.2px;
@@ -34,7 +34,7 @@
 
     .page-caption {
         color: #64748b;
-        font-size: 13px; /* Shrunk from 15px */
+        font-size: 13px;
         font-weight: 500;
         line-height: 1.5;
         max-width: 650px;
@@ -46,14 +46,14 @@
         align-items: center;
         justify-content: space-between;
         gap: 15px;
-        margin-top: 20px; /* Reduced from 30px */
+        margin-top: 20px;
         width: 100%;
     }
 
     .search-container {
         position: relative;
         flex: 1;
-        max-width: 350px; /* Slightly narrower search container */
+        max-width: 350px;
     }
 
     .search-container i.bi-search {
@@ -67,11 +67,11 @@
 
     .search-input {
         width: 100%;
-        padding: 10px 40px 10px 42px; /* Less padding to make it smaller */
+        padding: 10px 40px 10px 42px;
         border: 2px solid #f1f5f9;
         background: #ffffff;
-        border-radius: 12px; /* Tighter border radius from 16px */
-        font-size: 13px; /* Smaller text size from 14px */
+        border-radius: 12px;
+        font-size: 13px;
         font-weight: 600;
         outline: none;
         transition: 0.3s;
@@ -100,10 +100,10 @@
         background: #2a5298;
         color: white;
         border: none;
-        padding: 10px 20px; /* Shrunk button padding from 14px 28px */
+        padding: 10px 20px;
         border-radius: 12px;
         font-weight: 700;
-        font-size: 13px; /* Smaller button text */
+        font-size: 13px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -121,25 +121,24 @@
     /* --- SUB UNIT GRID --- */
     .subunit-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Changed from 280px so cards are smaller and more fit across the screen */
-        gap: 20px; /* Lowered grid gap from 28px */
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
         margin-top: 25px;
         min-height: 300px;
         align-items: stretch;
-        /* ✅ FIX: Forces rows to only take up exact content height, keeping styling uniform from card 1 */
         grid-auto-rows: max-content;
     }
 
     .subunit-card {
         background: #ffffff;
-        border-radius: 18px; /* Shrunk from 28px for softer edges on small items */
-        padding: 20px; /* Reduced from 32px to make the card physically smaller */
+        border-radius: 18px;
+        padding: 20px;
         border: 1px solid #f1f5f9;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 130px; /* Lowered minimum height from 180px */
+        min-height: 130px;
         position: relative;
     }
 
@@ -153,9 +152,9 @@
         display: inline-block;
         background: #eff6ff;
         color: #2a5298;
-        padding: 4px 10px; /* Made badge smaller */
+        padding: 4px 10px;
         border-radius: 30px;
-        font-size: 10px; /* Smaller text font size */
+        font-size: 10px;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.8px;
@@ -163,7 +162,7 @@
     }
 
     .subunit-name {
-        font-size: 18px; /* Shrunk text size down from 24px */
+        font-size: 18px;
         font-weight: 800;
         color: #1e293b;
         word-break: break-word;
@@ -173,13 +172,13 @@
     .card-actions {
         display: flex;
         gap: 10px;
-        margin-top: 15px; /* Shrunk from 30px */
-        padding-top: 12px; /* Shrunk from 20px */
+        margin-top: 15px;
+        padding-top: 12px;
         border-top: 1px solid #f8fafc;
     }
 
     .action-square {
-        width: 34px; /* Shrunk buttons from 42px */
+        width: 34px;
         height: 34px;
         background: #f8fafc;
         border-radius: 10px;
@@ -187,8 +186,10 @@
         align-items: center;
         justify-content: center;
         text-decoration: none;
-        font-size: 14px; /* Smaller action icons */
+        font-size: 14px;
         transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
     }
 
     .edit-square { color: #2a5298; }
@@ -285,7 +286,7 @@
             <h1 class="page-title">Sub Units</h1>
             <p class="page-caption">Define the specific components and sub-categories within your project units to maintain granular design control.</p>
         </div>
-        <button class="btn-add" onclick="openAddModal()">
+        <button type="button" class="btn-add" id="openAddBtn">
             <i class="bi bi-plus-lg"></i> Add Sub Unit
         </button>
     </div>
@@ -310,9 +311,11 @@
         </div>
         
         <div class="card-actions">
-            <a href="javascript:void(0)" class="action-square edit-square" title="Edit Sub Unit" onclick="openEditModal('{{ s.id }}','{{ s.unit.id }}','{{ s.name }}')">
+            {# ✅ FIX: Use data-* attributes (Django auto-escapes) instead of inline onclick which breaks on apostrophes/quotes #}
+            <button type="button" class="action-square edit-square edit-btn" title="Edit Sub Unit"
+                    data-id="{{ s.id }}" data-unit-id="{{ s.unit.id }}" data-name="{{ s.name }}">
                 <i class="bi bi-pencil-fill"></i>
-            </a>
+            </button>
             <a href="{% url 'subunit_delete' s.id %}" class="action-square delete-square" title="Remove Sub Unit" onclick="return confirm('Delete this sub unit?')">
                 <i class="bi bi-trash3-fill"></i>
             </a>
@@ -350,7 +353,7 @@
             </select>
             <input type="text" name="name" class="form-input" placeholder="Sub Unit Name" required>
             <button type="submit" class="save-btn">Save Sub Unit</button>
-            <a class="dismiss-link" onclick="closeAddModal()">Dismiss</a>
+            <a class="dismiss-link" id="closeAddBtn">Dismiss</a>
         </form>
     </div>
 </div>
@@ -367,14 +370,14 @@
             </select>
             <input type="text" name="name" id="editName" class="form-input" required>
             <button type="submit" class="save-btn">Update Details</button>
-            <a class="dismiss-link" onclick="closeEditModal()">Dismiss</a>
+            <a class="dismiss-link" id="closeEditBtn">Dismiss</a>
         </form>
     </div>
 </div>
 
 <script>
 // --- LIVE SEARCH & PAGINATION LOGIC ---
-const cardsPerPage = 12; // 🌟 Updated from 6 to 12 as requested!
+const cardsPerPage = 12;
 let currentPage = 1;
 
 const searchInput = document.getElementById('subunitSearch');
@@ -386,16 +389,10 @@ const paginationBox = document.getElementById('paginationBox');
 
 function filterAndPaginate() {
     const filter = searchInput.value.toLowerCase();
-    
-    // Toggle Clear Button
     clearBtn.style.display = filter.length > 0 ? 'block' : 'none';
 
-    // Filter cards
-    const filtered = allCards.filter(card => {
-        return card.getAttribute('data-name').includes(filter);
-    });
+    const filtered = allCards.filter(card => card.getAttribute('data-name').includes(filter));
 
-    // Handle Empty Results
     if (filtered.length === 0 && allCards.length > 0) {
         noResults.style.display = 'block';
         paginationBox.style.display = 'none';
@@ -404,7 +401,6 @@ function filterAndPaginate() {
         paginationBox.style.display = filtered.length > cardsPerPage ? 'flex' : 'none';
     }
 
-    // Pagination Calc
     const totalPages = Math.ceil(filtered.length / cardsPerPage);
     if (currentPage > totalPages) currentPage = totalPages || 1;
 
@@ -416,13 +412,11 @@ function filterAndPaginate() {
         if (index >= start && index < end) card.style.display = 'flex';
     });
 
-    // Update Nav UI
     document.getElementById('pageNumber').innerText = currentPage;
     document.getElementById('prevBtn').classList.toggle('disabled', currentPage === 1);
     document.getElementById('nextBtn').classList.toggle('disabled', currentPage === totalPages || totalPages === 0);
 }
 
-// Event Listeners
 searchInput.addEventListener('input', () => { currentPage = 1; filterAndPaginate(); });
 clearBtn.addEventListener('click', () => { searchInput.value = ''; currentPage = 1; filterAndPaginate(); searchInput.focus(); });
 
@@ -434,20 +428,40 @@ document.getElementById('nextBtn').addEventListener('click', () => {
     if (currentPage < totalPages) { currentPage++; filterAndPaginate(); }
 });
 
-// Initial Run
 filterAndPaginate();
 
 // --- MODAL HELPERS ---
-function openAddModal(){ document.getElementById('addModal').style.display='block'; }
-function closeAddModal(){ document.getElementById('addModal').style.display='none'; }
-function openEditModal(id, unitId, name){
-    document.getElementById('editModal').style.display='block';
-    document.getElementById('editName').value = name;
-    document.getElementById('editUnit').value = unitId;
-    document.getElementById('editForm').action = '/subunit/edit/' + id + '/';
-}
-function closeEditModal(){ document.getElementById('editModal').style.display='none'; }
-window.onclick = function(event) { if (event.target.className === 'modal') event.target.style.display = 'none'; }
+const addModal = document.getElementById('addModal');
+const editModal = document.getElementById('editModal');
+
+document.getElementById('openAddBtn').addEventListener('click', () => {
+    addModal.style.display = 'block';
+});
+document.getElementById('closeAddBtn').addEventListener('click', () => {
+    addModal.style.display = 'none';
+});
+document.getElementById('closeEditBtn').addEventListener('click', () => {
+    editModal.style.display = 'none';
+});
+
+// ✅ FIX: Attach edit handlers via event listeners using data-* attributes (safe for apostrophes/special chars)
+document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const unitId = this.getAttribute('data-unit-id');
+        const name = this.getAttribute('data-name');
+        document.getElementById('editName').value = name;
+        document.getElementById('editUnit').value = unitId;
+        document.getElementById('editForm').action = '/subunit/edit/' + id + '/';
+        editModal.style.display = 'block';
+    });
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    if (event.target === addModal) addModal.style.display = 'none';
+    if (event.target === editModal) editModal.style.display = 'none';
+});
 </script>
 
 {% endblock %}
