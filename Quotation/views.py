@@ -4,7 +4,7 @@ from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
 from django.db.models import Q 
 from django.http import HttpResponse, JsonResponse
-from django.contrib import messages  # Added this to handle our error alerts!
+from django.contrib import messages 
 from .models import *
 
 # VALIDATION
@@ -25,11 +25,7 @@ def login_view(request):
 @never_cache
 def dashboard(request):
     if not request.session.get('user'): return redirect('login')
-    
-    # Girl, we are fetching the top 4 most recent customers here!
     recent_customers = Customer.objects.all().order_by('-id')[:8]
-    
-    # We pass them into our template context dictionary
     return render(request, 'dashboard.html', {'recent_customers': recent_customers})
 
 def logout_view(request):
@@ -52,13 +48,10 @@ def customer_list(request):
 def customer_add(request):
     if request.method == "POST":
         mobile_number = request.POST.get('mobile')
-        
-        # Look here, girl! We check if any customer already has this mobile number
         if Customer.objects.filter(mobile=mobile_number).exists():
             messages.error(request, "This phone number is already registered to another customer!")
             return redirect('customer_list')
             
-        # If it doesn't exist, we safely create it!
         Customer.objects.create(
             name=request.POST.get('name'),
             mobile=mobile_number,
@@ -80,7 +73,7 @@ def customer_delete(request, id):
     return redirect('customer_list')
 
 
-# -------- QUOTATION VIEWS (Scoped to Customer) --------
+# -------- QUOTATION VIEWS --------
 def quotation_list(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     qs = customer.quotations.all().order_by('-id')
@@ -124,7 +117,7 @@ def quotation_delete(request, id):
     return redirect('quotation_list', customer_id=customer_id)
 
 
-# -------- EXISTING CRUD VIEWS --------
+# -------- STRUCTURAL MODEL CONTROLLERS --------
 def unit_list(request): return render(request, 'unit_list.html', {'units': Unit.objects.all()})
 def unit_add(request):
     if request.method == "POST":
@@ -173,10 +166,7 @@ def item_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'item_list.html', {
-        'items': page_obj,
-        'query': query,
-        'units': Unit.objects.all(),
-        'subunits': SubUnit.objects.all(),
+        'items': page_obj, 'query': query, 'units': Unit.objects.all(), 'subunits': SubUnit.objects.all(),
     })
 
 def item_add(request):
@@ -227,6 +217,8 @@ def material_delete(request, id):
     Material.objects.get(id=id).delete()
     return redirect('material_list')
 
+
+# -------- DETAILED QUOTATION MANAGER --------
 def quotation_detail(request, id):
     quotation = get_object_or_404(Quotation, id=id)
     units = Unit.objects.all()
@@ -242,6 +234,10 @@ def quotation_detail(request, id):
         material_id = request.POST.get('material')
         calc_type = request.POST.get('calc_type')
         item_count = int(request.POST.get('item_count', 1) or 1)
+        
+        disc_type = request.POST.get('discount_type', 'percentage')
+        disc_val = float(request.POST.get('discount_value', 0) or 0)
+
         mat_obj = get_object_or_404(Material, id=material_id)
         current_rate = float(mat_obj.rate)
 
@@ -265,12 +261,15 @@ def quotation_detail(request, id):
             qi.quantity = final_quantity
             qi.item_count = item_count
             qi.rate = current_rate
+            qi.discount_type = disc_type
+            qi.discount_value = disc_val
             qi.save()
         else:
             QuotationItem.objects.create(
                 quotation=quotation, item_id=item_id, material=mat_obj,
                 l_val=l, d_val=d, h_val=h, qty_val=qv,
-                quantity=final_quantity, item_count=item_count, rate=current_rate
+                quantity=final_quantity, item_count=item_count, rate=current_rate,
+                discount_type='percentage', discount_value=0
             )
         return redirect('quotation_detail', id=id)
 

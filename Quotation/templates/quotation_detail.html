@@ -29,8 +29,11 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .material-table tbody tr.item-row:hover { background-color: #f8fafc; }
 .unit-heading-row { background-color: #528ec2 !important; }
 .unit-heading-text { font-size: 13px; font-weight: 800; color: #fff !important; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding: 8px 14px !important; }
+
+/* Sub-Unit Compact Layout Styling Elements */
 .subunit-heading-row { background-color: #e2e8f0 !important; }
-.subunit-heading-text { font-size: 11px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 1px; text-align: left; padding: 12px 16px !important; border-bottom: 1px solid #cbd5e1; }
+.subunit-heading-text { font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; text-align: left; padding: 6px 16px !important; border-bottom: 1px solid #cbd5e1; }
+
 .pagination-container { padding: 20px 0; display: flex; justify-content: center; align-items: center; }
 .pagination { display: flex; align-items: center; gap: 20px; }
 .pagination-link { text-decoration: none; font-size: 14px; color: var(--accent-blue); display: flex; align-items: center; }
@@ -42,8 +45,10 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .action-btn:hover { background-color: #f1f5f9; }
 .item-img { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; }
 .no-image { width: 65px; height: 65px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; }
+
+/* Modal aligned perfectly to the screen center */
 .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15,23,42,0.6); align-items: center; justify-content: center; }
-.modal-content { background-color: var(--white); width: 520px; max-width: 90%; max-height: 85vh; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-soft); }
+.modal-content { background-color: var(--white); width: 540px; max-width: 90%; max-height: 88vh; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-soft); }
 .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between; align-items: center; }
 .modal-header h3 { font-size: 18px; margin: 0; color: var(--primary-dark); font-weight: 700; }
 .modal-body { padding: 24px; flex: 1; overflow-y: auto; }
@@ -53,8 +58,13 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .form-control { width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; }
 .form-control:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 .calc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border-soft); }
-.total-card { background: #f8fafc; padding: 20px; border-radius: 10px; text-align: center; margin-top: 10px; border: 1px solid var(--border-soft); }
-.total-card .amount { font-size: 26px; font-weight: 800; color: var(--accent-blue); margin-top: 5px; }
+
+/* Unified Total Card Components */
+.total-card { background: #f8fafc; padding: 15px; border-radius: 10px; text-align: center; margin-top: 10px; border: 1px solid var(--border-soft); }
+.total-card.split-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.total-card .sub-box { padding: 5px; }
+.total-card .amount { font-size: 20px; font-weight: 800; color: var(--primary-dark); }
+.total-card .amount.net { color: #16a34a; font-size: 24px; }
 .close-btn { cursor: pointer; color: var(--text-muted); font-size: 20px; }
 .close-btn:hover { color: #ef4444; }
 .select2-container--default .select2-selection--single { height: 40px !important; border-radius: 6px !important; border: 1px solid #cbd5e1 !important; padding-top: 5px; }
@@ -88,11 +98,11 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
             <tr>
                 <th>No</th>
                 <th>Image</th>
-                <th>Item</th>
-                <th>Description</th>
-                <th>Quantity Count</th>
-                <th>MaterialRate</th>
+                <th>Item Details</th>
+                <th>Qty Count</th>
+                <th>Material Rate</th>
                 <th>MRP Total</th>
+                <th>Discount Amount</th>
                 <th style="text-align:center;">Actions</th>
             </tr>
         </thead>
@@ -125,6 +135,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                 </td>
                 <td>
                     <div style="font-weight:700; color:#0f172a; font-size:14px;">{{ q_item.item.name }}</div>
+                    
                     <div style="font-size:11px; color:#6366f1; margin-top:6px; font-weight:600; display:inline-block; background:#e0e7ff; padding:2px 8px; border-radius:4px;">
                         {% if q_item.item.calculation_type == 'sqft' %}
                             <span style="color:#4f46e5;">Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm</span>
@@ -136,25 +147,34 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                             <span style="color:#4f46e5;">Count: {{ q_item.qty_val }}</span>
                         {% endif %}
                     </div>
+                    
                     {% if q_item.item.calculation_type == 'sqft' %}
                         <div style="font-size:11px; color:#0ea5e9; margin-top:4px; font-weight:600;">
                             Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft
                         </div>
                     {% endif %}
-                    <div style="font-size:11px; color:#64748b; margin-top:6px;">
+                    
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;">
                         Material: <span style="font-weight:600; color:#475569;">{{ q_item.material.name }}</span>
                     </div>
-                </td>
-                <td>
+
                     {% if q_item.item.description %}
-                        <div style="max-width:250px; line-height:1.5; color:#475569; font-size:12px;">{{ q_item.item.description }}</div>
-                    {% else %}
-                        <span style="color:#94a3b8; font-size:12px; font-style:italic;">No Description</span>
+                        <div style="max-width:280px; line-height:1.5; color:#64748b; font-size:12px; margin-top:8px; padding-top:6px; border-top: 1px dotted #e2e8f0;">
+                            {{ q_item.item.description }}
+                        </div>
                     {% endif %}
                 </td>
                 <td><strong style="color:#0f172a; font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
                 <td><span style="font-weight:600; color:#2563eb;">₹{{ q_item.rate }}</span></td>
-                <td><strong style="color:#16a34a; font-size:14px;">₹{{ q_item.mrp_total|floatformat:2 }}</strong></td>
+                <td><span style="color:#475569; font-weight:600;">₹{{ q_item.mrp_total|floatformat:2 }}</span></td>
+                <td>
+                    <!-- Shows final total only after a valid discount value gets verified -->
+                    {% if q_item.discount_value > 0 %}
+                        <strong style="color:#16a34a; font-size:14px;">₹{{ q_item.final_total|floatformat:2 }}</strong>
+                    {% else %}
+                        <span style="color:#94a3b8; font-size:12px; font-style:italic;">---</span>
+                    {% endif %}
+                </td>
                 <td style="text-align:center;">
                     <button type="button" class="action-btn edit-btn"
                         data-id="{{ q_item.id }}"
@@ -167,7 +187,9 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                         data-d="{{ q_item.d_val|default:0 }}"
                         data-h="{{ q_item.h_val|default:0 }}"
                         data-qv="{{ q_item.qty_val|default:0 }}"
-                        data-count="{{ q_item.item_count|default:1 }}">
+                        data-count="{{ q_item.item_count|default:1 }}"
+                        data-disc-type="{{ q_item.discount_type }}"
+                        data-disc-val="{{ q_item.discount_value }}">
                         <i class="fa-regular fa-pen-to-square" style="color:#2563eb;"></i>
                     </button>
                     <a href="{% url 'delete_quotation_item' q_item.id %}" class="action-btn" onclick="return confirm('Delete this item?')">
@@ -275,11 +297,42 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                         <input type="hidden" id="rate-val" value="0">
                     </div>
                 </div>
-                <div class="total-card">
-                    <div style="font-size:10px; text-transform:uppercase; color:#94a3b8;">Final Estimate</div>
-                    <div class="amount">₹ <span id="auto-total">0.00</span></div>
+
+                <!-- Conditional Discount Row Entry Selector -->
+                <div id="discount-section-wrapper" style="display:none; grid-template-columns:1fr 1fr; gap:15px; background: #fffdf5; padding: 12px; border-radius: 8px; border: 1px solid #fef08a; margin-bottom: 10px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label><i class="fa-solid fa-tags"></i> Disc. Unit Type</label>
+                        <select id="discount-type" class="form-control math-input" name="discount_type">
+                            <option value="percentage">Percentage (%)</option>
+                            <option value="flat">Flat Amount (₹)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label id="discount-val-label">Discount Value</label>
+                        <input type="number" step="0.01" id="discount-value" name="discount_value" class="form-control math-input" value="0" min="0">
+                    </div>
                 </div>
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:20px; padding:14px; font-size:15px;">
+
+                <!-- Dynamic Single / Dual Column Estimated Card Component -->
+                <div id="modal-total-card" class="total-card">
+                    <!-- Standard Add-Item Mode Structure View -->
+                    <div id="single-total-view" class="sub-box" style="grid-column: span 2;">
+                        <div style="font-size:11px; text-transform:uppercase; color:#64748b; font-weight:700; letter-spacing:0.5px;">Estimated Total</div>
+                        <div class="amount net" style="margin-top:4px;">₹ <span id="auto-single-total">0.00</span></div>
+                    </div>
+                    
+                    <!-- Advanced Split Edit-Item Mode Display View -->
+                    <div id="mrp-box-view" class="sub-box" style="display:none; text-align:left; padding-left:10px; border-right:1px solid var(--border-soft);">
+                        <div style="font-size:10px; text-transform:uppercase; color:#94a3b8; font-weight:600;">Gross MRP</div>
+                        <div class="amount" style="font-size:18px; margin-top:2px;">₹ <span id="auto-mrp">0.00</span></div>
+                    </div>
+                    <div id="net-box-view" class="sub-box" style="display:none; text-align:right; padding-right:10px;">
+                        <div style="font-size:10px; text-transform:uppercase; color:#94a3b8; font-weight:600;">Net Estimate</div>
+                        <div class="amount net" style="font-size:20px; margin-top:2px;">₹ <span id="auto-total">0.00</span></div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:15px; padding:14px; font-size:15px;">
                     Save Changes
                 </button>
             </form>
@@ -305,6 +358,15 @@ function openAddModal() {
     $('#edit-id').val('');
     $('#item-count').val(1);
     $('#l-val, #d-val, #h-val, #qty-val').val(0);
+    
+    $('#discount-section-wrapper').hide();
+    $('#discount-type').val('percentage');
+    $('#discount-value').val(0);
+    
+    $('#modal-total-card').removeClass('split-mode');
+    $('#single-total-view').show();
+    $('#mrp-box-view, #net-box-view').hide();
+    
     $('#qty-label').html('<i class="fa-solid fa-arrow-right-arrows-left"></i> Quantity');
     $('#subunit-select').html('<option value="">Select</option>');
     $('#item-select').html('<option value="">-- Search Item --</option>');
@@ -313,13 +375,14 @@ function openAddModal() {
     $('#calc-type-display').val('');
     $('#calc-type').val('');
     $('#rate-val').val(0);
+    $('#auto-single-total').text('0.00');
+    $('#auto-mrp').text('0.00');
     $('#auto-total').text('0.00');
     
     $('#itemModal').css('display', 'flex').hide().fadeIn(200);
     $('#material-rate-select, #item-select').select2({ dropdownParent: $('#itemModal'), width: '100%' });
 }
 
-// EDIT — uses event delegation + data-* attributes
 $(document).on('click', '.edit-btn', function() {
     const $btn = $(this);
     
@@ -334,8 +397,10 @@ $(document).on('click', '.edit-btn', function() {
     const h = safeNum($btn.attr('data-h'));
     const qv = safeNum($btn.attr('data-qv'));
     const count = safeNum($btn.attr('data-count'));
+    const discType = $btn.attr('data-disc-type') || 'percentage';
+    const discVal = safeNum($btn.attr('data-disc-val'));
     
-    console.log('[DEBUG] Edit clicked:', { id, matId, itemId, unitId, subunitId, calcType, l, d, h, qv, count });
+    console.log('[DEBUG] Edit clicked:', { id, matId, itemId, unitId, subunitId, calcType, l, d, h, qv, count, discType, discVal });
     
     $('#modal-title').text("Edit Item Detail");
     $('#edit-id').val(id);
@@ -346,58 +411,64 @@ $(document).on('click', '.edit-btn', function() {
     $('#qty-val').val(qv);
     $('#item-count').val(count);
     
+    $('#discount-section-wrapper').css('display', 'grid');
+    $('#discount-type').val(discType);
+    $('#discount-value').val(discVal);
+    updateDiscountLabel();
+    
+    $('#modal-total-card').addClass('split-mode');
+    $('#single-total-view').hide();
+    $('#mrp-box-view, #net-box-view').show();
+    
     $('#itemModal').css('display', 'flex').hide().fadeIn(200);
     $('#material-rate-select, #item-select').select2({ dropdownParent: $('#itemModal'), width: '100%' });
     
     isPrefilling = true;
     $('#unit-select').val(unitId);
-    console.log('[DEBUG] Unit set to:', unitId, '| Actual:', $('#unit-select').val());
     
     $.ajax({
         url: "{% url 'ajax_load_subunits' %}",
         data: { 'unit': unitId },
         success: function (data) {
-            console.log('[DEBUG] Subunits loaded');
             $("#subunit-select").html(data);
             $('#subunit-select').val(subunitId);
-            console.log('[DEBUG] Subunit set to:', subunitId, '| Actual:', $('#subunit-select').val());
             
             $.ajax({
                 url: "{% url 'ajax_load_items' %}",
                 data: { 'subunit': subunitId },
                 success: function (data) {
-                    console.log('[DEBUG] Items loaded');
                     $("#item-select").html(data);
                     $('#item-select').select2({ dropdownParent: $('#itemModal'), width: '100%' });
-                    
                     $('#item-select').val(itemId).trigger('change');
-                    console.log('[DEBUG] Item set to:', itemId, '| Actual:', $('#item-select').val());
-                    
                     $('#material-rate-select').val(matId).trigger('change');
-                    console.log('[DEBUG] Material set to:', matId, '| Actual:', $('#material-rate-select').val());
                     
                     runMath();
                     isPrefilling = false;
                     console.log('[DEBUG] Prefill complete');
                 },
-                error: function(xhr, status, err) {
-                    isPrefilling = false;
-                    console.error('[DEBUG] Items AJAX failed:', status, err);
-                    alert('Failed to load items.');
-                }
+                error: function() { isPrefilling = false; alert('Failed to load items.'); }
             });
         },
-        error: function(xhr, status, err) {
-            isPrefilling = false;
-            console.error('[DEBUG] Subunits AJAX failed:', status, err);
-            alert('Failed to load sub-units.');
-        }
+        error: function() { isPrefilling = false; alert('Failed to load sub-units.'); }
     });
 });
 
 function closeModal() { $('#itemModal').fadeOut(200); }
-
 $(window).on('click', function(e) { if ($(e.target).is('#itemModal')) { closeModal(); } });
+
+function updateDiscountLabel() {
+    const discType = $('#discount-type').val();
+    if(discType === 'percentage') {
+        $('#discount-val-label').text('Discount (%)');
+    } else {
+        $('#discount-val-label').text('Discount Value (₹)');
+    }
+}
+
+$(document).on('change', '#discount-type', function() {
+    updateDiscountLabel();
+    runMath();
+});
 
 $(document).on('change', '#item-select', function() {
     const type = $(this).find(':selected').data('type');
@@ -443,10 +514,29 @@ function runMath() {
     }
     
     const finalQty = baseQty * count;
-    $('#auto-total').text((finalQty * rate).toLocaleString('en-IN', { minimumFractionDigits: 2 }));
+    const mrpTotal = finalQty * rate;
+    
+    const discType = $('#discount-type').val();
+    const discVal = parseFloat($('#discount-value').val()) || 0;
+    let computedDiscount = 0;
+
+    if (discVal > 0) {
+        if (discType === 'percentage') {
+            computedDiscount = (mrpTotal * discVal) / 100;
+        } else if (discType === 'flat') {
+            computedDiscount = discVal;
+        }
+    }
+
+    const netTotal = Math.max(0, mrpTotal - computedDiscount);
+    const formattedString = netTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+    
+    $('#auto-single-total').text(mrpTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 }));
+    $('#auto-mrp').text(mrpTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 }));
+    $('#auto-total').text(formattedString);
 }
 
-$(document).on('input', '.math-input', runMath);
+$(document).on('input change', '.math-input', runMath);
 
 $(document).on('change', '#material-rate-select', function() {
     $('#rate-val').val($(this).find(':selected').data('rate') || 0);

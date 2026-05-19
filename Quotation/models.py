@@ -45,7 +45,7 @@ class Material(models.Model):
     def __str__(self):
         return f"{self.name} (₹{self.rate})"
 
-# NEW MODEL: CUSTOMER
+# CUSTOMER MODEL
 class Customer(models.Model):
     name = models.CharField(max_length=200)
     mobile = models.CharField(max_length=15, unique=True)
@@ -55,7 +55,7 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
-# 5. QUOTATION (Updated with null=True and blank=True for migration safety)
+# 5. QUOTATION
 class Quotation(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='quotations', null=True, blank=True)
     quotation_no = models.CharField(max_length=50, unique=True, blank=True)
@@ -80,6 +80,11 @@ class Quotation(models.Model):
 
 # 6. QUOTATION ITEM
 class QuotationItem(models.Model):
+    DISCOUNT_TYPE_CHOICES = [
+        ('percentage', 'Percentage (%)'),
+        ('flat', 'Flat Amount (₹)'),
+    ]
+
     quotation = models.ForeignKey(Quotation, related_name='items', on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.SET_NULL, null=True)
@@ -90,11 +95,31 @@ class QuotationItem(models.Model):
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     item_count = models.PositiveIntegerField(default=1)
     rate = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    discount_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    
+    discount_type = models.CharField(max_length=15, choices=DISCOUNT_TYPE_CHOICES, default='percentage')
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     @property
     def mrp_total(self):
         return self.quantity * self.rate
+
+    @property
+    def discount_amount(self):
+        mrp = float(self.mrp_total)
+        val = float(self.discount_value)
+        if val <= 0:
+            return 0.0
+        
+        if self.discount_type == 'percentage':
+            return (mrp * val) / 100.0
+        elif self.discount_type == 'flat':
+            return val
+        return 0.0
+
+    @property
+    def final_total(self):
+        total = float(self.mrp_total) - self.discount_amount
+        return max(0.0, total)
 
     def __str__(self):
         return f"{self.quotation.quotation_no} - {self.item.name}"
