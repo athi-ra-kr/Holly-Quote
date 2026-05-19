@@ -15,354 +15,49 @@
     --white: #ffffff;
 }
 
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f8fafc;
-    color: var(--text-main);
-}
-
-.detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.client-info-bar {
-    background: var(--white);
-    padding: 18px 24px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid var(--border-soft);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-}
-
-.info-item {
-    display: flex;
-    flex-direction: column;
-}
-
-.info-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    font-weight: 700;
-    margin-bottom: 4px;
-    letter-spacing: 0.5px;
-}
-
-.info-value {
-    font-size: 14px;
-    color: var(--primary-dark);
-    font-weight: 600;
-}
-
-.table-container {
-    background: var(--white);
-    border-radius: 12px;
-    border: 1px solid var(--border-soft);
-    overflow: hidden;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.material-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.material-table th {
-    background: #f8fafc;
-    text-align: left;
-    padding: 16px;
-    font-size: 11px;
-    color: #000000; /* 🌟 CHANGED TO DARK BLACK 🌟 */
-    font-weight: 800; /* Extra bold so it stands out beautifully! */
-    border-bottom: 2px solid var(--border-soft);
-    text-transform: uppercase;
-    white-space: nowrap;
-    letter-spacing: 0.5px;
-}
-
-.material-table td {
-    padding: 16px;
-    border-bottom: 1px solid var(--border-soft);
-    font-size: 13px;
-    vertical-align: middle;
-}
-
-.material-table tbody tr.item-row {
-    transition: background-color 0.2s ease;
-}
-
-.material-table tbody tr.item-row:hover {
-    background-color: #f8fafc;
-}
-
-/* 🌟 UPDATED PREMIUM STYLE: Deep Navy Blue Heading for Unit Room */
-.unit-heading-row {
-    background-color: #528ec2 !important; /* Premium Deep Navy Blue */
-}
-
-.unit-heading-text {
-    font-size: 13px;
-    font-weight: 800;
-    color: #ffffff !important; /* Crisp White Text */
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-align: center;
-    padding: 8px 14px !important;
-}
-
-/* 🌟 UPDATED PREMIUM STYLE: Soft Slate Gray Heading for Subunit */
-.subunit-heading-row {
-    background-color: #e2e8f0 !important; /* Premium Soft Slate Gray */
-}
-
-.subunit-heading-text {
-    font-size: 11px;
-    font-weight: 700;
-    color: #334155; /* Elegant Dark Charcoal Text */
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-align: left;
-    padding: 12px 16px !important;
-    border-bottom: 1px solid #cbd5e1;
-}
-
-.pagination-container {
-    padding: 20px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: transparent;
-}
-
-.pagination {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.pagination-link {
-    text-decoration: none;
-    font-size: 14px;
-    color: var(--accent-blue);
-    transition: opacity 0.2s;
-    display: flex;
-    align-items: center;
-}
-
-.pagination-link.disabled {
-    color: #cbd5e1;
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-.current-page-num {
-    font-size: 16px;
-    font-weight: 700;
-    color: #0f172a;
-    min-width: 20px;
-    text-align: center;
-}
-
-.btn-primary {
-    background: var(--accent-blue);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    transition: transform 0.1s ease, background-color 0.2s ease;
-}
-
-.btn-primary:hover {
-    background-color: #1d4ed8;
-}
-
-.btn-primary:active {
-    transform: scale(0.98);
-}
-
-.action-btn {
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 6px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.action-btn:hover {
-    background-color: #f1f5f9;
-    transform: translateY(-1px);
-}
-
-.action-btn:active {
-    transform: translateY(0);
-}
-
-.item-img {
-    width: 65px;
-    height: 65px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-}
-
-.no-image {
-    width: 65px;
-    height: 65px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background: #f8fafc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #94a3b8;
-    font-size: 11px;
-}
-
-.modal { 
-    display: none; 
-    position: fixed; 
-    z-index: 9999; 
-    left: 0; 
-    top: 0; 
-    width: 100%; 
-    height: 100%; 
-    background-color: rgba(15, 23, 42, 0.6); 
-    align-items: center; 
-    justify-content: center; 
-}
-
-.modal-content { 
-    background-color: var(--white); 
-    width: 520px; 
-    max-width: 90%; 
-    max-height: 85vh;
-    border-radius: 12px; 
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid var(--border-soft);
-}
-
-.modal-header {
-    padding: 18px 24px;
-    border-bottom: 1px solid var(--border-soft);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-}
-
-.modal-header h3 {
-    font-size: 18px;
-    margin: 0;
-    color: var(--primary-dark);
-    font-weight: 700;
-}
-
-.modal-body {
-    padding: 24px;
-    flex: 1;
-    overflow-y: auto;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-}
-
-.form-group label i {
-    color: var(--accent-blue);
-    font-size: 12px;
-    width: 14px;
-    text-align: center;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
-    font-size: 14px;
-    outline: none;
-}
-
-.form-control:focus {
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.calc-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    background: #f8fafc;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 1px solid var(--border-soft);
-}
-
-.total-card {
-    background: #f8fafc;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    color: var(--text-main);
-    margin-top: 10px;
-    border: 1px solid var(--border-soft);
-}
-
-.total-card .amount {
-    font-size: 26px;
-    font-weight: 800;
-    color: var(--accent-blue);
-    margin-top: 5px;
-}
-
-.close-btn {
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 20px;
-}
-
-.close-btn:hover {
-    color: #ef4444;
-}
-
-.select2-container--default .select2-selection--single {
-    height: 40px !important;
-    border-radius: 6px !important;
-    border: 1px solid #cbd5e1 !important;
-    padding-top: 5px;
-}
+body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text-main); }
+.detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.client-info-bar { background: var(--white); padding: 18px 24px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; border: 1px solid var(--border-soft); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); }
+.info-item { display: flex; flex-direction: column; }
+.info-label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; letter-spacing: 0.5px; }
+.info-value { font-size: 14px; color: var(--primary-dark); font-weight: 600; }
+.table-container { background: var(--white); border-radius: 12px; border: 1px solid var(--border-soft); overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+.material-table { width: 100%; border-collapse: collapse; }
+.material-table th { background: #f8fafc; text-align: left; padding: 16px; font-size: 11px; color: #000; font-weight: 800; border-bottom: 2px solid var(--border-soft); text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px; }
+.material-table td { padding: 16px; border-bottom: 1px solid var(--border-soft); font-size: 13px; vertical-align: middle; }
+.material-table tbody tr.item-row { transition: background-color 0.2s ease; }
+.material-table tbody tr.item-row:hover { background-color: #f8fafc; }
+.unit-heading-row { background-color: #528ec2 !important; }
+.unit-heading-text { font-size: 13px; font-weight: 800; color: #fff !important; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding: 8px 14px !important; }
+.subunit-heading-row { background-color: #e2e8f0 !important; }
+.subunit-heading-text { font-size: 11px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 1px; text-align: left; padding: 12px 16px !important; border-bottom: 1px solid #cbd5e1; }
+.pagination-container { padding: 20px 0; display: flex; justify-content: center; align-items: center; }
+.pagination { display: flex; align-items: center; gap: 20px; }
+.pagination-link { text-decoration: none; font-size: 14px; color: var(--accent-blue); display: flex; align-items: center; }
+.pagination-link.disabled { color: #cbd5e1; pointer-events: none; opacity: 0.5; }
+.current-page-num { font-size: 16px; font-weight: 700; color: #0f172a; min-width: 20px; text-align: center; }
+.btn-primary { background: var(--accent-blue); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.btn-primary:hover { background-color: #1d4ed8; }
+.action-btn { border: none; background: none; cursor: pointer; font-size: 16px; padding: 6px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; }
+.action-btn:hover { background-color: #f1f5f9; }
+.item-img { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; }
+.no-image { width: 65px; height: 65px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; }
+.modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15,23,42,0.6); align-items: center; justify-content: center; }
+.modal-content { background-color: var(--white); width: 520px; max-width: 90%; max-height: 85vh; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-soft); }
+.modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { font-size: 18px; margin: 0; color: var(--primary-dark); font-weight: 700; }
+.modal-body { padding: 24px; flex: 1; overflow-y: auto; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
+.form-group label i { color: var(--accent-blue); font-size: 12px; width: 14px; text-align: center; }
+.form-control { width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; }
+.form-control:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border-soft); }
+.total-card { background: #f8fafc; padding: 20px; border-radius: 10px; text-align: center; margin-top: 10px; border: 1px solid var(--border-soft); }
+.total-card .amount { font-size: 26px; font-weight: 800; color: var(--accent-blue); margin-top: 5px; }
+.close-btn { cursor: pointer; color: var(--text-muted); font-size: 20px; }
+.close-btn:hover { color: #ef4444; }
+.select2-container--default .select2-selection--single { height: 40px !important; border-radius: 6px !important; border: 1px solid #cbd5e1 !important; padding-top: 5px; }
 </style>
 
 <div class="detail-header">
@@ -403,8 +98,6 @@ body {
         </thead>
         <tbody>
             {% for q_item in page_obj %}
-                
-                {# Unit heading - Deep Navy Blue & Center Aligned #}
                 {% ifchanged q_item.item.unit.id %}
                     <tr class="unit-heading-row">
                         <td colspan="8" class="unit-heading-text">
@@ -413,7 +106,6 @@ body {
                     </tr>
                 {% endifchanged %}
 
-                {# Sub Unit heading - Soft Slate Gray & Left Aligned #}
                 {% ifchanged q_item.item.sub_unit.id %}
                     <tr class="subunit-heading-row">
                         <td colspan="8" class="subunit-heading-text">
@@ -423,7 +115,7 @@ body {
                 {% endifchanged %}
 
             <tr class="item-row">
-                <td><strong style="color: #64748b;">{{ forloop.counter0|add:page_obj.start_index }}</strong></td>
+                <td><strong style="color:#64748b;">{{ forloop.counter0|add:page_obj.start_index }}</strong></td>
                 <td>
                     {% if q_item.item.image %}
                         <img src="{{ q_item.item.image.url }}" class="item-img">
@@ -432,43 +124,50 @@ body {
                     {% endif %}
                 </td>
                 <td>
-                    <div style="font-weight:700; color:#0f172a; font-size: 14px;">{{ q_item.item.name }}</div>
-                    
-                    <div style="font-size:11px; color:#6366f1; margin-top:6px; font-weight:600; display: inline-block; background: #e0e7ff; padding: 2px 8px; border-radius: 4px;">
+                    <div style="font-weight:700; color:#0f172a; font-size:14px;">{{ q_item.item.name }}</div>
+                    <div style="font-size:11px; color:#6366f1; margin-top:6px; font-weight:600; display:inline-block; background:#e0e7ff; padding:2px 8px; border-radius:4px;">
                         {% if q_item.item.calculation_type == 'sqft' %}
-                            <span style="color: #4f46e5;">Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm</span>
+                            <span style="color:#4f46e5;">Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm</span>
                         {% elif q_item.item.calculation_type == 'rm' %}
-                            <span style="color: #4f46e5;">Running Meters: {{ q_item.qty_val }} m</span>
+                            <span style="color:#4f46e5;">Running Meters: {{ q_item.qty_val }} m</span>
                         {% elif q_item.item.calculation_type == 'rf' %}
-                            <span style="color: #4f46e5;">Running Feet: {{ q_item.qty_val }} ft</span>
+                            <span style="color:#4f46e5;">Running Feet: {{ q_item.qty_val }} ft</span>
                         {% else %}
-                            <span style="color: #4f46e5;">Count: {{ q_item.qty_val }}</span>
+                            <span style="color:#4f46e5;">Count: {{ q_item.qty_val }}</span>
                         {% endif %}
                     </div>
-
                     {% if q_item.item.calculation_type == 'sqft' %}
-                        <div style="font-size: 11px; color: #0ea5e9; margin-top: 4px; font-weight: 600;">
+                        <div style="font-size:11px; color:#0ea5e9; margin-top:4px; font-weight:600;">
                             Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft
                         </div>
                     {% endif %}
-
                     <div style="font-size:11px; color:#64748b; margin-top:6px;">
-                        Material: <span style="font-weight: 600; color: #475569;">{{ q_item.material.name }}</span>
+                        Material: <span style="font-weight:600; color:#475569;">{{ q_item.material.name }}</span>
                     </div>
                 </td>
                 <td>
                     {% if q_item.item.description %}
-                        <div style="max-width:250px; line-height:1.5; color:#475569; font-size: 12px;">{{ q_item.item.description }}</div>
+                        <div style="max-width:250px; line-height:1.5; color:#475569; font-size:12px;">{{ q_item.item.description }}</div>
                     {% else %}
-                        <span style="color:#94a3b8; font-size: 12px; font-style: italic;">No Description</span>
+                        <span style="color:#94a3b8; font-size:12px; font-style:italic;">No Description</span>
                     {% endif %}
                 </td>
-                <td><strong style="color:#0f172a; font-size: 14px;">{{ q_item.item_count|default:"1" }}</strong></td>
+                <td><strong style="color:#0f172a; font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
                 <td><span style="font-weight:600; color:#2563eb;">₹{{ q_item.rate }}</span></td>
-                <td><strong style="color:#16a34a; font-size: 14px;">₹{{ q_item.mrp_total|floatformat:2 }}</strong></td>
+                <td><strong style="color:#16a34a; font-size:14px;">₹{{ q_item.mrp_total|floatformat:2 }}</strong></td>
                 <td style="text-align:center;">
-                    <button class="action-btn" 
-                        onclick="openEditModal('{{ q_item.id }}', '{{ q_item.quantity }}', '{{ q_item.material.id }}', '{{ q_item.item.id }}', '{{ q_item.item.unit.id }}', '{{ q_item.item.sub_unit.id }}', '{{ q_item.item.calculation_type }}', '{{ q_item.l_val }}', '{{ q_item.d_val }}', '{{ q_item.h_val }}', '{{ q_item.qty_val }}', '{{ q_item.item_count }}')">
+                    <button type="button" class="action-btn edit-btn"
+                        data-id="{{ q_item.id }}"
+                        data-mat-id="{{ q_item.material.id }}"
+                        data-item-id="{{ q_item.item.id }}"
+                        data-unit-id="{{ q_item.item.unit.id }}"
+                        data-subunit-id="{{ q_item.item.sub_unit.id }}"
+                        data-calc-type="{{ q_item.item.calculation_type }}"
+                        data-l="{{ q_item.l_val|default:0 }}"
+                        data-d="{{ q_item.d_val|default:0 }}"
+                        data-h="{{ q_item.h_val|default:0 }}"
+                        data-qv="{{ q_item.qty_val|default:0 }}"
+                        data-count="{{ q_item.item_count|default:1 }}">
                         <i class="fa-regular fa-pen-to-square" style="color:#2563eb;"></i>
                     </button>
                     <a href="{% url 'delete_quotation_item' q_item.id %}" class="action-btn" onclick="return confirm('Delete this item?')">
@@ -592,18 +291,52 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
+let isPrefilling = false;
+
+function safeNum(v) {
+    if (v === null || v === undefined || v === '' || v === 'None') return '0';
+    return v;
+}
+
 function openAddModal() {
+    console.log('[DEBUG] openAddModal called');
     $('#modal-title').text("Add New Item");
     $('#materialForm')[0].reset();
     $('#edit-id').val('');
     $('#item-count').val(1);
     $('#l-val, #d-val, #h-val, #qty-val').val(0);
     $('#qty-label').html('<i class="fa-solid fa-arrow-right-arrows-left"></i> Quantity');
+    $('#subunit-select').html('<option value="">Select</option>');
+    $('#item-select').html('<option value="">-- Search Item --</option>');
+    $('#sqft-inputs').hide();
+    $('#single-input').hide();
+    $('#calc-type-display').val('');
+    $('#calc-type').val('');
+    $('#rate-val').val(0);
+    $('#auto-total').text('0.00');
+    
     $('#itemModal').css('display', 'flex').hide().fadeIn(200);
     $('#material-rate-select, #item-select').select2({ dropdownParent: $('#itemModal'), width: '100%' });
 }
 
-function openEditModal(id, qty, matId, itemId, unitId, subunitId, calcType, l, d, h, qv, count) {
+// EDIT — uses event delegation + data-* attributes
+$(document).on('click', '.edit-btn', function() {
+    const $btn = $(this);
+    
+    const id = $btn.attr('data-id');
+    const matId = $btn.attr('data-mat-id');
+    const itemId = $btn.attr('data-item-id');
+    const unitId = $btn.attr('data-unit-id');
+    const subunitId = $btn.attr('data-subunit-id');
+    const calcType = $btn.attr('data-calc-type');
+    const l = safeNum($btn.attr('data-l'));
+    const d = safeNum($btn.attr('data-d'));
+    const h = safeNum($btn.attr('data-h'));
+    const qv = safeNum($btn.attr('data-qv'));
+    const count = safeNum($btn.attr('data-count'));
+    
+    console.log('[DEBUG] Edit clicked:', { id, matId, itemId, unitId, subunitId, calcType, l, d, h, qv, count });
+    
     $('#modal-title').text("Edit Item Detail");
     $('#edit-id').val(id);
     
@@ -612,20 +345,55 @@ function openEditModal(id, qty, matId, itemId, unitId, subunitId, calcType, l, d
     $('#h-val').val(h);
     $('#qty-val').val(qv);
     $('#item-count').val(count);
-
-    $('#unit-select').val(unitId).change();
     
-    setTimeout(() => {
-        $('#subunit-select').val(subunitId).change();
-        setTimeout(() => {
-            $('#item-select').val(itemId).change();
-            $('#material-rate-select').val(matId).trigger('change');
-            runMath();
-        }, 300);
-    }, 300);
-
     $('#itemModal').css('display', 'flex').hide().fadeIn(200);
-}
+    $('#material-rate-select, #item-select').select2({ dropdownParent: $('#itemModal'), width: '100%' });
+    
+    isPrefilling = true;
+    $('#unit-select').val(unitId);
+    console.log('[DEBUG] Unit set to:', unitId, '| Actual:', $('#unit-select').val());
+    
+    $.ajax({
+        url: "{% url 'ajax_load_subunits' %}",
+        data: { 'unit': unitId },
+        success: function (data) {
+            console.log('[DEBUG] Subunits loaded');
+            $("#subunit-select").html(data);
+            $('#subunit-select').val(subunitId);
+            console.log('[DEBUG] Subunit set to:', subunitId, '| Actual:', $('#subunit-select').val());
+            
+            $.ajax({
+                url: "{% url 'ajax_load_items' %}",
+                data: { 'subunit': subunitId },
+                success: function (data) {
+                    console.log('[DEBUG] Items loaded');
+                    $("#item-select").html(data);
+                    $('#item-select').select2({ dropdownParent: $('#itemModal'), width: '100%' });
+                    
+                    $('#item-select').val(itemId).trigger('change');
+                    console.log('[DEBUG] Item set to:', itemId, '| Actual:', $('#item-select').val());
+                    
+                    $('#material-rate-select').val(matId).trigger('change');
+                    console.log('[DEBUG] Material set to:', matId, '| Actual:', $('#material-rate-select').val());
+                    
+                    runMath();
+                    isPrefilling = false;
+                    console.log('[DEBUG] Prefill complete');
+                },
+                error: function(xhr, status, err) {
+                    isPrefilling = false;
+                    console.error('[DEBUG] Items AJAX failed:', status, err);
+                    alert('Failed to load items.');
+                }
+            });
+        },
+        error: function(xhr, status, err) {
+            isPrefilling = false;
+            console.error('[DEBUG] Subunits AJAX failed:', status, err);
+            alert('Failed to load sub-units.');
+        }
+    });
+});
 
 function closeModal() { $('#itemModal').fadeOut(200); }
 
@@ -638,29 +406,22 @@ $(document).on('change', '#item-select', function() {
     const names = { 'sqft': 'Square Feet', 'rm': 'Running Meter', 'rf': 'Running Feet', 'nos': 'Unit Based' };
     $('#calc-type-display').val(names[type] || '---');
     
-    if(type === 'sqft') { 
-        $('#sqft-inputs').show(); 
-        $('#single-input').hide(); 
-    } 
+    if(type === 'sqft') { $('#sqft-inputs').show(); $('#single-input').hide(); } 
     else if(type === 'rm') {
         $('#qty-label').html('<i class="fa-solid fa-ruler-horizontal"></i> Total Running Meters');
-        $('#sqft-inputs').hide(); 
-        $('#single-input').show();
+        $('#sqft-inputs').hide(); $('#single-input').show();
     }
     else if(type === 'rf') {
         $('#qty-label').html('<i class="fa-solid fa-ruler"></i> Total Running Feet');
-        $('#sqft-inputs').hide(); 
-        $('#single-input').show();
+        $('#sqft-inputs').hide(); $('#single-input').show();
     }
     else if(type === 'nos') {
         $('#qty-label').html('<i class="fa-solid fa-arrow-1-9"></i> Count Value');
-        $('#sqft-inputs').hide(); 
-        $('#single-input').show();
+        $('#sqft-inputs').hide(); $('#single-input').show();
     }
     else {
         $('#qty-label').html('<i class="fa-solid fa-arrow-right-arrows-left"></i> Quantity');
-        $('#sqft-inputs').hide(); 
-        $('#single-input').hide();
+        $('#sqft-inputs').hide(); $('#single-input').hide();
     }
     runMath();
 });
@@ -675,12 +436,8 @@ function runMath() {
         const l = parseFloat($('#l-val').val()) || 0;
         const d = parseFloat($('#d-val').val()) || 0;
         const h = parseFloat($('#h-val').val()) || 0;
-        
-        if(l > 0) { 
-            baseQty = (l * Math.max(d, h)) / 929; 
-        } else { 
-            baseQty = parseFloat($('#qty-val').val()) || 0; 
-        }
+        if(l > 0) { baseQty = (l * Math.max(d, h)) / 929; } 
+        else { baseQty = parseFloat($('#qty-val').val()) || 0; }
     } else { 
         baseQty = parseFloat($('#qty-val').val()) || 0; 
     }
@@ -697,14 +454,27 @@ $(document).on('change', '#material-rate-select', function() {
 });
 
 $("#unit-select").change(function () {
-    $.ajax({ url: "{% url 'ajax_load_subunits' %}", data: { 'unit': $(this).val() }, success: function (data) { $("#subunit-select").html(data); } });
+    if (isPrefilling) return;
+    $.ajax({ 
+        url: "{% url 'ajax_load_subunits' %}", 
+        data: { 'unit': $(this).val() }, 
+        success: function (data) { 
+            $("#subunit-select").html(data);
+            $("#item-select").html('<option value="">-- Select Item --</option>');
+        } 
+    });
 });
 
 $("#subunit-select").change(function () {
-    $.ajax({ url: "{% url 'ajax_load_items' %}", data: { 'subunit': $(this).val() }, success: function (data) {
-        $("#item-select").html(data);
-        $('#item-select').select2({ dropdownParent: $('#itemModal'), width: '100%' });
-    }});
+    if (isPrefilling) return;
+    $.ajax({ 
+        url: "{% url 'ajax_load_items' %}", 
+        data: { 'subunit': $(this).val() }, 
+        success: function (data) {
+            $("#item-select").html(data);
+            $('#item-select').select2({ dropdownParent: $('#itemModal'), width: '100%' });
+        }
+    });
 });
 </script>
 
