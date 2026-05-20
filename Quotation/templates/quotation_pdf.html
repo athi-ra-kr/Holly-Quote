@@ -6,60 +6,131 @@
     <title>Quotation {{ quotation.quotation_no }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="https://hollyblueinterio.com/images/abc/fav.png">
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 40px; max-width: 1000px; margin: 0 auto; color: #333; }
-
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; border-bottom: 2px solid #1a73e8; padding-bottom: 20px; }
-        .logo-section img { height: 80px; width: auto; object-fit: contain; }
-        .company-details { text-align: right; font-size: 12px; color: #555; line-height: 1.5; }
-        .title { color: #1a73e8; font-size: 24px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
-
-        .client-info { margin-bottom: 40px; }
-        .info-row { display: flex; margin-bottom: 8px; }
-        .info-label { width: 130px; font-weight: bold; color: #444; }
-        .info-val { flex: 1; color: #000; }
-
-        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        thead { background-color: #f1f3f4; border-bottom: 2px solid #ccc; }
-        th { text-align: left; padding: 10px 12px; font-size: 11px; text-transform: uppercase; color: #444; font-weight: 800; }
-        td { padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
-        .col-price { text-align: right; font-weight: bold; color: #1a73e8; white-space: nowrap; }
-        .col-net { text-align: right; font-weight: bold; color: #16a34a; white-space: nowrap; }
-        .col-rate { text-align: right; font-weight: 600; color: #2563eb; white-space: nowrap; }
-        .col-size { font-size: 11px; color: #666; }
-
-        .pdf-img { width: 55px; height: 55px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0; }
-        .no-img { width: 55px; height: 55px; border-radius: 6px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #999; font-size: 9px; }
-
-        .item-desc { font-size: 11px; color: #777; margin-top: 5px; line-height: 1.4; padding-top: 4px; border-top: 1px dotted #e2e8f0; }
-        .size-tag { display: inline-block; background: #e0e7ff; color: #4f46e5; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-top: 4px; }
-        .sqft-tag { font-size: 11px; color: #0ea5e9; font-weight: 600; margin-top: 3px; }
-
-        /* Unit heading row */
-        .unit-row td { background-color: #528ec2; color: #fff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; padding: 8px 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        /* Sub-unit heading row */
-        .subunit-row td { background-color: #e2e8f0; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-size: 10px; padding: 6px 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        /* Unit total row */
-        .unit-total-row td { background-color: #f8fafc; font-weight: bold; border-top: 1px dashed #ccc; border-bottom: 1px solid #ccc; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-        .grand-total-section { margin-top: 10px; }
-        .grand-table { width: 340px; margin-left: auto; border-collapse: collapse; }
-        .grand-table td { padding: 8px 12px; font-size: 14px; border: none; }
-        .grand-table .label { text-align: left; color: #444; font-weight: 600; }
-        .grand-table .value { text-align: right; font-weight: bold; }
-        .grand-table .net-row td { border-top: 2px solid #333; font-size: 18px; padding-top: 12px; }
-        .grand-table .net-row .value { color: #16a34a; }
-
-        .print-btn {
-            display: block; margin: 0 auto 30px; padding: 10px 24px;
-            background: #1a73e8; color: white; border: none; border-radius: 4px;
-            cursor: pointer; font-size: 14px; text-decoration: none; width: fit-content;
+        /* Base Reset & Tightened Typography */
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
-        .print-btn:hover { background: #0d47a1; }
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            padding: 30px; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            color: #1e293b; 
+            font-size: 12px; 
+            line-height: 1.4;
+            background-color: #ffffff;
+        }
+
+        /* Header Layout Styling */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 30px; 
+            border-bottom: 2px solid #528ec2; 
+            padding-bottom: 15px; 
+        }
+        .logo-section img { height: 65px; width: auto; object-fit: contain; }
+        .company-details { text-align: right; font-size: 11px; color: #475569; line-height: 1.5; }
+        
+        /* Updated Font Style for QUOTATION Title - Straight/Upright Serif style */
+        .title { 
+            color: #528ec2; 
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 26px; 
+            font-weight: bold; 
+            font-style: normal;
+            margin-bottom: 5px; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+        }
+
+        /* Client Info Section - Beautiful 3-Column Grid with No Empty Space */
+        .client-info { 
+            margin-bottom: 30px; 
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px 20px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .info-row { display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; }
+        .info-label { font-weight: bold; color: #64748b; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px; }
+        .info-val { color: #0f172a; font-weight: 600; font-size: 12px; }
+
+        /* Global Table Adjustments */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 25px; 
+            counter-reset: pdf-row-counter; 
+        }
+        thead { background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1; }
+        
+        th { 
+            padding: 10px 12px; 
+            font-size: 10px; 
+            text-transform: uppercase; 
+            color: #475569; 
+            font-weight: 800; 
+            letter-spacing: 0.5px;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 11.5px; vertical-align: middle; }
+        
+        /* Column Specific Alignments */
+        .col-center { text-align: center; }
+        .col-right { text-align: right; }
+        
+        /* Pricing Text Styles */
+        .col-price { text-align: right; font-weight: 700; color: #475569; white-space: nowrap; }
+        .col-net { text-align: right; font-weight: 700; color: #16a34a; white-space: nowrap; }
+        .col-rate { text-align: right; font-weight: 600; color: #2563eb; white-space: nowrap; }
+
+        /* Image Formatting */
+        .pdf-img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0; }
+        .no-img { width: 48px; height: 48px; border-radius: 6px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 8px; text-align: center; font-weight: 600; }
+
+        /* Item Metadata Badges */
+        .item-desc { font-size: 10.5px; color: #64748b; margin-top: 5px; line-height: 1.4; padding-top: 5px; border-top: 1px dotted #e2e8f0; }
+        .size-tag { display: inline-block; background: #eff6ff; color: #2563eb; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; margin-top: 5px; border: 1px solid #dbeafe; }
+        .sqft-tag { font-size: 10px; color: #0ea5e9; font-weight: 600; margin-top: 3px; }
+
+        /* Grouping Header Row Styles */
+        .unit-row td { background-color: #528ec2; color: #fff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 11px; padding: 8px 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .subunit-row td { background-color: #e2e8f0; color: #334155; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-size: 9.5px; padding: 6px 12px; border-bottom: 1px solid #cbd5e1; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        
+        /* Continuous row number injector */
+        .item-row { counter-increment: pdf-row-counter; }
+        .item-row .row-num-display::before { content: counter(pdf-row-counter); }
+
+        /* Section Summary Totals */
+        .unit-total-row td { background-color: #f8fafc; font-weight: 700; font-size: 11px; border-top: 1px dashed #cbd5e1; border-bottom: 1px solid #cbd5e1; padding: 10px 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+        /* Grand Summary Box */
+        .grand-total-section { margin-top: 20px; display: flex; justify-content: flex-end; }
+        .grand-table { width: 300px; border-collapse: collapse; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+        .grand-table td { padding: 10px 14px; font-size: 12px; border: none; }
+        .grand-table .label { text-align: left; color: #64748b; font-weight: 600; }
+        .grand-table .value { text-align: right; font-weight: 700; color: #0f172a; }
+        .grand-table .net-row td { border-top: 2px solid #e2e8f0; background-color: #f0fdf4; font-size: 15px; padding-top: 12px; padding-bottom: 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .grand-table .net-row .value { color: #16a34a; font-weight: 800; }
+
+        /* Print Button Utility */
+        .print-btn {
+            display: block; margin: 0 auto 25px; padding: 9px 20px;
+            background: #2563eb; color: white; border: none; border-radius: 6px;
+            cursor: pointer; font-size: 13px; font-weight: 600; text-decoration: none; width: fit-content;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: background 0.2s;
+        }
+        .print-btn:hover { background: #1d4ed8; }
 
         @media print {
             .print-btn { display: none; }
-            body { padding: 0; }
-            @page { size: A4 landscape; margin: 12mm; }
+            body { padding: 0; margin: 0; }
+            @page { size: A4 portrait; margin: 15mm; }
+            .grand-table { page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -82,41 +153,37 @@
 
     <div class="client-info">
         <div class="info-row">
-            <div class="info-label">Client Name:</div>
+            <div class="info-label">Client Name</div>
             <div class="info-val">{{ quotation.customer.name }}</div>
         </div>
         <div class="info-row">
-            <div class="info-label">Mobile:</div>
-            <div class="info-val">{{ quotation.customer.mobile }}</div>
-        </div>
-        <div class="info-row">
-            <div class="info-label">Email:</div>
-            <div class="info-val">{{ quotation.customer.email }}</div>
-        </div>
-        <div class="info-row">
-            <div class="info-label">Quotation No:</div>
+            <div class="info-label">Quotation No</div>
             <div class="info-val">{{ quotation.quotation_no }}</div>
         </div>
         <div class="info-row">
-            <div class="info-label">Project:</div>
-            <div class="info-val">{{ quotation.project_type }}</div>
+            <div class="info-label">Date</div>
+            <div class="info-val">{{ quotation.date|date:"d M Y" }}</div>
         </div>
         <div class="info-row">
-            <div class="info-label">Date:</div>
-            <div class="info-val">{{ quotation.date|date:"d M Y" }}</div>
+            <div class="info-label">Mobile</div>
+            <div class="info-val">{{ quotation.customer.mobile }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Project</div>
+            <div class="info-val">{{ quotation.project_type }}</div>
         </div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th style="width: 5%;">No</th>
-                <th style="width: 8%;">Image</th>
-                <th style="width: 32%;">Item Details</th>
-                <th style="width: 8%; text-align:center;">Qty Count</th>
-                <th style="width: 13%; text-align:right;">Material Rate</th>
-                <th style="width: 17%; text-align:right;">MRP</th>
-                <th style="width: 17%; text-align:right;">Discount Amount</th>
+                <th style="width: 5%; text-align: left;">No</th>
+                <th style="width: 8%; text-align: left;">Image</th>
+                <th style="width: 32%; text-align: left;">Item Details</th>
+                <th style="width: 10%; text-align: center;">Qty Count</th>
+                <th style="width: 13%; text-align: right;">Material Rate</th>
+                <th style="width: 16%; text-align: right;">MRP</th>
+                <th style="width: 16%; text-align: right;">Discount Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -132,8 +199,8 @@
                 </tr>
 
                 {% for q_item in subunit_group.list %}
-                <tr>
-                    <td>{{ forloop.parentloop.counter }}.{{ forloop.counter }}</td>
+                <tr class="item-row">
+                    <td class="row-num-display" style="font-weight: bold; color: #64748b;"></td>
                     <td>
                         {% if q_item.item.image %}
                             <img src="{{ q_item.item.image.url }}" class="pdf-img">
@@ -142,7 +209,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <strong style="color:#0f172a;">{{ q_item.item.name }}</strong>
+                        <strong style="color: #0f172a; font-size: 12px;">{{ q_item.item.name }}</strong>
                         <div class="size-tag">
                             {% if q_item.item.calculation_type == 'sqft' %}
                                 Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm
@@ -157,21 +224,21 @@
                         {% if q_item.item.calculation_type == 'sqft' %}
                             <div class="sqft-tag">Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft</div>
                         {% endif %}
-                        <div style="font-size:11px; color:#64748b; margin-top:3px;">
-                            Material: <span style="font-weight:600; color:#475569;">{{ q_item.material.name }}</span>
+                        <div style="font-size: 10px; color: #64748b; margin-top: 4px;">
+                            Material: <span style="font-weight: 600; color: #475569;">{{ q_item.material.name }}</span>
                         </div>
                         {% if q_item.item.description %}
                             <div class="item-desc">{{ q_item.item.description }}</div>
                         {% endif %}
                     </td>
-                    <td style="text-align:center;"><strong>{{ q_item.item_count|default:"1" }}</strong></td>
+                    <td class="col-center"><strong>{{ q_item.item_count|default:"1" }}</strong></td>
                     <td class="col-rate">₹ {{ q_item.rate }}</td>
                     <td class="col-price">₹ {{ q_item.mrp_total|floatformat:2 }}</td>
                     <td class="col-net">
                         {% if q_item.discount_value > 0 %}
                             ₹ {{ q_item.final_total|floatformat:2 }}
                         {% else %}
-                            <span style="color:#999; font-style:italic; font-weight:normal;">---</span>
+                            <span style="color: #94a3b8; font-style: italic; font-weight: normal;">---</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -179,12 +246,12 @@
             {% endfor %}
 
             <tr class="unit-total-row">
-                <td colspan="5" style="text-align:right; text-transform:uppercase; font-size:11px; letter-spacing:0.5px; color:#555;">{{ room.name }} Total:</td>
+                <td colspan="5" style="text-align: right; text-transform: uppercase; color: #475569;">{{ room.name }} Total:</td>
                 <td class="col-price">₹ {{ data.mrp_total|floatformat:2 }}</td>
                 <td class="col-net">₹ {{ data.unit_grand_total|floatformat:2 }}</td>
             </tr>
             {% empty %}
-            <tr><td colspan="7" style="text-align:center; padding:30px; color:#777;">No items added.</td></tr>
+            <tr><td colspan="7" style="text-align: center; padding: 30px; color: #94a3b8;">No items added.</td></tr>
             {% endfor %}
         </tbody>
     </table>
