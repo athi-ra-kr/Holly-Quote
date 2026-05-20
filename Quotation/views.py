@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout 
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
-from django.db.models import Q 
+from django.db.models import Q, Count # Added Count here to help us count items!
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages 
 from .models import *
@@ -25,8 +25,40 @@ def login_view(request):
 @never_cache
 def dashboard(request):
     if not request.session.get('user'): return redirect('login')
+    
+    # --- NEW REAL-TIME COUNTS FOR YOUR CARDS ---
+    # 1. Count all quotations in the database
+    total_quotations = Quotation.objects.count()
+    
+    # Check if there are any quotations at all first to prevent ghost counts!
+    if total_quotations == 0:
+        total_submitted = 0
+        total_drafts = 0
+    else:
+        # 2. Count quotations that have 1 or more items added to them (Submitted)
+        total_submitted = Quotation.objects.annotate(items_count=Count('items')).filter(items_count__gt=0).count()
+        
+        # 3. Count quotations that have exactly 0 items added to them (Drafts)
+        total_drafts = Quotation.objects.annotate(items_count=Count('items')).filter(items_count=0).count()
+    
+    # ✨ GIRL, LOOK AT YOUR VS CODE TERMINAL FOR THESE PRINTS! ✨
+    print("================ DEBUG COUNTS ================")
+    print(f"Total Quotations in DB: {total_quotations}")
+    print(f"Total Submitted in DB: {total_submitted}")
+    print(f"Total Drafts in DB: {total_drafts}")
+    print("==============================================")
+    
     recent_customers = Customer.objects.all().order_by('-id')[:8]
-    return render(request, 'dashboard.html', {'recent_customers': recent_customers})
+    
+    # Pass the real numbers to your template context
+    context = {
+        'recent_customers': recent_customers,
+        'total_quotations': total_quotations,
+        'total_submitted': total_submitted,
+        'total_drafts': total_drafts,
+    }
+    
+    return render(request, 'dashboard.html', context)
 
 def logout_view(request):
     request.session.flush()
@@ -219,14 +251,12 @@ def material_delete(request, id):
 
 
 # -------- DETAILED QUOTATION MANAGER --------
-# UPDATED: Now groups by main Unit to calculate room totals and room discounts!
 def quotation_detail(request, id):
     quotation = get_object_or_404(Quotation, id=id)
     units = Unit.objects.all()
     materials_list = Material.objects.all()
     quotation_items = quotation.items.all().order_by('-id')
     
-    # 1. Group items by main Unit (room) to calculate totals
     unit_data = {}
     for q_item in quotation_items:
         main_unit = q_item.item.unit
@@ -239,7 +269,6 @@ def quotation_detail(request, id):
         unit_data[main_unit]['mrp_total'] += float(q_item.mrp_total)
         unit_data[main_unit]['final_total'] += float(q_item.final_total)
 
-    # 2. Apply main Unit level discounts on top of the room totals
     for main_unit, totals in unit_data.items():
         base_amt = totals['final_total']
         val = float(main_unit.discount_value)
@@ -255,7 +284,6 @@ def quotation_detail(request, id):
         
         totals['unit_grand_total'] = max(0.0, base_amt - unit_discount)
 
-    # 3. NEW: Calculate grand totals across all units
     grand_mrp_total = sum(t['mrp_total'] for t in unit_data.values())
     grand_net_total = sum(t['unit_grand_total'] for t in unit_data.values())
 
@@ -313,12 +341,11 @@ def quotation_detail(request, id):
         'units': units, 
         'materials_list': materials_list, 
         'page_obj': page_obj,
-        'unit_data': unit_data,                # Sent to the template to show room totals!
-        'grand_mrp_total': grand_mrp_total,    # NEW: grand MRP total
-        'grand_net_total': grand_net_total,    # NEW: grand net total
+        'unit_data': unit_data, 
+        'grand_mrp_total': grand_mrp_total, 
+        'grand_net_total': grand_net_total, 
     })
 
-# UPDATED VIEW: Handles form data to update main Unit discounts
 def update_unit_discount(request, quotation_id, unit_id):
     if request.method == "POST":
         main_unit = get_object_or_404(Unit, id=unit_id)
@@ -349,7 +376,6 @@ def quotation_pdf(request, id):
     quotation = get_object_or_404(Quotation, id=id)
     quotation_items = quotation.items.all().order_by('item__unit__id', 'item__sub_unit__id')
 
-    # Group by unit (same logic as quotation_detail)
     unit_data = {}
     for q_item in quotation_items:
         main_unit = q_item.item.unit

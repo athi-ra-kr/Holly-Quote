@@ -250,7 +250,7 @@
             margin: 40px 0 20px 0;
         }
 
-        /* ================= OVERVIEW CARDS (REDUCED SIZE) ================= */
+        /* ================= OVERVIEW CARDS ================= */
 
         .cards{
             display:grid;
@@ -524,13 +524,12 @@
             }
         }
 
-        /* CRITICAL: Adjusted for mobile screens to keep the dashboard visible */
         @media(max-width:768px){
             .main-container {
-                margin-left: 90px; /* Keeps room for the slim mobile sidebar */
+                margin-left: 90px;
             }
             .main-content {
-                padding: 20px; /* Gives nice breathing room on tiny screens */
+                padding: 20px;
             }
         }
 
@@ -614,17 +613,17 @@
 
                 <div class="card">
                     <h3>Total Quotations</h3>
-                    <p>25</p>
+                    <p>{{ total_quotations }}</p>
                 </div>
 
                 <div class="card">
                     <h3>Submitted</h3>
-                    <p>17</p>
+                    <p>{{ total_submitted }}</p>
                 </div>
 
                 <div class="card">
                     <h3>Drafts</h3>
-                    <p>08</p>
+                    <p>{{ total_drafts }}</p>
                 </div>
 
             </div>
@@ -675,7 +674,7 @@
                 {% endfor %}
             </div>
 
-            <!-- ✅ POPUP MODAL HTML STRUCTURE -->
+            <!-- POPUP MODAL HTML STRUCTURE -->
             <div id="customerModal" class="custom-modal">
                 <div class="modal-content-box">
                     <div class="modal-header-box">
@@ -724,7 +723,6 @@
             }, 100);
         });
 
-        // ✅ MODAL JAVASCRIPT FUNCTIONS
         function openEditModal(element) {
             const id = element.getAttribute('data-id');
             const name = element.getAttribute('data-name');
