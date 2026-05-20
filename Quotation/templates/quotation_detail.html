@@ -17,6 +17,7 @@
 
 body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text-main); }
 .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.header-actions { display: flex; gap: 10px; }
 .client-info-bar { background: var(--white); padding: 18px 24px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; border: 1px solid var(--border-soft); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); }
 .info-item { display: flex; flex-direction: column; }
 .info-label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; letter-spacing: 0.5px; }
@@ -28,7 +29,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .material-table tbody tr.item-row { transition: background-color 0.2s ease; }
 .material-table tbody tr.item-row:hover { background-color: #f8fafc; }
 .unit-heading-row { background-color: #528ec2 !important; }
-.unit-heading-text { font-size: 13px; font-weight: 800; color: #fff !important; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding: 8px 14px !important; }
+.unit-heading-text { font-size: 13px; font-weight: 800; color: #fff !important; text-transform: uppercase; letter-spacing: 2px; text-align: left; padding: 10px 16px !important; }
 
 /* Sub-Unit Compact Layout Styling Elements */
 .subunit-heading-row { background-color: #e2e8f0 !important; }
@@ -41,6 +42,8 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .current-page-num { font-size: 16px; font-weight: 700; color: #0f172a; min-width: 20px; text-align: center; }
 .btn-primary { background: var(--accent-blue); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .btn-primary:hover { background-color: #1d4ed8; }
+.btn-export { background: #16a34a; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.btn-export:hover { background-color: #15803d; }
 .action-btn { border: none; background: none; cursor: pointer; font-size: 16px; padding: 6px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; }
 .action-btn:hover { background-color: #f1f5f9; }
 .item-img { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; }
@@ -68,13 +71,44 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .close-btn { cursor: pointer; color: var(--text-muted); font-size: 20px; }
 .close-btn:hover { color: #ef4444; }
 .select2-container--default .select2-selection--single { height: 40px !important; border-radius: 6px !important; border: 1px solid #cbd5e1 !important; padding-top: 5px; }
+
+/* Unit summary styles matched cleanly to table layout */
+.unit-total-row { background-color: #f8fafc; border-top: 2px dashed var(--border-soft); border-bottom: 2px solid var(--border-soft); font-weight: 700; }
+.unit-discount-btn { background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; padding: 4px 10px; font-size: 11px; border-radius: 6px; cursor: pointer; font-weight: 700; transition: all 0.2s; margin-left: 12px; }
+.unit-discount-btn:hover { background: #f1f5f9; border-color: #94a3b8; }
+
+/* Grand total row styling */
+.grand-total-row { background-color: #528ec2  !important; }
+.grand-total-row td { color: #ffffff !important; font-size: 15px; font-weight: 800; padding: 18px 16px !important; border-bottom: none; }
+
+/* ===== PRINT STYLES (Save as PDF) ===== */
+@media print {
+    body { background: #fff !important; }
+    .detail-header .header-actions,
+    .pagination-container,
+    .action-btn,
+    .unit-discount-btn,
+    .edit-btn,
+    .modal { display: none !important; }
+    .table-container { box-shadow: none; border: 1px solid #ccc; }
+    .material-table th { color: #000 !important; }
+    .unit-heading-row { background-color: #528ec2 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .grand-total-row { background-color: #0f172a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .grand-total-row td { color: #fff !important; }
+    @page { size: A4 landscape; margin: 12mm; }
+}
 </style>
 
 <div class="detail-header">
     <h2>Quotation Detail</h2>
-    <button class="btn-primary" onclick="openAddModal()">
-        <i class="fa-solid fa-plus"></i> Add Item
-    </button>
+    <div class="header-actions">
+        <a href="{% url 'quotation_pdf' quotation.id %}" target="_blank" class="btn-export" style="text-decoration:none;">
+            <i class="fa-solid fa-file-pdf"></i> Export PDF
+        </a>
+        <button class="btn-primary" onclick="openAddModal()">
+            <i class="fa-solid fa-plus"></i> Add Item
+        </button>
+    </div>
 </div>
 
 <div class="client-info-bar">
@@ -101,107 +135,142 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                 <th>Item Details</th>
                 <th>Qty Count</th>
                 <th>Material Rate</th>
-                <th>MRP Total</th>
+                <th>MRP </th>
                 <th>Discount Amount</th>
                 <th style="text-align:center;">Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for q_item in page_obj %}
-                {% ifchanged q_item.item.unit.id %}
-                    <tr class="unit-heading-row">
-                        <td colspan="8" class="unit-heading-text">
-                            {{ q_item.item.unit.name|default:"General Items" }}
-                        </td>
-                    </tr>
-                {% endifchanged %}
+            {% regroup page_obj by item.unit as unit_list %}
+            {% for unit_group in unit_list %}
+                {# ===== UNIT HEADING (no discount button here anymore) ===== #}
+                <tr class="unit-heading-row">
+                    <td colspan="8" class="unit-heading-text">
+                        <span style="color:#ffffff;">{{ unit_group.grouper.name|default:"General Items" }}</span>
+                    </td>
+                </tr>
 
-                {% ifchanged q_item.item.sub_unit.id %}
+                {# ===== Group again by sub-unit within this unit ===== #}
+                {% regroup unit_group.list by item.sub_unit as subunit_list %}
+                {% for subunit_group in subunit_list %}
                     <tr class="subunit-heading-row">
                         <td colspan="8" class="subunit-heading-text">
-                            {{ q_item.item.sub_unit.name|default:"General Sub-Unit" }}
+                            {{ subunit_group.grouper.name|default:"General Sub-Unit" }}
                         </td>
                     </tr>
-                {% endifchanged %}
 
-            <tr class="item-row">
-                <td><strong style="color:#64748b;">{{ forloop.counter0|add:page_obj.start_index }}</strong></td>
-                <td>
-                    {% if q_item.item.image %}
-                        <img src="{{ q_item.item.image.url }}" class="item-img">
-                    {% else %}
-                        <div class="no-image">No Image</div>
-                    {% endif %}
-                </td>
-                <td>
-                    <div style="font-weight:700; color:#0f172a; font-size:14px;">{{ q_item.item.name }}</div>
-                    
-                    <div style="font-size:11px; color:#6366f1; margin-top:6px; font-weight:600; display:inline-block; background:#e0e7ff; padding:2px 8px; border-radius:4px;">
-                        {% if q_item.item.calculation_type == 'sqft' %}
-                            <span style="color:#4f46e5;">Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm</span>
-                        {% elif q_item.item.calculation_type == 'rm' %}
-                            <span style="color:#4f46e5;">Running Meters: {{ q_item.qty_val }} m</span>
-                        {% elif q_item.item.calculation_type == 'rf' %}
-                            <span style="color:#4f46e5;">Running Feet: {{ q_item.qty_val }} ft</span>
-                        {% else %}
-                            <span style="color:#4f46e5;">Count: {{ q_item.qty_val }}</span>
-                        {% endif %}
-                    </div>
-                    
-                    {% if q_item.item.calculation_type == 'sqft' %}
-                        <div style="font-size:11px; color:#0ea5e9; margin-top:4px; font-weight:600;">
-                            Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft
-                        </div>
-                    {% endif %}
-                    
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;">
-                        Material: <span style="font-weight:600; color:#475569;">{{ q_item.material.name }}</span>
-                    </div>
+                    {% for q_item in subunit_group.list %}
+                    <tr class="item-row">
+                        <td><strong style="color:#64748b;">{{ forloop.parentloop.parentloop.counter }}.{{ forloop.counter }}</strong></td>
+                        <td>
+                            {% if q_item.item.image %}
+                                <img src="{{ q_item.item.image.url }}" class="item-img">
+                            {% else %}
+                                <div class="no-image">No Image</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div style="font-weight:700; color:#0f172a; font-size:14px;">{{ q_item.item.name }}</div>
+                            
+                            <div style="font-size:11px; color:#6366f1; margin-top:6px; font-weight:600; display:inline-block; background:#e0e7ff; padding:2px 8px; border-radius:4px;">
+                                {% if q_item.item.calculation_type == 'sqft' %}
+                                    <span style="color:#4f46e5;">Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm</span>
+                                {% elif q_item.item.calculation_type == 'rm' %}
+                                    <span style="color:#4f46e5;">Running Meters: {{ q_item.qty_val }} m</span>
+                                {% elif q_item.item.calculation_type == 'rf' %}
+                                    <span style="color:#4f46e5;">Running Feet: {{ q_item.qty_val }} ft</span>
+                                {% else %}
+                                    <span style="color:#4f46e5;">Count: {{ q_item.qty_val }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            {% if q_item.item.calculation_type == 'sqft' %}
+                                <div style="font-size:11px; color:#0ea5e9; margin-top:4px; font-weight:600;">
+                                    Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft
+                                </div>
+                            {% endif %}
+                            
+                            <div style="font-size:11px; color:#64748b; margin-top:4px;">
+                                Material: <span style="font-weight:600; color:#475569;">{{ q_item.material.name }}</span>
+                            </div>
 
-                    {% if q_item.item.description %}
-                        <div style="max-width:280px; line-height:1.5; color:#64748b; font-size:12px; margin-top:8px; padding-top:6px; border-top: 1px dotted #e2e8f0;">
-                            {{ q_item.item.description }}
-                        </div>
-                    {% endif %}
-                </td>
-                <td><strong style="color:#0f172a; font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
-                <td><span style="font-weight:600; color:#2563eb;">₹{{ q_item.rate }}</span></td>
-                <td><span style="color:#475569; font-weight:600;">₹{{ q_item.mrp_total|floatformat:2 }}</span></td>
-                <td>
-                    <!-- Shows final total only after a valid discount value gets verified -->
-                    {% if q_item.discount_value > 0 %}
-                        <strong style="color:#16a34a; font-size:14px;">₹{{ q_item.final_total|floatformat:2 }}</strong>
-                    {% else %}
-                        <span style="color:#94a3b8; font-size:12px; font-style:italic;">---</span>
-                    {% endif %}
-                </td>
-                <td style="text-align:center;">
-                    <button type="button" class="action-btn edit-btn"
-                        data-id="{{ q_item.id }}"
-                        data-mat-id="{{ q_item.material.id }}"
-                        data-item-id="{{ q_item.item.id }}"
-                        data-unit-id="{{ q_item.item.unit.id }}"
-                        data-subunit-id="{{ q_item.item.sub_unit.id }}"
-                        data-calc-type="{{ q_item.item.calculation_type }}"
-                        data-l="{{ q_item.l_val|default:0 }}"
-                        data-d="{{ q_item.d_val|default:0 }}"
-                        data-h="{{ q_item.h_val|default:0 }}"
-                        data-qv="{{ q_item.qty_val|default:0 }}"
-                        data-count="{{ q_item.item_count|default:1 }}"
-                        data-disc-type="{{ q_item.discount_type }}"
-                        data-disc-val="{{ q_item.discount_value }}">
-                        <i class="fa-regular fa-pen-to-square" style="color:#2563eb;"></i>
-                    </button>
-                    <a href="{% url 'delete_quotation_item' q_item.id %}" class="action-btn" onclick="return confirm('Delete this item?')">
-                        <i class="fa-regular fa-trash-can" style="color:#ef4444;"></i>
-                    </a>
-                </td>
-            </tr>
+                            {% if q_item.item.description %}
+                                <div style="max-width:280px; line-height:1.5; color:#64748b; font-size:12px; margin-top:8px; padding-top:6px; border-top: 1px dotted #e2e8f0;">
+                                    {{ q_item.item.description }}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td><strong style="color:#0f172a; font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
+                        <td><span style="font-weight:600; color:#2563eb;">₹{{ q_item.rate }}</span></td>
+                        <td><span style="color:#475569; font-weight:600;">₹{{ q_item.mrp_total|floatformat:2 }}</span></td>
+                        <td>
+                            {% if q_item.discount_value > 0 %}
+                                <strong style="color:#16a34a; font-size:14px;">₹{{ q_item.final_total|floatformat:2 }}</strong>
+                            {% else %}
+                                <span style="color:#94a3b8; font-size:12px; font-style:italic;">---</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:center;">
+                            <button type="button" class="action-btn edit-btn"
+                                data-id="{{ q_item.id }}"
+                                data-mat-id="{{ q_item.material.id }}"
+                                data-item-id="{{ q_item.item.id }}"
+                                data-unit-id="{{ q_item.item.unit.id }}"
+                                data-subunit-id="{{ q_item.item.sub_unit.id }}"
+                                data-calc-type="{{ q_item.item.calculation_type }}"
+                                data-l="{{ q_item.l_val|default:0 }}"
+                                data-d="{{ q_item.d_val|default:0 }}"
+                                data-h="{{ q_item.h_val|default:0 }}"
+                                data-qv="{{ q_item.qty_val|default:0 }}"
+                                data-count="{{ q_item.item_count|default:1 }}"
+                                data-disc-type="{{ q_item.discount_type }}"
+                                data-disc-val="{{ q_item.discount_value }}">
+                                <i class="fa-regular fa-pen-to-square" style="color:#2563eb;"></i>
+                            </button>
+                            <a href="{% url 'delete_quotation_item' q_item.id %}" class="action-btn" onclick="return confirm('Delete this item?')">
+                                <i class="fa-regular fa-trash-can" style="color:#ef4444;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+
+                {# ===== UNIT TOTAL — MRP under MRP column, Net under Discount Amount column ===== #}
+                <tr class="unit-total-row">
+                    <td colspan="5" style="text-align: right; color:#64748b; font-size:12px; text-transform:uppercase; letter-spacing:0.5px; padding-right: 20px;">
+                        Unit Total:
+                        <button class="unit-discount-btn"
+                            onclick="openUnitModal('{{ unit_group.grouper.id }}', '{{ unit_group.grouper.name }}', '{{ unit_group.grouper.discount_type }}', '{{ unit_group.grouper.discount_value }}')">
+                            <i class="fa-solid fa-tag" style="color: #2563eb;"></i> Set Unit Discount
+                        </button>
+                    </td>
+                    <td style="color: #475569; font-weight: 800; font-size: 14px; text-align: left; white-space: nowrap;">
+                        {% for room, data in unit_data.items %}
+                            {% if room.id == unit_group.grouper.id %}₹{{ data.mrp_total|floatformat:2 }}{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td style="color: #16a34a; font-weight: 800; font-size: 14px; text-align: left; white-space: nowrap;">
+                        {% for room, data in unit_data.items %}
+                            {% if room.id == unit_group.grouper.id %}₹{{ data.unit_grand_total|floatformat:2 }}{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td></td>
+                </tr>
             {% empty %}
-            <tr>
-                <td colspan="8" style="text-align:center; color:#64748b; padding:40px;">No items added yet.</td>
-            </tr>
+                <tr>
+                    <td colspan="8" style="text-align:center; color:#64748b; padding:40px;">No items added yet.</td>
+                </tr>
             {% endfor %}
+
+            {# ===== GRAND TOTAL — sum across all units ===== #}
+            {% if page_obj %}
+            <tr class="grand-total-row">
+                <td colspan="5" style="text-align: right; text-transform:uppercase; letter-spacing:1px;">Grand Total</td>
+                <td style="text-align: left; white-space: nowrap;">₹{{ grand_mrp_total|floatformat:2 }}</td>
+                <td style="text-align: left; white-space: nowrap; color:#4ade80 !important;">₹{{ grand_net_total|floatformat:2 }}</td>
+                <td></td>
+            </tr>
+            {% endif %}
         </tbody>
     </table>
 </div>
@@ -298,7 +367,6 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                     </div>
                 </div>
 
-                <!-- Conditional Discount Row Entry Selector -->
                 <div id="discount-section-wrapper" style="display:none; grid-template-columns:1fr 1fr; gap:15px; background: #fffdf5; padding: 12px; border-radius: 8px; border: 1px solid #fef08a; margin-bottom: 10px;">
                     <div class="form-group" style="margin-bottom:0;">
                         <label><i class="fa-solid fa-tags"></i> Disc. Unit Type</label>
@@ -313,15 +381,12 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                     </div>
                 </div>
 
-                <!-- Dynamic Single / Dual Column Estimated Card Component -->
                 <div id="modal-total-card" class="total-card">
-                    <!-- Standard Add-Item Mode Structure View -->
                     <div id="single-total-view" class="sub-box" style="grid-column: span 2;">
                         <div style="font-size:11px; text-transform:uppercase; color:#64748b; font-weight:700; letter-spacing:0.5px;">Estimated Total</div>
                         <div class="amount net" style="margin-top:4px;">₹ <span id="auto-single-total">0.00</span></div>
                     </div>
                     
-                    <!-- Advanced Split Edit-Item Mode Display View -->
                     <div id="mrp-box-view" class="sub-box" style="display:none; text-align:left; padding-left:10px; border-right:1px solid var(--border-soft);">
                         <div style="font-size:10px; text-transform:uppercase; color:#94a3b8; font-weight:600;">Gross MRP</div>
                         <div class="amount" style="font-size:18px; margin-top:2px;">₹ <span id="auto-mrp">0.00</span></div>
@@ -334,6 +399,38 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                 
                 <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:15px; padding:14px; font-size:15px;">
                     Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="unitDiscountModal" class="modal">
+    <div class="modal-content" style="width: 420px;">
+        <div class="modal-header">
+            <h3 id="unit-modal-title">Room Section Discount</h3>
+            <span class="close-btn" onclick="closeUnitModal()"><i class="fa-solid fa-xmark"></i></span>
+        </div>
+        <div class="modal-body">
+            <form id="unitDiscountForm" method="POST" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label><i class="fa-solid fa-door-open"></i> Unit Name</label>
+                    <input type="text" id="unit-name-display" class="form-control" readonly style="background:#f1f5f9; font-weight: 600;">
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-tags"></i> Discount Type</label>
+                    <select id="unit-discount-type" class="form-control" name="unit_discount_type">
+                        <option value="percentage">Percentage (%)</option>
+                        <option value="flat">Flat Amount (₹)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="unit-discount-label">Discount Value</label>
+                    <input type="number" step="0.01" id="unit-discount-value" name="unit_discount_value" class="form-control" value="0" min="0">
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:10px; padding:12px;">
+                    Apply Room Discount
                 </button>
             </form>
         </div>
@@ -454,7 +551,36 @@ $(document).on('click', '.edit-btn', function() {
 });
 
 function closeModal() { $('#itemModal').fadeOut(200); }
-$(window).on('click', function(e) { if ($(e.target).is('#itemModal')) { closeModal(); } });
+
+function openUnitModal(id, name, currentType, currentVal) {
+    $('#unit-name-display').val(name);
+    $('#unit-discount-type').val(currentType || 'percentage');
+    $('#unit-discount-value').val(currentVal || 0);
+    
+    let targetUrl = "/quotation/{{ quotation.id }}/unit/" + id + "/discount/";
+    $('#unitDiscountForm').attr('action', targetUrl);
+    
+    updateUnitLabel();
+    $('#unitDiscountModal').css('display', 'flex').hide().fadeIn(200);
+}
+
+function closeUnitModal() { $('#unitDiscountModal').fadeOut(200); }
+
+function updateUnitLabel() {
+    const type = $('#unit-discount-type').val();
+    if(type === 'percentage') {
+        $('#unit-discount-label').text('Discount (%)');
+    } else {
+        $('#unit-discount-label').text('Discount Value (₹)');
+    }
+}
+
+$(document).on('change', '#unit-discount-type', updateUnitLabel);
+
+$(window).on('click', function(e) { 
+    if ($(e.target).is('#itemModal')) { closeModal(); } 
+    if ($(e.target).is('#unitDiscountModal')) { closeUnitModal(); } 
+});
 
 function updateDiscountLabel() {
     const discType = $('#discount-type').val();

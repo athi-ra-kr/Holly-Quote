@@ -219,11 +219,46 @@ def material_delete(request, id):
 
 
 # -------- DETAILED QUOTATION MANAGER --------
+# UPDATED: Now groups by main Unit to calculate room totals and room discounts!
 def quotation_detail(request, id):
     quotation = get_object_or_404(Quotation, id=id)
     units = Unit.objects.all()
     materials_list = Material.objects.all()
     quotation_items = quotation.items.all().order_by('-id')
+    
+    # 1. Group items by main Unit (room) to calculate totals
+    unit_data = {}
+    for q_item in quotation_items:
+        main_unit = q_item.item.unit
+        if main_unit not in unit_data:
+            unit_data[main_unit] = {
+                'mrp_total': 0.0,
+                'final_total': 0.0,
+                'discount_display': ''
+            }
+        unit_data[main_unit]['mrp_total'] += float(q_item.mrp_total)
+        unit_data[main_unit]['final_total'] += float(q_item.final_total)
+
+    # 2. Apply main Unit level discounts on top of the room totals
+    for main_unit, totals in unit_data.items():
+        base_amt = totals['final_total']
+        val = float(main_unit.discount_value)
+        unit_discount = 0.0
+        
+        if val > 0:
+            if main_unit.discount_type == 'percentage':
+                unit_discount = (base_amt * val) / 100.0
+                totals['discount_display'] = f"{val}% Off (-₹{unit_discount:,.2f})"
+            elif main_unit.discount_type == 'flat':
+                unit_discount = val
+                totals['discount_display'] = f"₹{val} Off"
+        
+        totals['unit_grand_total'] = max(0.0, base_amt - unit_discount)
+
+    # 3. NEW: Calculate grand totals across all units
+    grand_mrp_total = sum(t['mrp_total'] for t in unit_data.values())
+    grand_net_total = sum(t['unit_grand_total'] for t in unit_data.values())
+
     paginator = Paginator(quotation_items, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -274,8 +309,24 @@ def quotation_detail(request, id):
         return redirect('quotation_detail', id=id)
 
     return render(request, 'quotation_detail.html', {
-        'quotation': quotation, 'units': units, 'materials_list': materials_list, 'page_obj': page_obj
+        'quotation': quotation, 
+        'units': units, 
+        'materials_list': materials_list, 
+        'page_obj': page_obj,
+        'unit_data': unit_data,                # Sent to the template to show room totals!
+        'grand_mrp_total': grand_mrp_total,    # NEW: grand MRP total
+        'grand_net_total': grand_net_total,    # NEW: grand net total
     })
+
+# UPDATED VIEW: Handles form data to update main Unit discounts
+def update_unit_discount(request, quotation_id, unit_id):
+    if request.method == "POST":
+        main_unit = get_object_or_404(Unit, id=unit_id)
+        main_unit.discount_type = request.POST.get('unit_discount_type', 'percentage')
+        main_unit.discount_value = float(request.POST.get('unit_discount_value', 0) or 0)
+        main_unit.save()
+        messages.success(request, f"Discount updated for {main_unit.name}!")
+    return redirect('quotation_detail', id=quotation_id)
 
 def delete_quotation_item(request, item_id):
     qi = get_object_or_404(QuotationItem, id=item_id)
@@ -292,3 +343,39 @@ def load_items(request):
     items = Item.objects.filter(sub_unit_id=request.GET.get('subunit')).order_by('name')
     opts = '<option value="">-- Select Item --</option>' + ''.join([f'<option value="{i.id}" data-type="{i.calculation_type}">{i.name}</option>' for i in items])
     return HttpResponse(opts)
+
+
+def quotation_pdf(request, id):
+    quotation = get_object_or_404(Quotation, id=id)
+    quotation_items = quotation.items.all().order_by('item__unit__id', 'item__sub_unit__id')
+
+    # Group by unit (same logic as quotation_detail)
+    unit_data = {}
+    for q_item in quotation_items:
+        main_unit = q_item.item.unit
+        if main_unit not in unit_data:
+            unit_data[main_unit] = {'mrp_total': 0.0, 'final_total': 0.0, 'items': []}
+        unit_data[main_unit]['mrp_total'] += float(q_item.mrp_total)
+        unit_data[main_unit]['final_total'] += float(q_item.final_total)
+        unit_data[main_unit]['items'].append(q_item)
+
+    for main_unit, totals in unit_data.items():
+        base_amt = totals['final_total']
+        val = float(main_unit.discount_value)
+        unit_discount = 0.0
+        if val > 0:
+            if main_unit.discount_type == 'percentage':
+                unit_discount = (base_amt * val) / 100.0
+            elif main_unit.discount_type == 'flat':
+                unit_discount = val
+        totals['unit_grand_total'] = max(0.0, base_amt - unit_discount)
+
+    grand_mrp_total = sum(t['mrp_total'] for t in unit_data.values())
+    grand_net_total = sum(t['unit_grand_total'] for t in unit_data.values())
+
+    return render(request, 'quotation_pdf.html', {
+        'quotation': quotation,
+        'unit_data': unit_data,
+        'grand_mrp_total': grand_mrp_total,
+        'grand_net_total': grand_net_total,
+    })

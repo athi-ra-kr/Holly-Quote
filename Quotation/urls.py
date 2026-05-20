@@ -53,4 +53,9 @@ urlpatterns = [
     # --- SMART DROPDOWN PATHS ---
     path('ajax/load-subunits/', views.load_subunits, name='ajax_load_subunits'),
     path('ajax/load-items/', views.load_items, name='ajax_load_items'),
+
+    # --- NEW UNIT LEVEL ACTIONS ---
+    # UPDATED: This path maps the main unit discount form directly to its processing view
+    path('quotation/<int:quotation_id>/unit/<int:unit_id>/discount/', views.update_unit_discount, name='update_unit_discount'),
+    path('quotation/<int:id>/pdf/', views.quotation_pdf, name='quotation_pdf'),
 ]

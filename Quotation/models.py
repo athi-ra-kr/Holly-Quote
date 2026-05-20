@@ -2,13 +2,24 @@ from django.db import models
 from datetime import date
 
 # 1. UNIT (e.g., Kitchen, Bedroom, Living Room)
+# UPDATED: Added discount type and value fields here!
 class Unit(models.Model):
+    DISCOUNT_TYPE_CHOICES = [
+        ('percentage', 'Percentage (%)'),
+        ('flat', 'Flat Amount (₹)'),
+    ]
+
     name = models.CharField(max_length=100)
+    
+    # New fields to save the unit-level discount (Kitchen, Bedroom, etc.)
+    discount_type = models.CharField(max_length=15, choices=DISCOUNT_TYPE_CHOICES, default='percentage')
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.name
 
 # 2. SUB-UNIT (e.g., Bottom Unit, Wall Unit, Wardrobe)
+# CLEANED: Removed the sub-unit discount fields from here!
 class SubUnit(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)

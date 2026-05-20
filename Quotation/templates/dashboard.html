@@ -51,49 +51,6 @@
             overflow-x:hidden;
         }
 
-        /* ================= MOBILE BLOCK SCREEN ================= */
-        .mobile-block {
-            display: none; /* Hidden by default on desktop */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #fdfdfe;
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 30px;
-        }
-
-        .mobile-block-box {
-            max-width: 400px;
-        }
-
-        .mobile-block i {
-            font-size: 50px;
-            color: var(--hb-blue-bright);
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-
-        .mobile-block h2 {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--hb-dark);
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
-        }
-
-        .mobile-block p {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
         /* ================= SIDEBAR ================= */
 
         .sidebar{
@@ -567,21 +524,13 @@
             }
         }
 
-        /* CRITICAL: Triggered when the user is on mobile screens (768px and down) */
+        /* CRITICAL: Adjusted for mobile screens to keep the dashboard visible */
         @media(max-width:768px){
-            /* Hide the actual webpage layout entirely */
-            .sidebar, 
             .main-container {
-                display: none !important;
+                margin-left: 90px; /* Keeps room for the slim mobile sidebar */
             }
-
-            /* Force display the block screen container */
-            .mobile-block {
-                display: flex !important;
-            }
-            
-            body {
-                overflow: hidden !important; /* Disables scrolling on phone screens */
+            .main-content {
+                padding: 20px; /* Gives nice breathing room on tiny screens */
             }
         }
 
@@ -589,14 +538,6 @@
 </head>
 
 <body>
-
-    <div class="mobile-block">
-        <div class="mobile-block-box">
-            <i class="bi bi-laptop"></i>
-            <h2>Desktop View Only</h2>
-            <p>To view your HollyBlue Premium dashboard, please switch to a desktop computer or a larger screen. Thank you!</p>
-        </div>
-    </div>
 
     <aside class="sidebar">
 
@@ -734,7 +675,7 @@
                 {% endfor %}
             </div>
 
-            <!-- ✅ NEW POPUP MODAL HTML STRUCTURE -->
+            <!-- ✅ POPUP MODAL HTML STRUCTURE -->
             <div id="customerModal" class="custom-modal">
                 <div class="modal-content-box">
                     <div class="modal-header-box">
@@ -783,7 +724,7 @@
             }, 100);
         });
 
-        // ✅ NEW MODAL JAVASCRIPT FUNCTIONS
+        // ✅ MODAL JAVASCRIPT FUNCTIONS
         function openEditModal(element) {
             const id = element.getAttribute('data-id');
             const name = element.getAttribute('data-name');
