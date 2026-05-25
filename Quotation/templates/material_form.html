@@ -23,7 +23,7 @@ h2{
     margin-bottom:20px;
 }
 
-select, input {
+select, input, textarea {
     width:100%;
     padding:12px;
     margin-top:12px;
@@ -31,9 +31,10 @@ select, input {
     border-radius:10px;
     outline:none;
     transition:0.3s;
+    font-family: inherit;
 }
 
-select:focus, input:focus{
+select:focus, input:focus, textarea:focus{
     border-color:#2a5298;
     box-shadow:0 0 0 2px rgba(42,82,152,0.1);
 }
@@ -76,6 +77,8 @@ button:hover{
 
             <input type="text" name="name" placeholder="Material Name"
                    value="{{ material.name|default:'' }}" required>
+
+            <textarea name="description" placeholder="Material Description (Optional)" rows="3">{% if material.description %}{{ material.description }}{% endif %}</textarea>
 
             <input type="number" step="0.01" name="rate" placeholder="Rate"
                    value="{{ material.rate|default:'' }}" required>

@@ -48,9 +48,11 @@ class Item(models.Model):
         return self.name
 
 # 4. MATERIAL (The finish/material with specific rates)
+# ✅ UPDATED: Added the description box field here!
 class Material(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
     rate = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):

@@ -231,16 +231,26 @@ def item_delete(request, id):
 
 def material_list(request): return render(request, 'material_list.html', {'materials': Material.objects.all(), 'units': Unit.objects.all()})
 
+# ✅ UPDATED: Added description to create step
 def material_add(request):
     if request.method == "POST":
-        Material.objects.create(unit_id=request.POST.get('unit'), name=request.POST.get('name'), rate=request.POST.get('rate'))
+        Material.objects.create(
+            unit_id=request.POST.get('unit'), 
+            name=request.POST.get('name'), 
+            description=request.POST.get('description'),
+            rate=request.POST.get('rate')
+        )
         return redirect('material_list')
     return render(request, 'material_form.html', {'units': Unit.objects.all()})
 
+# ✅ UPDATED: Added description to update step
 def material_edit(request, id):
     m = get_object_or_404(Material, id=id)
     if request.method == "POST":
-        m.unit_id, m.name, m.rate = request.POST.get('unit'), request.POST.get('name'), request.POST.get('rate')
+        m.unit_id = request.POST.get('unit')
+        m.name = request.POST.get('name')
+        m.description = request.POST.get('description')
+        m.rate = request.POST.get('rate')
         m.save()
         return redirect('material_list')
     return render(request, 'material_form.html', {'material': m, 'units': Unit.objects.all()})
