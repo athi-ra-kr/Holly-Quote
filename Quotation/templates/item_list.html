@@ -1,0 +1,509 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+
+.header-section{
+    margin-bottom:35px;
+}
+
+.page-header-flex{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.page-title-area h2{
+    font-size:32px;
+    font-weight:800;
+    color:#0f172a;
+    margin-bottom:4px;
+}
+
+.page-caption{
+    color:#64748b;
+    font-size:15px;
+    font-weight:500;
+}
+
+.action-bar{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-top:25px;
+}
+
+.search-form{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    background:#fff;
+    padding:6px 6px 6px 15px;
+    border-radius:16px;
+    border:1px solid #f1f5f9;
+    box-shadow:0 4px 12px rgba(0,0,0,0.03);
+}
+
+.search-input{
+    border:none;
+    outline:none;
+    width:250px;
+    font-size:14px;
+    font-weight:600;
+    color:#1e293b;
+}
+
+.btn-search{
+    background:#2a5298;
+    color:#fff;
+    padding:10px 18px;
+    border-radius:12px;
+    border:none;
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn-search:hover{
+    background:#1e3c72;
+}
+
+.btn-add{
+    background:#2a5298;
+    color:#fff;
+    padding:12px 24px;
+    border-radius:14px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    transition:0.3s;
+    box-shadow:0 10px 20px rgba(42,82,152,0.15);
+}
+
+.btn-add:hover{
+    background:#1e3c72;
+    transform:translateY(-2px);
+}
+
+.table-box{
+    background:#fff;
+    border-radius:24px;
+    padding:10px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.02);
+    border:1px solid #f1f5f9;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    color:#94a3b8;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:800;
+    padding:20px 15px;
+    text-align:left;
+    border-bottom:1px solid #f8fafc;
+}
+
+td{
+    padding:18px 15px;
+    font-size:14px;
+    color:#64748b;
+    vertical-align:middle;
+}
+
+tr{
+    transition:0.2s;
+}
+
+tr:hover{
+    background:#fcfdfe;
+}
+
+.item-name{
+    color:#0f172a;
+    font-weight:700;
+    font-size:15px;
+}
+
+.type-badge{
+    padding:5px 12px;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:800;
+    display:inline-block;
+    background:#f1f5f9;
+    color:#475569;
+}
+
+.item-img{
+    width:55px;
+    height:55px;
+    object-fit:cover;
+    border-radius:12px;
+    border:2px solid #f1f5f9;
+}
+
+.action-container{
+    display:flex;
+    gap:12px;
+}
+
+.btn-icon{
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    background:#f8fafc;
+    border:none;
+    cursor:pointer;
+    transition:0.3s;
+    text-decoration:none;
+    font-size:16px;
+}
+
+.edit-icon{
+    color:#2a5298;
+}
+
+.edit-icon:hover{
+    background:#eef2ff;
+    transform:translateY(-2px);
+}
+
+.delete-icon{
+    color:#ef4444;
+}
+
+.delete-icon:hover{
+    background:#fef2f2;
+    transform:translateY(-2px);
+}
+
+/* SMALL PAGINATION */
+
+.pagination{
+    margin-top:18px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:14px;
+}
+
+.pagination a,
+.pagination span{
+    text-decoration:none;
+    line-height:1;
+}
+
+.pagination .page-arrow{
+    font-size:14px;
+    color:#6b21a8;
+    font-weight:500;
+}
+
+.pagination .page-arrow:hover{
+    opacity:0.7;
+}
+
+.pagination .disabled-arrow{
+    font-size:14px;
+    color:#cbd5e1;
+}
+
+.pagination .page-number{
+    font-size:14px;
+    font-weight:600;
+    color:#111827;
+}
+
+@media(max-width:768px){
+
+    .page-header-flex{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .action-bar{
+        width:100%;
+    }
+
+    .search-form{
+        width:100%;
+    }
+
+    .search-input{
+        width:100%;
+    }
+
+}
+
+</style>
+
+<div class="header-section">
+
+    <div class="page-header-flex">
+
+        <div class="page-title-area">
+
+            <h2>Items</h2>
+
+            <p class="page-caption">
+                Manage and catalog your interior design components and pricing.
+            </p>
+
+        </div>
+
+        <a href="{% url 'item_add' %}" class="btn-add">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Add New Item
+
+        </a>
+
+    </div>
+
+    <div class="action-bar">
+
+        <form method="GET"
+              action="{% url 'item_list' %}"
+              class="search-form">
+
+            <i class="fa-solid fa-magnifying-glass"
+               style="color:#94a3b8;font-size:13px;"></i>
+
+            <input type="text"
+                   name="search"
+                   placeholder="Search item name..."
+                   value="{{ query|default:'' }}"
+                   class="search-input">
+
+            <button type="submit" class="btn-search">
+                Search
+            </button>
+
+            {% if query %}
+
+                <a href="{% url 'item_list' %}"
+                   style="color:#94a3b8;
+                          margin-left:10px;
+                          font-size:13px;
+                          text-decoration:none;
+                          font-weight:700;">
+
+                    Clear
+
+                </a>
+
+            {% endif %}
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="table-box">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Preview</th>
+                <th>Item Details</th>
+                <th>Placement</th>
+                <th>Calculation</th>
+                <th>Rate</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for i in items %}
+
+            <tr>
+
+                <td>
+
+                    {% if i.image %}
+
+                        <img src="{{ i.image.url }}" class="item-img">
+
+                    {% else %}
+
+                        <div class="item-img"
+                             style="background:#f8fafc;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    color:#cbd5e1;
+                                    font-size:10px;">
+
+                            No Image
+
+                        </div>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <div class="item-name">
+                        {{ i.name }}
+                    </div>
+
+                    <div style="font-size:12px;
+                                color:#94a3b8;
+                                margin-top:4px;">
+
+                        {{ i.description|default:"-"|truncatechars:40 }}
+
+                    </div>
+
+                </td>
+
+                <td>
+
+                    <div style="font-weight:600;
+                                color:#1e293b;
+                                font-size:13px;">
+
+                        {{ i.unit.name }}
+
+                    </div>
+
+                    <div style="font-size:12px;color:#94a3b8;">
+
+                        {{ i.sub_unit.name }}
+
+                    </div>
+
+                </td>
+
+                <td>
+
+                    <span class="type-badge">
+
+                        {{ i.calculation_type|upper }}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <strong style="color:#0f172a;">
+
+                        ₹ {{ i.rate|default:"0" }}
+
+                    </strong>
+
+                </td>
+
+                <td>
+
+                    <div class="action-container">
+
+                        <a href="{% url 'item_edit' i.id %}"
+                           class="btn-icon edit-icon">
+
+                            <i class="fa-solid fa-pencil"></i>
+
+                        </a>
+
+                        <a href="{% url 'item_delete' i.id %}"
+                           class="btn-icon delete-icon"
+                           onclick="return confirm('Delete this item?')">
+
+                            <i class="fa-solid fa-trash-can"></i>
+
+                        </a>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="6"
+                    style="text-align:center;
+                           color:#94a3b8;
+                           padding:60px;">
+
+                    No items found.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% if items.has_other_pages %}
+
+<div class="pagination">
+
+    {% if items.has_previous %}
+
+        <a href="?page={{ items.previous_page_number }}{% if query %}&search={{ query }}{% endif %}"
+           class="page-arrow">
+
+            &laquo;
+
+        </a>
+
+    {% endif %}
+
+    <span class="page-number">
+
+        {{ items.number }}
+
+    </span>
+
+    {% if items.has_next %}
+
+        <a href="?page={{ items.next_page_number }}{% if query %}&search={{ query }}{% endif %}"
+           class="page-arrow">
+
+            &raquo;
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}

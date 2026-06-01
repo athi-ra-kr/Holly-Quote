@@ -1,0 +1,311 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HollyBlue | Premium Portal</title>
+    <link rel="icon" type="image/gif" href="{% static 'media/holly.gif' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Added Bootstrap Icons so the laptop icon works perfectly! -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --hb-blue: #2a5298;
+            --hb-light: #f8fafc;
+            --hb-text: #1e293b;
+            /* Premium cubic-bezier for a natural, high-end feel */
+            --transition: all 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            background-color: var(--hb-light);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ================= MOBILE BLOCK SCREEN ================= */
+        .mobile-block {
+            display: none; /* Hidden by default on desktop */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #fdfdfe;
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .mobile-block-box {
+            max-width: 400px;
+        }
+
+        .mobile-block i {
+            font-size: 50px;
+            color: var(--hb-blue);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .mobile-block h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--hb-text);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .mobile-block p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* --- SPLASH SCREEN (OPEN MODE) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: var(--transition);
+            opacity: 1;
+        }
+
+        .welcome-text {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: var(--hb-blue);
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            margin-top: 25px;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 1s forwards 0.4s;
+        }
+
+        .splash-logo {
+            width: 140px;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: zoomIn 1s forwards 0.2s;
+        }
+
+        /* --- LOGIN PORTAL WRAPPER --- */
+        .login-wrapper {
+            display: flex;
+            width: 95%;
+            max-width: 900px;
+            min-height: 580px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.06);
+            overflow: hidden;
+            
+            /* Hidden state for arrival */
+            opacity: 0;
+            transform: scale(0.98);
+            transition: var(--transition);
+            visibility: hidden;
+        }
+
+        /* --- REVEAL ANIMATION (OPEN MODE) --- */
+        .loaded #splash-screen { 
+            transform: translateY(-100%); /* Elegant curtain lift */
+            pointer-events: none;
+        }
+
+        .loaded .login-wrapper { 
+            opacity: 1; 
+            transform: scale(1);
+            visibility: visible;
+            transition-delay: 0.2s; /* Subtle delay so it appears as curtain rises */
+        }
+
+        /* --- BRAND SIDE (BUTTERFLY) --- */
+        .brand-side {
+            flex: 1;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            border-right: 1px solid #f1f5f9;
+        }
+
+        .brand-side .brand-gif {
+            width: 140px; /* Small and elegant size */
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.03));
+            animation: gentleFloat 4s infinite ease-in-out;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* --- FORM SIDE --- */
+        .form-side {
+            flex: 1.2;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #fdfdfd;
+        }
+
+        h2 { font-size: 30px; color: var(--hb-text); margin-bottom: 8px; font-weight: 700; }
+        .subtitle { color: #64748b; margin-bottom: 35px; font-size: 15px; }
+
+        .form-group { margin-bottom: 22px; }
+        label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        
+        input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 16px;
+            transition: 0.3s ease;
+            background: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--hb-blue);
+            box-shadow: 0 0 0 4px rgba(42, 82, 152, 0.06);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--hb-blue);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 10px 25px rgba(42, 82, 152, 0.15);
+        }
+
+        .login-btn:hover { background: #1a3a6e; transform: translateY(-1px); }
+
+        .error-box {
+            background: #fff1f2;
+            color: #e11d48;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid #fecdd3;
+        }
+
+        /* --- CRITICAL: MOBILE BLOCK TRIGGER (768px and down) --- */
+        @media(max-width:768px){
+            /* Hide the login card and splash screen entirely */
+            .login-wrapper, #splash-screen {
+                display: none !important;
+            }
+
+            /* Force display the block screen overlay */
+            .mobile-block {
+                display: flex !important;
+            }
+            
+            body {
+                overflow: hidden !important; /* Stops scrolling */
+            }
+        }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <!-- This overlay pops up and blocks the screen if a phone opens the page -->
+    <div class="mobile-block">
+        <div class="mobile-block-box">
+            <i class="bi bi-laptop"></i>
+            <h2>Desktop View Only</h2>
+            <p>To view your HollyBlue Premium portal, please switch to a desktop computer or a larger screen. Thank you!</p>
+        </div>
+    </div>
+
+    <div id="splash-screen">
+        <img src="/static/media/hollylogo.png" class="splash-logo" alt="HollyBlue">
+        <div class="welcome-text">Welcome</div>
+    </div>
+
+    <div class="login-wrapper">
+        <div class="brand-side">
+            <img src="/static/media/holly.gif" alt="HollyBlue Animation" class="brand-gif">
+        </div>
+
+        <div class="form-side">
+            <h2>Sign In</h2>
+            <p class="subtitle">Access your quotation dashboard</p>
+
+            {% if error %}
+                <div class="error-box">{{ error }}</div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="login-btn">Log In</button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 35px; font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Secure Access Portal</p>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            // "Perfect" timing: 2.5 seconds allows the welcome animation to 
+            // complete before the open-mode reveal begins.
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 2500);
+        });
+    </script>
+
+</body>
+</html>

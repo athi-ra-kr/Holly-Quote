@@ -1,0 +1,159 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+
+<style>
+.page-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:70vh;
+}
+
+.form-box {
+    width:100%;
+    max-width:500px;
+    background:white;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+select, input, textarea {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+    outline:none;
+    transition:0.3s;
+}
+
+select:focus, input:focus, textarea:focus{
+    border-color:#2a5298;
+    box-shadow:0 0 0 2px rgba(42,82,152,0.1);
+}
+
+/* File input styling */
+input[type="file"]{
+    padding:10px;
+    background:#f8fafc;
+    cursor:pointer;
+}
+
+button {
+    margin-top:20px;
+    background:#2a5298;
+    color:white;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    width:100%;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#1e3c72;
+}
+</style>
+
+<div class="page-container">
+    <div class="form-box">
+
+        <h2>{% if item %}Edit{% else %}Add{% endif %} Item</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Added id="id_unit" for the JS to find it -->
+            <select name="unit" id="id_unit" required>
+                <option value="">Select Unit</option>
+                {% for u in units %}
+                <option value="{{ u.id }}"
+                    {% if item and item.unit.id == u.id %}selected{% endif %}>
+                    {{ u.name }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <!-- Added id="id_subunit" for the JS to fill it -->
+            <select name="sub_unit" id="id_subunit" required>
+                {% if item %}
+                    <option value="{{ item.sub_unit.id }}">{{ item.sub_unit.name }}</option>
+                {% else %}
+                    <option value="">Select Sub Unit</option>
+                {% endif %}
+            </select>
+
+            <input type="text" name="name" placeholder="Item Name"
+                   value="{{ item.name|default:'' }}" required>
+
+            <!-- ✅ Description -->
+            <textarea name="description" placeholder="Description">{{ item.description|default:'' }}</textarea>
+
+            <!-- ✅ Calculation Type -->
+            <select name="calculation_type" id="calcType" required>
+                <option value="">Select Calculation Type</option>
+                <option value="sqft" {% if item and item.calculation_type == 'sqft' %}selected{% endif %}>Square Feet</option>
+                <option value="rm" {% if item and item.calculation_type == 'rm' %}selected{% endif %}>Running Meter</option>
+                <option value="rf" {% if item and item.calculation_type == 'rf' %}selected{% endif %}>Running Feet</option>
+                <option value="nos" {% if item and item.calculation_type == 'nos' %}selected{% endif %}>Number</option>
+            </select>
+
+            <!-- ✅ Rate (only for Number) -->
+            <input type="number" step="0.01" name="rate" id="rateField"
+                   placeholder="Item Rate"
+                   value="{{ item.rate|default:'' }}">
+
+            <input type="file" name="image">
+
+            <button type="submit">Save</button>
+        </form>
+
+    </div>
+</div>
+
+<!-- jQuery for the smart logic -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+// Logic for the Rate field
+function toggleRate(){
+    let type = document.getElementById('calcType').value;
+    let rateField = document.getElementById('rateField');
+
+    if(type === 'nos'){
+        rateField.style.display = 'block';
+    }else{
+        rateField.style.display = 'none';
+        rateField.value = '';
+    }
+}
+
+document.getElementById('calcType').addEventListener('change', toggleRate);
+window.onload = toggleRate;
+
+// ✅ NEW: Logic to filter Sub Units based on Unit
+$("#id_unit").change(function () {
+    const url = "{% url 'ajax_load_subunits' %}";  // This is your URL name from urls.py
+    const unitId = $(this).val();
+
+    $.ajax({
+        url: url,
+        data: {
+            'unit': unitId
+        },
+        success: function (data) {
+            $("#id_subunit").html(data);  // This replaces the options with the filtered ones!
+        }
+    });
+});
+</script>
+
+{% endblock %}

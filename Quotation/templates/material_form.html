@@ -1,0 +1,195 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+
+{# ✅ FIX: Use json_script to safely pass subunit data — no Django tags inside JS objects #}
+{{ subunits_json|json_script:"subunitsData" }}
+
+<style>
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 75vh;
+    padding: 20px;
+}
+
+.form-box {
+    width: 100%;
+    max-width: 460px;
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+    border: 1px solid #f1f5f9;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 28px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+select, input, textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0f172a;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+select:focus, input:focus, textarea:focus {
+    border-color: #2a5298;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.15);
+}
+
+select:disabled {
+    background: #f8fafc;
+    color: #94a3b8;
+    border-color: #e2e8f0;
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+button {
+    margin-top: 10px;
+    background: #2a5298;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: #1e3c72;
+}
+</style>
+
+<div class="page-container">
+    <div class="form-box">
+
+        <h2>{% if material %}Edit{% else %}Add{% endif %} Material</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label">Category (Unit)</label>
+                <select name="unit" id="unitSelect" required>
+                    <option value="">Select Category</option>
+                    {% for u in units %}
+                    <option value="{{ u.id }}"
+                        {% if material and material.unit.id == u.id %}selected{% endif %}>
+                        {{ u.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Sub Category</label>
+                <select name="sub_unit" id="subunitSelect" disabled>
+                    <option value="">— None —</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Material Name</label>
+                <input type="text" name="name" placeholder="e.g. Granite, Marble, Plywood"
+                       value="{{ material.name|default:'' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description (Optional)</label>
+                <textarea name="description" placeholder="Short note about this material..." rows="3">{% if material.description %}{{ material.description }}{% endif %}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Rate (₹)</label>
+                <input type="number" step="0.01" name="rate" placeholder="0.00"
+                       value="{{ material.rate|default:'' }}" required>
+            </div>
+
+            <button type="submit">Save Details</button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+// ✅ FIX: Read subunit data from the safe json_script tag
+const rawSubunits = JSON.parse(document.getElementById('subunitsData').textContent);
+
+// Build lookup: { "unitId": [{id, name}, ...], ... }
+const allSubunits = {};
+rawSubunits.forEach(function(s) {
+    const uid = String(s.unit_id);
+    if (!allSubunits[uid]) allSubunits[uid] = [];
+    allSubunits[uid].push({ id: String(s.id), name: s.name });
+});
+
+const unitSel    = document.getElementById('unitSelect');
+const subunitSel = document.getElementById('subunitSelect');
+
+// Pre-selected subunit id from Django (empty string if none)
+const preSelectedSubId = "{{ material.sub_unit.id|default:'' }}";
+
+function populateSubunits(unitId, selectedId) {
+    selectedId = selectedId || '';
+    const subs = allSubunits[String(unitId)] || [];
+    subunitSel.innerHTML = '<option value="">— None —</option>';
+    subs.forEach(function(s) {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = s.name;
+        if (s.id === String(selectedId)) opt.selected = true;
+        subunitSel.appendChild(opt);
+    });
+    subunitSel.disabled = subs.length === 0;
+}
+
+unitSel.addEventListener('change', function() {
+    if (this.value) {
+        populateSubunits(this.value, '');
+    } else {
+        subunitSel.innerHTML = '<option value="">— None —</option>';
+        subunitSel.disabled = true;
+    }
+});
+
+// On page load: if editing, pre-populate subunits and select the saved one
+window.addEventListener('DOMContentLoaded', function() {
+    if (unitSel.value) {
+        populateSubunits(unitSel.value, preSelectedSubId);
+    }
+});
+</script>
+
+{% endblock %}
