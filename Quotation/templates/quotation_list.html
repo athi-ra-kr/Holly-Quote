@@ -114,7 +114,7 @@
     top: 15px;
     right: 15px;
     display: flex;
-    gap: 10px;
+    gap: 8px;
     z-index: 20; 
 }
 
@@ -130,6 +130,9 @@
     transition: 0.3s;
     background: #f8fafc;
 }
+
+.icon-duplicate { color: #10b981; }
+.icon-duplicate:hover { background: #d1fae5; }
 
 .icon-edit { color: var(--accent-blue); }
 .icon-edit:hover { background: #dbeafe; }
@@ -159,7 +162,7 @@
 .card h3 {
     margin: 0 0 15px 0;
     font-size: 18px;
-    max-width: 80%;
+    max-width: 70%;
     color: var(--primary-dark);
 }
 
@@ -220,7 +223,7 @@
     border: 1px solid var(--border-color);
 }
 
-.modal-header-box {
+.modal-content-box .modal-header-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -296,6 +299,9 @@
     {% for q in quotations %}
     <div class="card">
         <div class="card-actions">
+            <a href="{% url 'quotation_duplicate' q.id %}" class="icon-duplicate" title="Duplicate Card" onclick="return confirm('Do you want to duplicate this quotation with today\'s date?')">
+                <i class="fa-regular fa-copy"></i>
+            </a>
             <a href="{% url 'quotation_edit' q.id %}" class="icon-edit" title="Edit">
                 <i class="fa-solid fa-pen-to-square"></i>
             </a>
@@ -304,8 +310,7 @@
             </a>
         </div>
 
-        <!-- We grab the first quotation number belonging to this specific customer so it matches across all cards -->
-        <span class="quotation-tag">{{ customer.quotations.all.first.quotation_no }}</span>
+        <span class="quotation-tag">{{ q.quotation_no }}</span>
         
         <h3><a href="{% url 'quotation_detail' q.id %}" class="main-link">{{ customer.name|upper }}</a></h3>
 
@@ -343,7 +348,6 @@
 </div>
 {% endif %}
 
-<!-- NEW MINIMALIST QUOTATION POPUP MODAL -->
 <div id="quotationModal" class="custom-modal">
     <div class="modal-content-box">
         <div class="modal-header-box">
@@ -354,7 +358,7 @@
             {% csrf_token %}
             <div class="form-group">
                 <label>Project Type</label>
-                <input type="text" name="project_type" class="form-control-modal" required placeholder="e.g., Kitchen, Wardrobe">
+                <input type="text" name="project_type" class="form-control-modal" required placeholder="">
             </div>
             <button type="submit" class="form-submit-btn">Save Quotation</button>
         </form>

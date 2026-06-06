@@ -1,0 +1,257 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    footer, .footer { background: transparent !important; box-shadow: none !important; }
+
+    .header-section { margin-bottom: 30px; animation: fadeInDown 0.8s ease-out; }
+    .page-header-flex { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+    .page-title { font-size: 26px; font-weight: 800; color: #0f172a; letter-spacing: -1.2px; margin-bottom: 4px; }
+    .page-caption { color: #64748b; font-size: 13px; font-weight: 500; line-height: 1.5; max-width: 650px; }
+
+    .controls-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 20px; width: 100%; }
+    .search-container { position: relative; flex: 1; max-width: 350px; }
+    .search-container i.bi-search { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+    .search-input { width: 100%; padding: 10px 40px 10px 42px; border: 2px solid #f1f5f9; background: #ffffff; border-radius: 12px; font-size: 13px; font-weight: 600; outline: none; transition: 0.3s; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); }
+    .search-input:focus { border-color: #2a5298; box-shadow: 0 10px 20px rgba(42, 82, 152, 0.05); }
+    .clear-search { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer; display: none; transition: 0.2s; }
+    .clear-search:hover { color: #ef4444; }
+
+    .btn-add { background: #2a5298; color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 20px rgba(42, 82, 152, 0.15); }
+    .btn-add:hover { background: #1e3c72; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(42, 82, 152, 0.25); }
+
+    .customer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 25px; min-height: 300px; align-items: stretch; grid-auto-rows: max-content; }
+    .customer-card-link { text-decoration: none; color: inherit; display: block; height: 100%; }
+    .customer-card { background: #ffffff; border-radius: 18px; padding: 20px; border: 1px solid #f1f5f9; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; justify-content: space-between; min-height: 150px; height: 100%; position: relative; }
+    .customer-card:hover { border-color: #2a5298; transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(15, 23, 42, 0.08); }
+    .unit-meta { display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 800; color: #2a5298; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .customer-name { font-size: 18px; font-weight: 800; color: #1e293b; word-break: break-word; line-height: 1.2; margin-bottom: 10px; }
+    .card-body { display: flex; flex-direction: column; gap: 6px; }
+    .info-item { font-size: 12px; color: #334155; display: flex; align-items: center; gap: 8px; }
+    .info-item i { color: #94a3b8; font-size: 12px; width: 14px; }
+    .card-actions { display: flex; gap: 10px; margin-top: 15px; padding-top: 12px; border-top: 1px solid #f8fafc; position: relative; z-index: 20; }
+    .action-square { width: 34px; height: 34px; background: #f8fafc; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; transition: all 0.3s ease; }
+    .edit-square { color: #2a5298; }
+    .edit-square:hover { background: #2a5298; color: #fff; }
+    .delete-square { color: #ef4444; }
+    .delete-square:hover { background: #ef4444; color: #fff; }
+
+    .pagination-container { display: flex; justify-content: center; margin-top: 40px; }
+    .pagination { display: flex; align-items: center; gap: 14px; }
+    .pagination a, .pagination span { display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease; }
+    .pagination span.active { font-size: 16px; font-weight: 800; color: #0f172a; padding: 0 8px; }
+    .prev-next-btn { width: 38px; height: 38px; border-radius: 50%; background-color: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); }
+    .left-arrow { color: #cbd5e1; }
+    .left-arrow:hover { background-color: #f8fafc; color: #94a3b8; }
+    .right-arrow { color: #1d4ed8; border-color: #d9e6ff; }
+    .right-arrow:hover { background-color: #eff6ff; color: #1e40af; }
+    .prev-next-btn.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+    .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(12px); z-index: 1000; justify-content: center; align-items: flex-start; padding-top: 4vh; }
+    .modal-content-box { background: white; padding: 35px; border-radius: 25px; width: 95%; max-width: 400px; box-shadow: 0 40px 80px rgba(0,0,0,0.2); animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes modalSlideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-header-box h3 { font-size: 22px; color: #0f172a; font-weight: 800; }
+    .close-modal-btn { background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
+    .form-control-modal { width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid #f1f5f9; outline: none; font-size: 14px; font-weight: 600; background: #f8fafc; transition: 0.3s; }
+    .form-control-modal:focus { border-color: #2a5298; background: #fff; }
+    .form-submit-btn { width: 100%; background: #2a5298; color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+    .form-submit-btn:hover { background: #1e3c72; }
+
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<div class="header-section">
+    <div class="page-header-flex">
+        <div>
+            <h1 class="page-title">Templates</h1>
+            <p class="page-caption">Build reusable item sets once, then reuse them whenever you create a quotation. Add a template, open it, and fill it with items.</p>
+        </div>
+        <button onclick="openTemplateModal()" class="btn-add">
+            <i class="bi bi-plus-lg"></i> Add Template
+        </button>
+    </div>
+
+    <div class="controls-wrapper">
+        <form method="GET" action="{% url 'template_list' %}" class="search-container" id="searchForm" onsubmit="event.preventDefault();">
+            <i class="bi bi-search"></i>
+            <input type="text" name="search" id="templateSearch" class="search-input" placeholder="Search template name..." value="{{ query|default:'' }}" oninput="liveSearch()">
+            <a href="javascript:void(0)" id="clearSearchBtn" class="clear-search" title="Clear search" onclick="clearSearchInput(event)">
+                <i class="bi bi-x-circle-fill" style="color: #94a3b8;"></i>
+            </a>
+        </form>
+    </div>
+</div>
+
+<div id="dynamicContainer">
+    <div class="customer-grid" id="templateContainer">
+        {% for template in templates %}
+        <div class="customer-card">
+            <a href="{% url 'template_detail' template.id %}" class="customer-card-link">
+                <div>
+                    <div class="unit-meta">
+                        <i class="fa-solid fa-layer-group"></i> Template
+                    </div>
+                    <div class="customer-name">{{ template.name }}</div>
+                    <div class="card-body">
+                        <div class="info-item">
+                            <i class="fa-solid fa-box"></i> {{ template.items.count }} item(s)
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-calendar"></i> {{ template.created_at }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <div class="card-actions">
+                <a href="javascript:void(0)"
+                   class="action-square edit-square"
+                   title="Edit Template"
+                   data-id="{{ template.id }}"
+                   data-name="{{ template.name }}"
+                   data-url="{% url 'template_edit' template.id %}"
+                   onclick="openEditModal(this)">
+                    <i class="bi bi-pencil-fill"></i>
+                </a>
+                <a href="{% url 'template_delete' template.id %}" class="action-square delete-square" title="Remove Template" onclick="return confirm('Delete this template?')">
+                    <i class="bi bi-trash3-fill"></i>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div id="noUnits" style="grid-column: 1/-1; text-align: center; padding: 80px 20px; background: #fff; border-radius: 25px; border: 2px dashed #f1f5f9; color: #94a3b8;">
+            <i class="bi bi-layers" style="font-size: 40px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+            <p style="font-weight: 700; color: #64748b; font-size: 16px;">No templates created yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if templates.has_other_pages %}
+    <div class="pagination-container" id="paginationContainer">
+        <div class="pagination">
+            {% if templates.has_previous %}
+                <a href="?page={{ templates.previous_page_number }}{% if query %}&search={{ query }}{% endif %}" class="prev-next-btn left-arrow" onclick="handlePaginationClick(event, this.href)">
+                    <i class="bi bi-chevron-double-left"></i>
+                </a>
+            {% else %}
+                <span class="prev-next-btn left-arrow disabled"><i class="bi bi-chevron-double-left"></i></span>
+            {% endif %}
+
+            {% for num in templates.paginator.page_range %}
+                {% if templates.number == num %}<span class="active">{{ num }}</span>{% endif %}
+            {% endfor %}
+
+            {% if templates.has_next %}
+                <a href="?page={{ templates.next_page_number }}{% if query %}&search={{ query }}{% endif %}" class="prev-next-btn right-arrow" onclick="handlePaginationClick(event, this.href)">
+                    <i class="bi bi-chevron-double-right"></i>
+                </a>
+            {% else %}
+                <span class="prev-next-btn right-arrow disabled"><i class="bi bi-chevron-double-right"></i></span>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div id="templateModal" class="custom-modal">
+    <div class="modal-content-box">
+        <div class="modal-header-box">
+            <h3 id="modalTitle">Add New Template</h3>
+            <button onclick="closeTemplateModal()" class="close-modal-btn">&times;</button>
+        </div>
+        <form id="templateForm" method="POST" action="{% url 'template_add' %}">
+            {% csrf_token %}
+            <input type="hidden" name="template_id" id="modalTemplateId">
+            <div class="form-group">
+                <label>Template Name</label>
+                <input type="text" name="name" id="modalTemplateName" class="form-control-modal" required placeholder="e.g. Standard 2BHK Kitchen">
+            </div>
+            <button type="submit" class="form-submit-btn">Save Template</button>
+        </form>
+    </div>
+</div>
+
+<script>
+let searchTimeout = null;
+
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('templateSearch');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    if (searchInput && searchInput.value.trim().length > 0) {
+        clearBtn.style.display = 'block';
+    }
+});
+
+function liveSearch() {
+    const searchInput = document.getElementById('templateSearch');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    const query = searchInput.value;
+    clearBtn.style.display = query.trim().length > 0 ? 'block' : 'none';
+
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        const url = `${document.getElementById('searchForm').action}?search=${encodeURIComponent(query)}`;
+        fetchData(url);
+    }, 300);
+}
+
+function clearSearchInput(event) {
+    event.preventDefault();
+    const searchInput = document.getElementById('templateSearch');
+    searchInput.value = '';
+    document.getElementById('clearSearchBtn').style.display = 'none';
+    fetchData(`${document.getElementById('searchForm').action}?search=`);
+}
+
+function handlePaginationClick(event, url) {
+    event.preventDefault();
+    fetchData(url);
+}
+
+function fetchData(url) {
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(response => response.text())
+        .then(html => {
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const newContainer = doc.getElementById('dynamicContainer');
+            const currentContainer = document.getElementById('dynamicContainer');
+            if (newContainer && currentContainer) {
+                currentContainer.innerHTML = newContainer.innerHTML;
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+function openTemplateModal() {
+    document.getElementById('modalTitle').innerText = "Add New Template";
+    document.getElementById('templateForm').action = "{% url 'template_add' %}";
+    document.getElementById('modalTemplateId').value = "";
+    document.getElementById('modalTemplateName').value = "";
+    document.getElementById('templateModal').style.display = 'flex';
+}
+
+function openEditModal(element) {
+    document.getElementById('modalTitle').innerText = "Edit Template";
+    document.getElementById('templateForm').action = element.getAttribute('data-url');
+    document.getElementById('modalTemplateId').value = element.getAttribute('data-id');
+    document.getElementById('modalTemplateName').value = element.getAttribute('data-name');
+    document.getElementById('templateModal').style.display = 'flex';
+}
+
+function closeTemplateModal() {
+    document.getElementById('templateModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    let modal = document.getElementById('templateModal');
+    if (event.target == modal) modal.style.display = "none";
+}
+</script>
+
+{% endblock %}

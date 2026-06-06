@@ -582,6 +582,12 @@
                 <span>Customers</span>
             </a>
 
+            <a href="/templates/"
+               class="{% if '/templates' in request.path or '/template/' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Templates</span>
+            </a>
+
         </nav>
 
         <div class="sidebar-logout">
@@ -674,7 +680,6 @@
                 {% endfor %}
             </div>
 
-            <!-- POPUP MODAL HTML STRUCTURE -->
             <div id="customerModal" class="custom-modal">
                 <div class="modal-content-box">
                     <div class="modal-header-box">

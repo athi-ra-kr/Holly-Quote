@@ -6,23 +6,13 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
-:root {
-    --primary-dark: #0f172a;
-    --accent-blue: #2563eb;
-    --brand-blue: #528ec2;
-    --border-soft: #e2e8f0;
-    --text-main: #1e293b;
-    --text-muted: #94a3b8;
-    --white: #ffffff;
-}
+:root { --primary-dark: #0f172a; --accent-blue: #2563eb; --brand-blue: #528ec2; --border-soft: #e2e8f0; --text-main: #1e293b; --text-muted: #94a3b8; --white: #ffffff; }
 body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text-main); }
 
-/* ── Counter ── */
 .material-table { width: 100%; border-collapse: collapse; counter-reset: row-counter; }
 .material-table tbody tr.item-row { counter-increment: row-counter; }
 .material-table tbody tr.item-row .row-number::before { content: counter(row-counter); }
 
-/* ── Layout ── */
 .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
 .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .client-info-bar { background: var(--white); padding: 18px 24px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; border: 1px solid var(--border-soft); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
@@ -31,96 +21,60 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .info-value { font-size: 14px; color: var(--primary-dark); font-weight: 600; }
 .table-container { background: var(--white); border-radius: 12px; border: 1px solid var(--border-soft); overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
 
-/* ── Template picker form style inside modal ── */
-.modal-template-wrapper { padding: 10px 0; }
-.template-select-field { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #fff; margin-bottom: 15px; display: block; }
-
-/* ── Table cells ── */
 .material-table th { background: #f8fafc; text-align: left; padding: 14px 16px; font-size: 11px; color: #000; font-weight: 800; border-bottom: 2px solid var(--border-soft); text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px; }
 .material-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-soft); font-size: 13px; vertical-align: middle; }
 .material-table tbody tr.item-row:hover { background-color: #f8fafc; }
 .cell-center { text-align: center; }
 .cell-right  { text-align: right; }
 
-/* ── Group headers ── */
 .unit-heading-row { background-color: var(--brand-blue) !important; }
 .unit-heading-text { font-size: 13px; font-weight: 800; color: #fff !important; text-transform: uppercase; letter-spacing: 2px; padding: 10px 16px !important; }
 .subunit-heading-row { background-color: #e2e8f0 !important; }
 .subunit-heading-text { font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 16px !important; border-bottom: 1px solid #cbd5e1; }
 
-/* ── Buttons ── */
 .btn-primary { background: var(--accent-blue); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .btn-primary:hover { background-color: #1d4ed8; }
-.btn-export { background: #16a34a; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; text-decoration: none; }
-.btn-export:hover { background-color: #15803d; }
 .action-btn { border: none; background: none; cursor: pointer; font-size: 16px; padding: 6px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; }
 .action-btn:hover { background-color: #f1f5f9; }
 .item-img  { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; }
 .no-image  { width: 65px; height: 65px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; }
 
-/* ── Eye button in th ── */
-.th-eye {
-    background: none; border: none; cursor: pointer; color: #c0cfe0;
-    font-size: 11px; padding: 2px 5px; border-radius: 4px;
-    transition: all 0.15s; display: inline-flex; align-items: center;
-    vertical-align: middle; margin-left: 4px;
-}
+.th-eye { background: none; border: none; cursor: pointer; color: #c0cfe0; font-size: 11px; padding: 2px 5px; border-radius: 4px; transition: all 0.15s; display: inline-flex; align-items: center; vertical-align: middle; margin-left: 4px; }
 .th-eye:hover { color: #64748b; background: #e2e8f0; }
-.th-eye.off   { color: #ef4444; background: #fee2e2; }
+.th-eye.off { color: #ef4444; background: #fee2e2; }
 .th-eye.off:hover { color: #b91c1c; background: #fecaca; }
 
-/* ── Column hide classes applied to <table> ── */
 #main-table.hide-rate .r-cell { display: none !important; }
 #main-table.hide-mrp  .m-cell { display: none !important; }
 #main-table.hide-disc .d-cell { display: none !important; }
 
-/* ── Grand total row ── */
 .grand-total-row { background-color: var(--brand-blue) !important; }
-.grand-total-row td {
-    background-color: var(--brand-blue) !important;
-    border-bottom: none;
-    padding: 0 !important;
-}
-.grand-bar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 32px;
-    padding: 16px 20px;
-    background-color: var(--brand-blue);
-}
-.grand-bar-label {
-    font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.85);
-    text-transform: uppercase; letter-spacing: 1px;
-    margin-right: auto;
-}
+.grand-total-row td { background-color: var(--brand-blue) !important; border-bottom: none; padding: 0 !important; }
+.grand-bar { display: flex; align-items: center; justify-content: flex-end; gap: 32px; padding: 16px 20px; background-color: var(--brand-blue); }
+.grand-bar-label { font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 1px; margin-right: auto; }
 .grand-bar-item { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 .grand-bar-item .g-title { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.5px; }
-.grand-bar-item .g-val   { font-size: 16px; font-weight: 800; color: #fff; white-space: nowrap; }
+.grand-bar-item .g-val { font-size: 16px; font-weight: 800; color: #fff; white-space: nowrap; }
 .grand-bar-item .g-val.green { color: #4ade80; }
 
-/* ── Unit total ── */
 .unit-total-row { background-color: #f8fafc; border-top: 2px dashed var(--border-soft); border-bottom: 2px solid var(--border-soft); font-weight: 700; }
 .unit-total-row td { padding: 12px 16px; }
 .unit-total-label { text-align: right; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-.unit-total-mrp   { color: #475569; font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; }
-.unit-total-net   { color: #16a34a; font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; }
+.unit-total-mrp { color: #475569; font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; }
+.unit-total-net { color: #16a34a; font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; }
 .unit-discount-btn { background: #fff; color: #1e293b; border: 1px solid #cbd5e1; padding: 4px 10px; font-size: 11px; border-radius: 6px; cursor: pointer; font-weight: 700; transition: all 0.2s; margin-left: 10px; }
 .unit-discount-btn:hover { background: #f1f5f9; }
 
-/* ── NOS badge ── */
 .nos-rate-badge { display: inline-flex; align-items: center; gap: 6px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; padding: 8px 12px; font-size: 13px; font-weight: 700; color: #92400e; }
 .nos-rate-badge i { color: #d97706; }
 
-/* ── Visibility chip bar ── */
 .vis-bar { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; }
 .vis-bar-label { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
 .vis-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid; transition: all 0.15s; user-select: none; }
-.vis-chip.on  { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+.vis-chip.on { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
 .vis-chip.off { background: #fef2f2; color: #ef4444; border-color: #fecaca; }
 .vis-chip:hover { filter: brightness(0.93); }
 
-/* ── Modal ── */
 .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15,23,42,0.6); align-items: flex-start; justify-content: center; overflow-y: auto; padding: 30px 0; }
 .modal-content { background-color: var(--white); width: 540px; max-width: 90%; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-soft); }
 .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between; align-items: center; }
@@ -140,239 +94,164 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .close-btn { cursor: pointer; color: var(--text-muted); font-size: 20px; }
 .close-btn:hover { color: #ef4444; }
 .select2-container--default .select2-selection--single { height: 40px !important; border-radius: 6px !important; border: 1px solid #cbd5e1 !important; padding-top: 5px; }
-
-/* ── Beautiful Theme-Matching Notification Prompt Styles ── */
-.notify-prompt-box { background: #f0f7ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--brand-blue); padding: 24px; border-radius: 12px; text-align: center; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-.notify-prompt-title { font-size: 16px; font-weight: 700; color: #1e3a8a; margin-bottom: 6px; }
-.notify-prompt-desc { font-size: 13px; color: #1e40af; margin-bottom: 16px; }
-.notify-prompt-actions { display: flex; justify-content: center; gap: 12px; }
-.btn-prompt-yes { background: var(--accent-blue); color: #fff; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-.btn-prompt-yes:hover { background: #1d4ed8; }
-.btn-prompt-no { background: #e2e8f0; color: #475569; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; }
-.btn-prompt-no:hover { background: #cbd5e1; }
-
-/* ===== PRINT ===== */
-@media print {
-    body { background: #fff !important; }
-    .detail-header .header-actions, .vis-bar, .action-btn,
-    .unit-discount-btn, .modal, .th-eye, .notify-prompt-box { display: none !important; }
-    .table-container { box-shadow: none; border: 1px solid #ccc; }
-    .material-table th { color: #000 !important; }
-    .unit-heading-row    { background-color: var(--brand-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .subunit-heading-row { background-color: #e2e8f0 !important;          -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .unit-total-row      { background-color: #f8fafc !important;           -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .grand-total-row, .grand-bar { background-color: var(--brand-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    #main-table.hide-rate .r-cell { display: none !important; }
-    #main-table.hide-mrp  .m-cell { display: none !important; }
-    #main-table.hide-disc .d-cell { display: none !important; }
-    @page { size: A4 landscape; margin: 12mm; }
-}
 </style>
 
-<div class="notify-prompt-box" id="templatePromptBox">
-    <div class="notify-prompt-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Set Up Your Quotation Items</div>
-    <div class="notify-prompt-desc">Do you need to fetch pre-saved items from an existing template?</div>
-    <div class="notify-prompt-actions">
-        <button class="btn-prompt-yes" onclick="openFetchTemplateModal()"><i class="fa-solid fa-layer-group"></i> Yes, Fetch Template</button>
-        <button class="btn-prompt-no" onclick="dismissPromptAndShowTable()">No, Manage Manually</button>
+<div class="detail-header">
+    <h2>Template — {{ template.name }}</h2>
+    <div class="header-actions">
+        <div class="vis-bar">
+            <span class="vis-bar-label">Columns:</span>
+            <span class="vis-chip on" id="chip-rate" onclick="toggleCol('rate')"><i class="fa-solid fa-eye" id="icon-rate"></i> Rate</span>
+            <span class="vis-chip on" id="chip-mrp"  onclick="toggleCol('mrp')"><i class="fa-solid fa-eye" id="icon-mrp"></i> MRP</span>
+            <span class="vis-chip on" id="chip-disc" onclick="toggleCol('disc')"><i class="fa-solid fa-eye" id="icon-disc"></i> Discount</span>
+        </div>
+        <button class="btn-primary" onclick="openAddModal()">
+            <i class="fa-solid fa-plus"></i> Add Item
+        </button>
     </div>
 </div>
 
-<div id="fetchTemplateModal" class="modal">
-    <div class="modal-content" style="width: 440px;">
-        <div class="modal-header">
-            <h3><i class="fa-solid fa-layer-group" style="color: var(--brand-blue)"></i> Fetch From Template</h3>
-            <span class="close-btn" onclick="closeFetchTemplateModal()"><i class="fa-solid fa-xmark"></i></span>
-        </div>
-        <div class="modal-body">
-            <form id="templateForm" method="POST" action="{% url 'apply_template_to_quotation' quotation.id %}"
-                  onsubmit="return confirm('Fetch and apply all template items directly into this quotation?');">
-                {% csrf_token %}
-                <div class="modal-template-wrapper">
-                    <div class="form-group">
-                        <label style="margin-bottom: 10px; display: block; font-weight: 700; font-size: 11px; color: var(--text-muted);">SELECT PROJECT TEMPLATE</label>
-                        <select name="template_id" id="templateSelect" class="template-select-field" required>
-                            <option value="">-- Choose Template --</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:14px; margin-top: 5px;">
-                        <i class="fa-solid fa-cloud-arrow-down"></i> Import & Save Items
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+<div class="client-info-bar">
+    <div class="info-item"><span class="info-label">Template</span><span class="info-value">{{ template.name }}</span></div>
+    <div class="info-item"><span class="info-label">Total Items</span><span class="info-value">{{ all_items|length }}</span></div>
+    <div class="info-item"><span class="info-label">Created</span><span class="info-value">{{ template.created_at }}</span></div>
 </div>
 
-<div id="mainContentWrapper">
-    <div class="detail-header">
-        <h2>Quotation Detail</h2>
-        <div class="header-actions">
-            <div class="vis-bar">
-                <span class="vis-bar-label">Columns:</span>
-                <span class="vis-chip on" id="chip-rate" onclick="toggleCol('rate')"><i class="fa-solid fa-eye" id="icon-rate"></i> Rate</span>
-                <span class="vis-chip on" id="chip-mrp"  onclick="toggleCol('mrp')"><i class="fa-solid fa-eye" id="icon-mrp"></i> MRP</span>
-                <span class="vis-chip on" id="chip-disc" onclick="toggleCol('disc')"><i class="fa-solid fa-eye" id="icon-disc"></i> Discount</span>
-            </div>
-
-            <a id="pdf-export-link" href="{% url 'quotation_pdf' quotation.id %}" target="_blank" class="btn-export">
-                <i class="fa-solid fa-file-pdf"></i> Export PDF
-            </a>
-            <button class="btn-primary" onclick="openAddModal()">
-                <i class="fa-solid fa-plus"></i> Add Item
-            </button>
-        </div>
-    </div>
-
-    <div class="client-info-bar">
-        <div class="info-item"><span class="info-label">Client</span><span class="info-value">{{ quotation.customer.name }}</span></div>
-        <div class="info-item"><span class="info-label">Quotation No</span><span class="info-value">{{ quotation.quotation_no }}</span></div>
-        <div class="info-item"><span class="info-label">Project</span><span class="info-value">{{ quotation.project_type }}</span></div>
-    </div>
-
-    <div class="table-container">
-        <table class="material-table" id="main-table">
-            <thead>
-                <tr>
-                    <th style="width:4%;">No</th>
-                    <th style="width:8%;">Image</th>
-                    <th>Item Details</th>
-                    <th class="cell-center" style="width:8%;">Qty</th>
-                    <th class="cell-right r-cell" style="width:11%;">
-                        Material Rate
-                        <button class="th-eye" id="th-rate" onclick="toggleCol('rate')"><i class="fa-solid fa-eye"></i></button>
-                    </th>
-                    <th class="cell-right m-cell" style="width:12%;">
-                        MRP Total
-                        <button class="th-eye" id="th-mrp" onclick="toggleCol('mrp')"><i class="fa-solid fa-eye"></i></button>
-                    </th>
-                    <th class="cell-right d-cell" style="width:12%;">
-                        Discount Amt
-                        <button class="th-eye" id="th-disc" onclick="toggleCol('disc')"><i class="fa-solid fa-eye"></i></button>
-                    </th>
-                    <th class="cell-center" style="width:8%;">Actions</th>
+<div class="table-container">
+    <table class="material-table" id="main-table">
+        <thead>
+            <tr>
+                <th style="width:4%;">No</th>
+                <th style="width:8%;">Image</th>
+                <th>Item Details</th>
+                <th class="cell-center" style="width:8%;">Qty</th>
+                <th class="cell-right r-cell" style="width:11%;">Material Rate
+                    <button class="th-eye" id="th-rate" onclick="toggleCol('rate')"><i class="fa-solid fa-eye"></i></button>
+                </th>
+                <th class="cell-right m-cell" style="width:12%;">MRP Total
+                    <button class="th-eye" id="th-mrp" onclick="toggleCol('mrp')"><i class="fa-solid fa-eye"></i></button>
+                </th>
+                <th class="cell-right d-cell" style="width:12%;">Discount Amt
+                    <button class="th-eye" id="th-disc" onclick="toggleCol('disc')"><i class="fa-solid fa-eye"></i></button>
+                </th>
+                <th class="cell-center" style="width:8%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% regroup all_items by item.unit as unit_list %}
+            {% for unit_group in unit_list %}
+                <tr class="unit-heading-row">
+                    <td colspan="8" class="unit-heading-text">{{ unit_group.grouper.name|default:"General Items" }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {% regroup all_items by item.unit as unit_list %}
-                {% for unit_group in unit_list %}
-                    <tr class="unit-heading-row">
-                        <td colspan="8" class="unit-heading-text">{{ unit_group.grouper.name|default:"General Items" }}</td>
+
+                {% regroup unit_group.list by item.sub_unit as subunit_list %}
+                {% for subunit_group in subunit_list %}
+                    <tr class="subunit-heading-row">
+                        <td colspan="8" class="subunit-heading-text">{{ subunit_group.grouper.name|default:"General Sub-Unit" }}</td>
                     </tr>
-
-                    {% regroup unit_group.list by item.sub_unit as subunit_list %}
-                    {% for subunit_group in subunit_list %}
-                        <tr class="subunit-heading-row">
-                            <td colspan="8" class="subunit-heading-text">{{ subunit_group.grouper.name|default:"General Sub-Unit" }}</td>
-                        </tr>
-                        {% for q_item in subunit_group.list %}
-                        <tr class="item-row">
-                            <td><strong class="row-number" style="color:#64748b;"></strong></td>
-                            <td>
-                                {% if q_item.item.image %}
-                                    <img src="{{ q_item.item.image.url }}" class="item-img">
-                                {% else %}
-                                    <div class="no-image">No Image</div>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <div style="font-weight:700;color:#0f172a;font-size:14px;">{{ q_item.item.name }}</div>
-                                <div style="font-size:11px;color:#6366f1;margin-top:6px;font-weight:600;display:inline-block;background:#e0e7ff;padding:2px 8px;border-radius:4px;">
-                                    {% if q_item.item.calculation_type == 'sqft' %}
-                                        <span style="color:#4f46e5;">Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm</span>
-                                    {% elif q_item.item.calculation_type == 'rm' %}
-                                        <span style="color:#4f46e5;">Running Meters: {{ q_item.qty_val }} m</span>
-                                    {% elif q_item.item.calculation_type == 'rf' %}
-                                        <span style="color:#4f46e5;">Running Feet: {{ q_item.qty_val }} ft</span>
-                                    {% else %}
-                                        <span style="color:#4f46e5;">Accessory</span>
-                                    {% endif %}
-                                </div>
-                                {% if q_item.item.calculation_type == 'sqft' %}
-                                    <div style="font-size:11px;color:#0ea5e9;margin-top:4px;font-weight:600;">Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft</div>
-                                {% endif %}
-                                {% if q_item.item.calculation_type != 'nos' %}
-                                <div style="font-size:11px;color:#64748b;margin-top:3px;">Material: <span style="font-weight:600;color:#475569;">{{ q_item.material.name }}</span></div>
-                                {% endif %}
-                                {% if q_item.item.description %}
-                                    <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:3px;padding-top:3px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
-                                {% endif %}
-                                {% if q_item.item.calculation_type != 'nos' and q_item.material.description %}
-                                    <div style="font-size:11px;color:#64748b;margin-top:4px;line-height:1.5;">{{ q_item.material.description }}</div>
-                                {% endif %}
-                            </td>
-                            <td class="cell-center"><strong style="color:#0f172a;font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
-                            <td class="cell-right r-cell"><span style="font-weight:600;color:#2563eb;">₹{{ q_item.rate }}</span></td>
-                            <td class="cell-right m-cell"><span style="color:#475569;font-weight:600;">₹{{ q_item.mrp_total|floatformat:2 }}</span></td>
-                            <td class="cell-right d-cell">
-                                {% if q_item.discount_value > 0 %}
-                                    <strong style="color:#16a34a;font-size:14px;">₹{{ q_item.final_total|floatformat:2 }}</strong>
-                                {% else %}
-                                    <span style="color:#94a3b8;font-size:12px;font-style:italic;">---</span>
-                                {% endif %}
-                            </td>
-                            <td class="cell-center">
-                                <button type="button" class="action-btn edit-btn"
-                                    data-id="{{ q_item.id }}" data-mat-id="{{ q_item.material.id }}"
-                                    data-item-id="{{ q_item.item.id }}" data-unit-id="{{ q_item.item.unit.id }}"
-                                    data-subunit-id="{{ q_item.item.sub_unit.id }}" data-calc-type="{{ q_item.item.calculation_type }}"
-                                    data-item-rate="{{ q_item.item.rate|default:0 }}" data-l="{{ q_item.l_val|default:0 }}"
-                                    data-d="{{ q_item.d_val|default:0 }}" data-h="{{ q_item.h_val|default:0 }}"
-                                    data-qv="{{ q_item.qty_val|default:0 }}" data-count="{{ q_item.item_count|default:1 }}"
-                                    data-disc-type="{{ q_item.discount_type }}" data-disc-val="{{ q_item.discount_value }}">
-                                    <i class="fa-regular fa-pen-to-square" style="color:#2563eb;"></i>
-                                </button>
-                                <a href="{% url 'delete_quotation_item' q_item.id %}" class="action-btn" onclick="return confirm('Delete this item?')">
-                                    <i class="fa-regular fa-trash-can" style="color:#ef4444;"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% endfor %}
-
-                    <tr class="unit-total-row">
-                        <td colspan="4" class="unit-total-label">
-                            Unit Total:
-                            <button class="unit-discount-btn" onclick="openUnitModal('{{ unit_group.grouper.id }}','{{ unit_group.grouper.name }}','{{ unit_group.grouper.discount_type }}','{{ unit_group.grouper.discount_value }}')">
-                                <i class="fa-solid fa-tag" style="color:#2563eb;"></i> Set Discount
+                    {% for q_item in subunit_group.list %}
+                    <tr class="item-row">
+                        <td><strong class="row-number" style="color:#64748b;"></strong></td>
+                        <td>
+                            {% if q_item.item.image %}
+                                <img src="{{ q_item.item.image.url }}" class="item-img">
+                            {% else %}
+                                <div class="no-image">No Image</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div style="font-weight:700;color:#0f172a;font-size:14px;">{{ q_item.item.name }}</div>
+                            <div style="font-size:11px;color:#6366f1;margin-top:6px;font-weight:600;display:inline-block;background:#e0e7ff;padding:2px 8px;border-radius:4px;">
+                                {% if q_item.item.calculation_type == 'sqft' %}<span style="color:#4f46e5;">Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm</span>
+                                {% elif q_item.item.calculation_type == 'rm' %}<span style="color:#4f46e5;">Running Meters: {{ q_item.qty_val }} m</span>
+                                {% elif q_item.item.calculation_type == 'rf' %}<span style="color:#4f46e5;">Running Feet: {{ q_item.qty_val }} ft</span>
+                                {% else %}<span style="color:#4f46e5;">Accessory</span>{% endif %}
+                            </div>
+                            {% if q_item.item.calculation_type == 'sqft' %}
+                                <div style="font-size:11px;color:#0ea5e9;margin-top:4px;font-weight:600;">Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft</div>
+                            {% endif %}
+                            {% if q_item.item.calculation_type != 'nos' %}
+                            <div style="font-size:11px;color:#64748b;margin-top:3px;">Material: <span style="font-weight:600;color:#475569;">{{ q_item.material.name }}</span></div>
+                            {% endif %}
+                            {% if q_item.item.description %}
+                                <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:3px;padding-top:3px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
+                            {% endif %}
+                            {% if q_item.item.calculation_type != 'nos' and q_item.material.description %}
+                                <div style="font-size:11px;color:#64748b;margin-top:4px;line-height:1.5;">{{ q_item.material.description }}</div>
+                            {% endif %}
+                        </td>
+                        <td class="cell-center"><strong style="color:#0f172a;font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
+                        <td class="cell-right r-cell"><span style="font-weight:600;color:#2563eb;">₹{{ q_item.rate }}</span></td>
+                        <td class="cell-right m-cell"><span style="color:#475569;font-weight:600;">₹{{ q_item.mrp_total|floatformat:2 }}</span></td>
+                        <td class="cell-right d-cell">
+                            {% if q_item.discount_value > 0 %}
+                                <strong style="color:#16a34a;font-size:14px;">₹{{ q_item.final_total|floatformat:2 }}</strong>
+                            {% else %}
+                                <span style="color:#94a3b8;font-size:12px;font-style:italic;">---</span>
+                            {% endif %}
+                        </td>
+                        <td class="cell-center">
+                            <button type="button" class="action-btn edit-btn"
+                                data-id="{{ q_item.id }}" data-mat-id="{{ q_item.material.id }}"
+                                data-item-id="{{ q_item.item.id }}" data-unit-id="{{ q_item.item.unit.id }}"
+                                data-subunit-id="{{ q_item.item.sub_unit.id }}" data-calc-type="{{ q_item.item.calculation_type }}"
+                                data-item-rate="{{ q_item.item.rate|default:0 }}" data-l="{{ q_item.l_val|default:0 }}"
+                                data-d="{{ q_item.d_val|default:0 }}" data-h="{{ q_item.h_val|default:0 }}"
+                                data-qv="{{ q_item.qty_val|default:0 }}" data-count="{{ q_item.item_count|default:1 }}"
+                                data-disc-type="{{ q_item.discount_type }}" data-disc-val="{{ q_item.discount_value }}">
+                                <i class="fa-regular fa-pen-to-square" style="color:#2563eb;"></i>
                             </button>
+                            <a href="{% url 'delete_template_item' q_item.id %}" class="action-btn" onclick="return confirm('Delete this item?')">
+                                <i class="fa-regular fa-trash-can" style="color:#ef4444;"></i>
+                            </a>
                         </td>
-                        <td class="r-cell"></td>
-                        <td class="unit-total-mrp">
-                            {% for room, data in unit_data.items %}{% if room.id == unit_group.grouper.id %}₹{{ data.mrp_total|floatformat:2 }}{% endif %}{% endfor %}
-                        </td>
-                        <td class="unit-total-net d-cell">
-                            {% for room, data in unit_data.items %}{% if room.id == unit_group.grouper.id %}₹{{ data.unit_grand_total|floatformat:2 }}{% endif %}{% endfor %}
-                        </td>
-                        <td></td>
                     </tr>
-                {% empty %}
-                    <tr><td colspan="8" style="text-align:center;color:#64748b;padding:40px;">No items added yet.</td></tr>
+                    {% endfor %}
                 {% endfor %}
 
-                {% if all_items %}
-                <tr class="grand-total-row">
-                    <td colspan="8">
-                        <div class="grand-bar" id="grand-bar">
-                            <span class="grand-bar-label">Grand Total</span>
-                            <div class="grand-bar-item" id="gbar-mrp">
-                                <span class="g-title">MRP Total</span>
-                                <span class="g-val">₹{{ grand_mrp_total|floatformat:2 }}</span>
-                            </div>
-                            <div class="grand-bar-item d-cell" id="gbar-disc">
-                                <span class="g-title">Net Total</span>
-                                <span class="g-val green">₹{{ grand_net_total|floatformat:2 }}</span>
-                            </div>
-                        </div>
+                <tr class="unit-total-row">
+                    <td colspan="4" class="unit-total-label">
+                        Unit Total:
+                        <button class="unit-discount-btn" onclick="openUnitModal('{{ unit_group.grouper.id }}','{{ unit_group.grouper.name }}','{{ unit_group.grouper.discount_type }}','{{ unit_group.grouper.discount_value }}')">
+                            <i class="fa-solid fa-tag" style="color:#2563eb;"></i> Set Discount
+                        </button>
                     </td>
+                    <td class="r-cell"></td>
+                    <td class="unit-total-mrp">
+                        {% for room, data in unit_data.items %}{% if room.id == unit_group.grouper.id %}₹{{ data.mrp_total|floatformat:2 }}{% endif %}{% endfor %}
+                    </td>
+                    <td class="unit-total-net d-cell">
+                        {% for room, data in unit_data.items %}{% if room.id == unit_group.grouper.id %}₹{{ data.unit_grand_total|floatformat:2 }}{% endif %}{% endfor %}
+                    </td>
+                    <td></td>
                 </tr>
-                {% endif %}
-            </tbody>
-        </table>
-    </div>
+            {% empty %}
+                <tr><td colspan="8" style="text-align:center;color:#64748b;padding:40px;">No items added yet.</td></tr>
+            {% endfor %}
+
+            {% if all_items %}
+            <tr class="grand-total-row">
+                <td colspan="8">
+                    <div class="grand-bar" id="grand-bar">
+                        <span class="grand-bar-label">Grand Total</span>
+                        <div class="grand-bar-item" id="gbar-mrp">
+                            <span class="g-title">MRP Total</span>
+                            <span class="g-val">₹{{ grand_mrp_total|floatformat:2 }}</span>
+                        </div>
+                        <div class="grand-bar-item d-cell" id="gbar-disc">
+                            <span class="g-title">Net Total</span>
+                            <span class="g-val green">₹{{ grand_net_total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
 </div>
 
 
+<!-- ADD / EDIT ITEM MODAL -->
 <div id="itemModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -480,6 +359,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
     </div>
 </div>
 
+<!-- UNIT DISCOUNT MODAL -->
 <div id="unitDiscountModal" class="modal">
     <div class="modal-content" style="width:420px;">
         <div class="modal-header">
@@ -517,98 +397,32 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 <script>
 let isPrefilling = false;
 
-/* ═══════════════════════════════════════════
-   INITIAL ENTRY WORKFLOW
-   ═══════════════════════════════════════════ */
-$(document).ready(function() {
-    // Hide table and details at first setup check
-    $('#mainContentWrapper').hide();
-    
-    // Check if data rows exist (meaning items have already been fetched/saved)
-    const hasItems = $('.item-row').length > 0;
-    if (hasItems) {
-        dismissPromptAndShowTable();
-    }
-});
-
-function openFetchTemplateModal() {
-    // Open the popup modal window containing the selector field directly
-    $('#fetchTemplateModal').css('display', 'flex').hide().fadeIn(200);
-}
-
-function closeFetchTemplateModal() {
-    $('#fetchTemplateModal').fadeOut(200);
-}
-
-// Fixed function name matching button onclick triggers
-function dismissPromptAndShowTable() {
-    $('#templatePromptBox').fadeOut(200);
-    $('#mainContentWrapper').fadeIn(200);
-}
-
-/* ═══════════════════════════════════════════
-   COLUMN VISIBILITY
-   ═══════════════════════════════════════════ */
 const colHidden = {
-    rate: sessionStorage.getItem('qd_hide_rate') === '1',
-    mrp:  sessionStorage.getItem('qd_hide_mrp')  === '1',
-    disc: sessionStorage.getItem('qd_hide_disc') === '1',
+    rate: sessionStorage.getItem('td_hide_rate') === '1',
+    mrp:  sessionStorage.getItem('td_hide_mrp')  === '1',
+    disc: sessionStorage.getItem('td_hide_disc') === '1',
 };
-const PDF_BASE = "{% url 'quotation_pdf' quotation.id %}";
 
 function syncColUI() {
     const table = document.getElementById('main-table');
-    if(!table) return;
     ['rate','mrp','disc'].forEach(col => {
         const hidden = colHidden[col];
-        const cls    = { rate:'hide-rate', mrp:'hide-mrp', disc:'hide-disc' }[col];
+        const cls = { rate:'hide-rate', mrp:'hide-mrp', disc:'hide-disc' }[col];
         table.classList.toggle(cls, hidden);
         document.getElementById('th-' + col).classList.toggle('off', hidden);
-        document.getElementById('th-' + col).querySelector('i').className =
-            hidden ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        document.getElementById('th-' + col).querySelector('i').className = hidden ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
         document.getElementById('chip-' + col).className = 'vis-chip ' + (hidden ? 'off' : 'on');
-        document.getElementById('icon-' + col).className =
-            hidden ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        document.getElementById('icon-' + col).className = hidden ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
     });
-    const p = new URLSearchParams();
-    if (colHidden.rate) p.set('hide_rate','1');
-    if (colHidden.mrp)  p.set('hide_mrp','1');
-    if (colHidden.disc) p.set('hide_disc','1');
-    const qs = p.toString();
-    document.getElementById('pdf-export-link').href = PDF_BASE + (qs ? '?' + qs : '');
 }
 
 function toggleCol(col) {
     colHidden[col] = !colHidden[col];
-    sessionStorage.setItem('qd_hide_' + col, colHidden[col] ? '1' : '0');
+    sessionStorage.setItem('td_hide_' + col, colHidden[col] ? '1' : '0');
     syncColUI();
 }
-
 document.addEventListener('DOMContentLoaded', syncColUI);
 
-/* ═══════════════════════════════════════════
-   TEMPLATE DROPDOWN INITIALIZER
-   ═══════════════════════════════════════════ */
-function loadTemplateList() {
-    fetch("{% url 'ajax_templates' %}")
-        .then(r => r.json())
-        .then(data => {
-            const sel = document.getElementById('templateSelect');
-            (data.templates || []).forEach(t => {
-                const opt = document.createElement('option');
-                opt.value = t.id;
-                opt.textContent = t.name;
-                sel.appendChild(opt);
-            });
-        })
-        .catch(() => {});
-}
-
-document.addEventListener('DOMContentLoaded', loadTemplateList);
-
-/* ═══════════════════════════════════════════
-   MODAL ACTIONS LOGIC
-   ═══════════════════════════════════════════ */
 function safeNum(v) { return (v===null||v===undefined||v===''||v==='None') ? '0' : v; }
 
 function applyCalcTypeUI(type) {
@@ -687,7 +501,7 @@ function openUnitModal(id,name,cType,cVal) {
     $('#unit-name-display').val(name);
     $('#unit-discount-type').val(cType||'percentage');
     $('#unit-discount-value').val(cVal||0);
-    $('#unitDiscountForm').attr('action','/quotation/{{ quotation.id }}/unit/'+id+'/discount/');
+    $('#unitDiscountForm').attr('action','/templates/{{ template.id }}/unit/'+id+'/discount/');
     updateUnitLabel();
     $('#unitDiscountModal').css('display','flex').hide().fadeIn(200);
 }
@@ -698,7 +512,6 @@ $(document).on('change','#unit-discount-type',updateUnitLabel);
 $(window).on('click',function(e){
     if($(e.target).is('#itemModal')) closeModal();
     if($(e.target).is('#unitDiscountModal')) closeUnitModal();
-    if($(e.target).is('#fetchTemplateModal')) closeFetchTemplateModal();
 });
 
 function updateDiscountLabel() {

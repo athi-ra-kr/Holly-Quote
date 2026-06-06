@@ -58,4 +58,23 @@ urlpatterns = [
     # UPDATED: This path maps the main unit discount form directly to its processing view
     path('quotation/<int:quotation_id>/unit/<int:unit_id>/discount/', views.update_unit_discount, name='update_unit_discount'),
     path('quotation/<int:id>/pdf/', views.quotation_pdf, name='quotation_pdf'),
+    path('templates/', views.template_list, name='template_list'),
+    path('templates/add/', views.template_add, name='template_add'),
+    path('templates/<int:template_id>/edit/', views.template_edit, name='template_edit'),
+    path('templates/<int:template_id>/delete/', views.template_delete, name='template_delete'),
+    path('templates/<int:template_id>/', views.template_detail, name='template_detail'),
+    path('template-item/<int:item_id>/delete/', views.delete_template_item, name='delete_template_item'),
+    path('templates/<int:template_id>/unit/<int:unit_id>/discount/', views.template_unit_discount, name='template_unit_discount'),
+    path('quotation/<int:quotation_id>/apply-template/', views.apply_template_to_quotation, name='apply_template_to_quotation'),
+    path('ajax/templates/', views.ajax_templates, name='ajax_templates'),
+    path('ajax/template-items/', views.ajax_template_items, name='ajax_template_items'),
+    path('quotation/<int:id>/duplicate/', views.quotation_duplicate, name='quotation_duplicate'),
+
+
+
+
+
+
+
+
 ]
