@@ -51,7 +51,7 @@
             border-radius: 8px;
             border: 1px solid #e2e8f0;
         }
-        .info-row   { display: flex; flex-direction: column; gap: 3px; }
+        .info-row    { display: flex; flex-direction: column; gap: 3px; }
         .info-label { font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 9.5px; letter-spacing: 0.5px; }
         .info-val   { color: #0f172a; font-weight: 600; font-size: 12px; }
 
@@ -200,7 +200,7 @@
                footers that appear in the page margins during printing.
                Setting margin to 0 eliminates the margin area where the browser
                draws those strings, then a padded wrapper keeps content inset.
-            ───────────────────────────────────────────────────────────────── */
+             ───────────────────────────────────────────────────────────────── */
             @page {
                 size: A4 portrait;
                 margin: 0;
@@ -227,7 +227,6 @@
 
     <a href="javascript:window.print()" class="print-btn">⬇ Download / Print PDF</a>
 
-    <!-- Header -->
     <div class="header">
         <div class="logo-section">
             <img src="https://hollyblueinterio.com/images/abc/logo.png" alt="HollyBlue Logo">
@@ -241,7 +240,6 @@
         </div>
     </div>
 
-    <!-- Client info -->
     <div class="client-info">
         <div class="info-row">
             <div class="info-label">Client Name</div>
@@ -307,7 +305,7 @@
                                 {% if q_item.item.calculation_type == 'sqft' %}Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm
                                 {% elif q_item.item.calculation_type == 'rm' %}Running Meters: {{ q_item.qty_val }} m
                                 {% elif q_item.item.calculation_type == 'rf' %}Running Feet: {{ q_item.qty_val }} ft
-                                {% else %}Count: {{ q_item.item_count|default:"1" }}{% endif %}
+                                {% else %}Accessory{% endif %}
                             </div>
                             {% if q_item.item.calculation_type == 'sqft' %}
                                 <div class="sqft-tag">Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft</div>
@@ -339,7 +337,6 @@
 
                 {% endfor %}
 
-                <!-- Unit total -->
                 <tr class="unit-total-row">
                     <td colspan="5" class="unit-total-label">{{ room.name }} Total</td>
                     <td class="col-price">₹ {{ data.mrp_total|floatformat:2 }}</td>
@@ -354,7 +351,6 @@
         </tbody>
     </table>
 
-    <!-- Grand total box -->
     <div class="grand-total-section">
         <table class="grand-table">
             <tr>
@@ -375,7 +371,6 @@
         </table>
     </div>
 
-    <!-- Footer -->
     <div class="doc-footer">
         <div class="terms-block">
             <strong>Terms &amp; Conditions</strong>

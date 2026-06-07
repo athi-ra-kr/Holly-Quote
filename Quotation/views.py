@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse # ✅ Added JsonResponse impo
 from django.contrib import messages
 from functools import wraps
 from datetime import date
+from decimal import Decimal # ✅ ADDED THIS LINE TO FIX THE ERROR!
 from .models import *
 
 VALID_USERNAME = "Hollyblue123@gmail.com"
