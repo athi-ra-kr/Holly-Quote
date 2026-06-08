@@ -363,7 +363,6 @@
             <i class="bi bi-search"></i>
             <input type="text" name="search" id="customerSearch" class="search-input" placeholder="Search customer name or phone..." value="{{ query|default:'' }}" oninput="liveSearch()">
             
-            <!-- ✅ FIX: Removed complex server conditional string styling from layout to bypass template processing bugs -->
             <a href="javascript:void(0)" id="clearSearchBtn" class="clear-search" title="Clear search" onclick="clearSearchInput(event)">
                 <i class="bi bi-x-circle-fill" style="color: #94a3b8;"></i>
             </a>
@@ -455,7 +454,7 @@
             <h3 id="modalTitle">Add New Customer</h3>
             <button onclick="closeCustomerModal()" class="close-modal-btn">&times;</button>
         </div>
-        <form id="customerForm" method="POST" action="{% url 'customer_add' %}" onsubmit="return validatePhoneNumber()">
+        <form id="customerForm" method="POST" action="{% url 'customer_add' %}">
             {% csrf_token %}
             <input type="hidden" name="customer_id" id="modalCustomerId">
             
@@ -470,9 +469,7 @@
                        id="modalCustomerMobile" 
                        class="form-control-modal" 
                        required 
-                       placeholder="Enter 10-digit mobile number"
-                       maxlength="10"
-                       oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                       placeholder="Enter phone number">
             </div>
 
             <button type="submit" class="form-submit-btn">Save Customer</button>
@@ -550,7 +547,6 @@ function openCustomerModal() {
     document.getElementById('modalCustomerId').value = "";
     document.getElementById('modalCustomerName').value = "";
     document.getElementById('modalCustomerMobile').value = "";
-    document.getElementById('modalCustomerMobile').setCustomValidity("");
     document.getElementById('customerModal').style.display = 'flex';
 }
 
@@ -566,22 +562,7 @@ function openEditModal(element) {
     document.getElementById('modalCustomerId').value = id;
     document.getElementById('modalCustomerName').value = name;
     document.getElementById('modalCustomerMobile').value = mobile;
-    document.getElementById('modalCustomerMobile').setCustomValidity("");
     document.getElementById('customerModal').style.display = 'flex';
-}
-
-function validatePhoneNumber() {
-    const phoneInput = document.getElementById('modalCustomerMobile');
-    const digitsOnly = phoneInput.value.trim();
-    
-    if (digitsOnly.length !== 10) {
-        phoneInput.setCustomValidity("Please enter a valid 10-digit phone number.");
-        phoneInput.reportValidity();
-        return false;
-    }
-    
-    phoneInput.setCustomValidity("");
-    return true;
 }
 
 function closeCustomerModal() {
