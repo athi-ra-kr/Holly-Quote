@@ -417,7 +417,7 @@
                     data-rate="{{ m.rate }}">
                 <i class="fa-solid fa-pencil"></i>
             </button>
-            <a href="{% url 'material_delete' m.id %}" class="action-square delete-square" title="Remove Material" onclick="return confirm('Archive this material?')">
+            <a href="{% url 'material_delete' m.id %}" class="action-square delete-square" title="Remove Material" onclick="return confirm('⚠️ Warning.  If you delete this item, all corresponding connected items, including quotes and related records, will also be permanently deleted. Are you sure you want to continue? 🚨')">
                 <i class="bi bi-trash3-fill"></i>
             </a>
         </div>

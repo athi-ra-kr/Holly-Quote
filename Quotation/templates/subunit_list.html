@@ -316,7 +316,7 @@
                     data-id="{{ s.id }}" data-unit-id="{{ s.unit.id }}" data-name="{{ s.name }}">
                 <i class="bi bi-pencil-fill"></i>
             </button>
-            <a href="{% url 'subunit_delete' s.id %}" class="action-square delete-square" title="Remove Sub Unit" onclick="return confirm('Delete this sub unit?')">
+            <a href="{% url 'subunit_delete' s.id %}" class="action-square delete-square" title="Remove Sub Unit" onclick="return confirm('⚠️ Warning.  If you delete this item, all corresponding connected items, including quotes and related records, will also be permanently deleted. Are you sure you want to continue? 🚨')">
                 <i class="bi bi-trash3-fill"></i>
             </a>
         </div>

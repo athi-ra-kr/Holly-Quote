@@ -3,11 +3,11 @@ from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
-from django.http import HttpResponse, JsonResponse # ✅ Added JsonResponse import here!
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from functools import wraps
 from datetime import date
-from decimal import Decimal # ✅ ADDED THIS LINE TO FIX THE ERROR!
+from decimal import Decimal
 from .models import *
 
 VALID_USERNAME = "Hollyblue123@gmail.com"
@@ -49,7 +49,7 @@ def dashboard(request):
         'recent_customers': Customer.objects.all().order_by('-id')[:8],
         'total_quotations': total_quotations,
         'total_submitted':  total_submitted,
-        'total_drafts':     total_drafts,
+        'total_drafts':      total_drafts,
     })
 
 
@@ -125,7 +125,6 @@ def quotation_delete(request, id):
 # ── DUPLICATE QUOTATION VIEW ACTION ──
 @login_required_session
 def quotation_duplicate(request, id):
-    """Clones a quotation with today's date, keeping the exact same project type text without adding (Copy)."""
     original_quotation = get_object_or_404(Quotation, id=id)
     customer_id = original_quotation.customer.id
 
@@ -150,6 +149,7 @@ def quotation_duplicate(request, id):
             rate=item.rate,
             discount_type=item.discount_type,
             discount_value=item.discount_value,
+            image=item.image,
         )
 
     return redirect('quotation_list', customer_id=customer_id)
@@ -302,6 +302,8 @@ def quotation_detail(request, id):
         h  = float(request.POST.get('h_val',  0) or 0)
         qv = float(request.POST.get('qty_val', 0) or 0)
 
+        uploaded_image = request.FILES.get('item_image')
+
         if calc_type == 'nos':
             item_obj     = get_object_or_404(Item, id=item_id)
             current_rate = float(item_obj.rate or 0)
@@ -310,8 +312,8 @@ def quotation_detail(request, id):
             mat_obj      = get_object_or_404(Material, id=material_id)
             current_rate = float(mat_obj.rate)
 
-        base_qty   = (l * max(d, h)) / 929 if calc_type == 'sqft' else (1 if calc_type == 'nos' else qv)
-        final_qty  = base_qty * item_count
+        base_qty  = (l * max(d, h)) / 929 if calc_type == 'sqft' else (1 if calc_type == 'nos' else qv)
+        final_qty = base_qty * item_count
 
         if edit_id:
             qi = get_object_or_404(QuotationItem, id=edit_id)
@@ -323,14 +325,19 @@ def quotation_detail(request, id):
             qi.rate           = current_rate
             qi.discount_type  = disc_type
             qi.discount_value = disc_val
+            if uploaded_image:
+                qi.image = uploaded_image
             qi.save()
         else:
-            QuotationItem.objects.create(
+            qi = QuotationItem.objects.create(
                 quotation=quotation, item_id=item_id, material=mat_obj,
                 l_val=l, d_val=d, h_val=h, qty_val=qv,
                 quantity=final_qty, item_count=item_count,
                 rate=current_rate, discount_type='percentage', discount_value=0
             )
+            if uploaded_image:
+                qi.image = uploaded_image
+                qi.save()
         return redirect('quotation_detail', id=id)
 
     return render(request, 'quotation_detail.html', {
@@ -364,17 +371,24 @@ def delete_quotation_item(request, item_id):
 
 @login_required_session
 def load_subunits(request):
-    subs = SubUnit.objects.filter(unit_id=request.GET.get('unit')).order_by('name')
-    return HttpResponse('<option value="">-- Select Sub Unit --</option>' +
-        ''.join(f'<option value="{s.id}">{s.name}</option>' for s in subs))
+    unit_id = request.GET.get('unit')
+    subs = SubUnit.objects.filter(unit_id=unit_id).order_by('name')
+    options = '<option value="">-- Select Sub Unit --</option>'
+    for s in subs:
+        options += f'<option value="{s.id}">{s.name}</option>'
+    return HttpResponse(options, content_type='text/html')
 
 
 @login_required_session
 def load_items(request):
     items = Item.objects.filter(sub_unit_id=request.GET.get('subunit')).order_by('name')
-    return HttpResponse('<option value="">-- Select Item --</option>' +
-        ''.join(f'<option value="{i.id}" data-type="{i.calculation_type}" data-item-rate="{i.rate or 0}">{i.name}</option>'
-                for i in items))
+    options = ['<option value="">-- Select Item --</option>']
+    for i in items:
+        img_url = i.image.url if i.image else ""
+        options.append(
+            f'<option value="{i.id}" data-type="{i.calculation_type}" data-item-rate="{i.rate or 0}" data-image="{img_url}">{i.name}</option>'
+        )
+    return HttpResponse(''.join(options), content_type='text/html')
 
 
 @login_required_session

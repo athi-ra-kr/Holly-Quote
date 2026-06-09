@@ -402,7 +402,7 @@
                    onclick="openEditModal(this)">
                     <i class="bi bi-pencil-fill"></i>
                 </a>
-                <a href="{% url 'customer_delete' customer.id %}" class="action-square delete-square" title="Remove Customer" onclick="return confirm('Delete customer record?')">
+                <a href="{% url 'customer_delete' customer.id %}" class="action-square delete-square" title="Remove Customer" onclick="return confirm('⚠️ Warning.  If you delete this item, all corresponding connected items, including quotes and related records, will also be permanently deleted. Are you sure you want to continue? 🚨')">
                     <i class="bi bi-trash3-fill"></i>
                 </a>
             </div>

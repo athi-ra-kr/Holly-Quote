@@ -2,7 +2,7 @@
 {% block content %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
@@ -58,6 +58,31 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .item-img  { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; }
 .no-image  { width: 65px; height: 65px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; }
 
+/* ── Item image preview + upload inside modal ── */
+.item-preview-box {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 130px; border: 1px dashed #cbd5e1; border-radius: 10px;
+    background: #f8fafc; padding: 12px; overflow: hidden;
+}
+.item-preview-box img {
+    max-height: 150px; max-width: 100%; border-radius: 8px;
+    object-fit: contain; border: 1px solid #e2e8f0; background: #fff;
+}
+.item-preview-box .img-empty {
+    color: #94a3b8; font-size: 12px; font-weight: 600;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.item-preview-box .img-empty i { font-size: 26px; color: #cbd5e1; }
+.image-upload-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.image-upload-row input[type="file"] { flex: 1; font-size: 12px; }
+.btn-clear-img {
+    background: #fef2f2; color: #ef4444; border: 1px solid #fecaca;
+    padding: 8px 12px; border-radius: 6px; font-size: 11px; font-weight: 700;
+    cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px;
+}
+.btn-clear-img:hover { background: #fee2e2; }
+.image-hint { font-size: 11px; color: #94a3b8; margin-top: 6px; display: block; }
+
 /* ── Eye button in th ── */
 .th-eye {
     background: none; border: none; cursor: pointer; color: #c0cfe0;
@@ -71,7 +96,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 
 /* ── Column hide classes applied to <table> ── */
 #main-table.hide-rate .r-cell { display: none !important; }
-#main-table.hide-mrp  .m-cell { display: none !important; }
+#main-table.hide-mrp   .m-cell { display: none !important; }
 #main-table.hide-disc .d-cell { display: none !important; }
 
 /* ── Grand total row ── */
@@ -120,13 +145,35 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .vis-chip.off { background: #fef2f2; color: #ef4444; border-color: #fecaca; }
 .vis-chip:hover { filter: brightness(0.93); }
 
-/* ── Modal ── */
-.modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15,23,42,0.6); align-items: flex-start; justify-content: center; overflow-y: auto; padding: 30px 0; }
-.modal-content { background-color: var(--white); width: 540px; max-width: 90%; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-soft); }
+/* ── Modal Main Layout ── */
+.modal { 
+    display: none; 
+    position: fixed; 
+    z-index: 9999; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(15,23,42,0.6); 
+    align-items: flex-start; /* Keeps scrolling nice and responsive */
+    justify-content: center; 
+    overflow-y: auto; 
+    padding: 30px 0; 
+}
+.modal-content { 
+    background-color: var(--white); 
+    width: 540px; 
+    max-width: 90%; 
+    border-radius: 12px; 
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+    display: flex; 
+    flex-direction: column; 
+    border: 1px solid var(--border-soft); 
+}
 .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between; align-items: center; }
 .modal-header h3 { font-size: 18px; margin: 0; color: var(--primary-dark); font-weight: 700; }
-.modal-body { padding: 24px; flex: 1; overflow-y: auto; }
-.form-group { margin-bottom: 18px; }
+.modal-body { padding: 24px; flex: 1; }
+.form-group { margin-bottom: 18px; position: relative; }
 .form-group label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
 .form-group label i { color: var(--accent-blue); font-size: 12px; width: 14px; text-align: center; }
 .form-control { width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; }
@@ -159,8 +206,8 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
     .table-container { box-shadow: none; border: 1px solid #ccc; }
     .material-table th { color: #000 !important; }
     .unit-heading-row    { background-color: var(--brand-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .subunit-heading-row { background-color: #e2e8f0 !important;          -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .unit-total-row      { background-color: #f8fafc !important;           -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .subunit-heading-row { background-color: #e2e8f0 !important;           -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .unit-total-row      { background-color: #f8fafc !important;             -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .grand-total-row, .grand-bar { background-color: var(--brand-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     #main-table.hide-rate .r-cell { display: none !important; }
     #main-table.hide-mrp  .m-cell { display: none !important; }
@@ -269,7 +316,9 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                         <tr class="item-row">
                             <td><strong class="row-number" style="color:#64748b;"></strong></td>
                             <td>
-                                {% if q_item.item.image %}
+                                {% if q_item.image %}
+                                    <img src="{{ q_item.image.url }}" class="item-img">
+                                {% elif q_item.item.image %}
                                     <img src="{{ q_item.item.image.url }}" class="item-img">
                                 {% else %}
                                     <div class="no-image">No Image</div>
@@ -319,7 +368,8 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                                     data-item-rate="{{ q_item.item.rate|default:0 }}" data-l="{{ q_item.l_val|default:0 }}"
                                     data-d="{{ q_item.d_val|default:0 }}" data-h="{{ q_item.h_val|default:0 }}"
                                     data-qv="{{ q_item.qty_val|default:0 }}" data-count="{{ q_item.item_count|default:1 }}"
-                                    data-disc-type="{{ q_item.discount_type }}" data-disc-val="{{ q_item.discount_value }}">
+                                    data-disc-type="{{ q_item.discount_type }}" data-disc-val="{{ q_item.discount_value }}"
+                                    data-img="{% if q_item.image %}{{ q_item.image.url }}{% elif q_item.item.image %}{{ q_item.item.image.url }}{% endif %}">
                                     <i class="fa-regular fa-pen-to-square" style="color:#2563eb;"></i>
                                 </button>
                                 <a href="{% url 'delete_quotation_item' q_item.id %}" class="action-btn" onclick="return confirm('Delete this item?')">
@@ -338,7 +388,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                             </button>
                         </td>
                         <td class="r-cell"></td>
-                        <td class="unit-total-mrp">
+                        <td class="unit-total-mrp m-cell">
                             {% for room, data in unit_data.items %}{% if room.id == unit_group.grouper.id %}₹{{ data.mrp_total|floatformat:2 }}{% endif %}{% endfor %}
                         </td>
                         <td class="unit-total-net d-cell">
@@ -380,30 +430,49 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
             <span class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></span>
         </div>
         <div class="modal-body">
-            <form id="materialForm" method="POST">
+            <form id="materialForm" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="edit_id" id="edit-id">
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
                     <div class="form-group">
                         <label><i class="fa-solid fa-door-open"></i> Room (Unit)</label>
-                        <select id="unit-select" class="form-control" name="unit" required>
-                            <option value="">Select</option>
-                            {% for u in units %}<option value="{{ u.id }}">{{ u.name }}</option>{% endfor %}
-                        </select>
+                        <div class="select2-wrapper">
+                            <select id="unit-select" class="form-control" name="unit" required>
+                                <option value="">Select</option>
+                                {% for u in units %}<option value="{{ u.id }}">{{ u.name }}</option>{% endfor %}
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label><i class="fa-solid fa-layer-group"></i> Sub Unit</label>
-                        <select id="subunit-select" class="form-control" name="sub_unit" required>
-                            <option value="">Select</option>
-                        </select>
+                        <div class="select2-wrapper">
+                            <select id="subunit-select" class="form-control" name="sub_unit" required>
+                                <option value="">Select</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label><i class="fa-solid fa-cube"></i> Item Selection</label>
-                    <select id="item-select" class="form-control" name="item" required>
-                        <option value="">-- Search Item --</option>
-                    </select>
+                    <div class="select2-wrapper">
+                        <select id="item-select" class="form-control" name="item" required>
+                            <option value="">-- Search Item --</option>
+                        </select>
+                    </div>
                 </div>
+
+                <div class="form-group" id="item-image-group" style="display:none;">
+                    <label><i class="fa-solid fa-image"></i> Item Image</label>
+                    <div id="item-image-preview" class="item-preview-box"></div>
+                    <div class="image-upload-row">
+                        <input type="file" name="item_image" id="item-image-input" accept="image/*" class="form-control">
+                        <button type="button" class="btn-clear-img" id="clear-img-btn" onclick="clearChosenImage()">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                    <small class="image-hint">Upload to set/change the image for this line. Leave empty to keep the current image.</small>
+                </div>
+
                 <div class="form-group">
                     <label><i class="fa-solid fa-calculator"></i> Calculation</label>
                     <input type="text" id="calc-type-display" class="form-control" readonly style="background:#f1f5f9;">
@@ -425,18 +494,20 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                     </div>
                     <div class="form-group" id="material-field-wrapper">
                         <label>Material</label>
-                        <select id="material-rate-select" class="form-control" name="material">
-                            <option value="">-- Choose --</option>
-                            {% for mat in materials_list %}
-                            <option value="{{ mat.id }}" data-rate="{{ mat.rate }}">{{ mat.name }} (₹{{ mat.rate }})</option>
-                            {% endfor %}
-                        </select>
+                        <div class="select2-wrapper">
+                            <select id="material-rate-select" class="form-control" name="material">
+                                <option value="">-- Choose --</option>
+                                {% for mat in materials_list %}
+                                <option value="{{ mat.id }}" data-rate="{{ mat.rate }}">{{ mat.name }} (₹{{ mat.rate }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <input type="hidden" id="rate-val" value="0">
                     </div>
                 </div>
                 <div id="nos-rate-wrapper" style="display:none;margin-bottom:18px;">
                     <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
-                        <i class="fa-solid fa-tag" style="color:var(--accent-blue);"></i> Item Rate
+                        <i class="fa-solid fa-indian-rupee-sign"></i> Item Rate
                     </div>
                     <div class="nos-rate-badge">
                         <i class="fa-solid fa-indian-rupee-sign"></i>
@@ -516,23 +587,78 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 let isPrefilling = false;
+let currentItemDefaultImg = '';   
+let currentExistingImg    = '';   
+let lastEditTarget        = null; // Tracks row button clicked for Edit view placement
 
 /* ═══════════════════════════════════════════
-   INITIAL ENTRY WORKFLOW
+    MODAL POSITIONING LOGIC
+   ═══════════════════════════════════════════ */
+function positionItemModalNear(targetEl) {
+    const $modal  = $('#itemModal');
+    const content = $modal.find('.modal-content')[0];
+    if (!content) return;
+
+    // If no row element target is passed (meaning Add Item was clicked), keep it centered near top!
+    if (!targetEl) { 
+        resetModalPosition(); 
+        return; 
+    }
+
+    const margin = 40;
+    const vw = window.innerWidth;
+    const cw = content.offsetWidth;
+    const rect = targetEl.getBoundingClientRect();
+
+    // Dynamically calculate top coordinate to sit near the row item clicked!
+    let top = window.scrollY + rect.top + (rect.height / 2) - (content.offsetHeight / 2);
+    top = Math.max(window.scrollY + margin, top);
+
+    let left = (vw - cw) / 2;
+
+    $modal.css({ 'align-items': 'flex-start', 'justify-content': 'flex-start' });
+    content.style.position = 'absolute';
+    content.style.top      = top  + 'px';
+    content.style.left     = left + 'px';
+    content.style.margin   = '0';
+}
+
+function resetModalPosition() {
+    const content = $('#itemModal').find('.modal-content')[0];
+    if (content) {
+        content.style.position = '';
+        content.style.top      = '40px'; // Places Add Modal beautifully near the top of viewport
+        content.style.left     = '';
+        content.style.margin   = '0 auto';
+    }
+    $('#itemModal').css({ 'align-items': 'flex-start', 'justify-content': 'center' });
+}
+
+$(window).on('resize scroll', function () {
+    if (lastEditTarget && $('#itemModal').is(':visible')) {
+        positionItemModalNear(lastEditTarget);
+    }
+});
+
+/* ═══════════════════════════════════════════
+    INITIAL ENTRY WORKFLOW
    ═══════════════════════════════════════════ */
 $(document).ready(function() {
-    // Hide table and details at first setup check
     $('#mainContentWrapper').hide();
-    
-    // Check if data rows exist (meaning items have already been fetched/saved)
     const hasItems = $('.item-row').length > 0;
     if (hasItems) {
         dismissPromptAndShowTable();
     }
+    
+    $('#unit-select, #subunit-select, #item-select, #material-rate-select').each(function() {
+        $(this).select2({
+            dropdownParent: $(this).parent(),
+            width: '100%'
+        });
+    });
 });
 
 function openFetchTemplateModal() {
-    // Open the popup modal window containing the selector field directly
     $('#fetchTemplateModal').css('display', 'flex').hide().fadeIn(200);
 }
 
@@ -540,14 +666,13 @@ function closeFetchTemplateModal() {
     $('#fetchTemplateModal').fadeOut(200);
 }
 
-// Fixed function name matching button onclick triggers
 function dismissPromptAndShowTable() {
     $('#templatePromptBox').fadeOut(200);
     $('#mainContentWrapper').fadeIn(200);
 }
 
 /* ═══════════════════════════════════════════
-   COLUMN VISIBILITY
+    COLUMN VISIBILITY
    ═══════════════════════════════════════════ */
 const colHidden = {
     rate: sessionStorage.getItem('qd_hide_rate') === '1',
@@ -587,36 +712,92 @@ function toggleCol(col) {
 document.addEventListener('DOMContentLoaded', syncColUI);
 
 /* ═══════════════════════════════════════════
-   TEMPLATE DROPDOWN INITIALIZER
+    TEMPLATE DROPDOWN INITIALIZER
    ═══════════════════════════════════════════ */
 function loadTemplateList() {
-    fetch("{% url 'ajax_templates' %}")
-        .then(r => r.json())
+    const sel = document.getElementById('templateSelect');
+    fetch("{% url 'ajax_templates' %}", { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status + ' from ajax_templates');
+            return r.json();
+        })
         .then(data => {
-            const sel = document.getElementById('templateSelect');
-            (data.templates || []).forEach(t => {
+            const list = Array.isArray(data) ? data : (data.templates || data.results || data.data || []);
+            list.forEach(t => {
                 const opt = document.createElement('option');
-                opt.value = t.id;
-                opt.textContent = t.name;
+                opt.value = t.id ?? t.pk ?? '';
+                opt.textContent = t.name || t.title || ('Template #' + (t.id ?? t.pk ?? ''));
                 sel.appendChild(opt);
             });
         })
-        .catch(() => {});
+        .catch(err => {
+            console.error('Template list failed:', err);
+            if (sel) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = '⚠ Could not load templates';
+                sel.appendChild(opt);
+            }
+        });
 }
 
 document.addEventListener('DOMContentLoaded', loadTemplateList);
 
 /* ═══════════════════════════════════════════
-   MODAL ACTIONS LOGIC
+    MODAL ACTIONS LOGIC
    ═══════════════════════════════════════════ */
 function safeNum(v) { return (v===null||v===undefined||v===''||v==='None') ? '0' : v; }
 
+function showImagePreview(url) {
+    const $group = $('#item-image-group');
+    const $box   = $('#item-image-preview');
+    $group.show();
+    if (url && url !== 'None' && String(url).trim() !== '') {
+        $box.html('<img src="' + url + '" alt="Item Image">');
+    } else {
+        $box.html('<div class="img-empty"><i class="fa-regular fa-image"></i><span>No image yet — upload one below</span></div>');
+    }
+}
+
+function resetItemImageState() {
+    $('#item-image-group').hide();
+    $('#item-image-preview').empty();
+    $('#item-image-input').val('');
+    currentItemDefaultImg = '';
+    currentExistingImg = '';
+}
+
+$(document).on('change', '#item-image-input', function() {
+    const file = this.files && this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = e => showImagePreview(e.target.result);
+        reader.readAsDataURL(file);
+    } else {
+        showImagePreview(currentExistingImg || currentItemDefaultImg);
+    }
+});
+
+function clearChosenImage() {
+    $('#item-image-input').val('');
+    showImagePreview(currentExistingImg || currentItemDefaultImg);
+}
+
 function applyCalcTypeUI(type) {
     const isNos = type === 'nos';
-    $('#material-field-wrapper').toggle(!isNos);
-    $('#nos-rate-wrapper').toggle(isNos);
-    $('#material-rate-select').prop('required', !isNos);
-    if (isNos) $('#material-rate-select').val('');
+    
+    if (isNos) {
+        $('#material-field-wrapper').hide();
+        $('#material-rate-select').prop('required', false).val('').trigger('change.select2');
+        $('#nos-rate-wrapper').show();
+    } else {
+        $('#nos-rate-wrapper').hide();
+        $('#material-field-wrapper').show();
+        $('#material-rate-select').prop('required', true);
+        
+        $('#material-rate-select').select2({ dropdownParent: $('#material-field-wrapper'), width: '100%' });
+    }
+    
     $('#sqft-inputs').toggle(type === 'sqft');
     $('#single-input').toggle(type === 'rm' || type === 'rf');
     if (type === 'rm') $('#qty-label').html('<i class="fa-solid fa-ruler-horizontal"></i> Total Running Meters');
@@ -624,6 +805,9 @@ function applyCalcTypeUI(type) {
 }
 
 function openAddModal() {
+    lastEditTarget = null; // Forces standard top-positioned setup context
+    resetModalPosition();
+
     $('#modal-title').text('Add New Item');
     $('#materialForm')[0].reset();
     $('#edit-id').val(''); $('#item-count').val(1);
@@ -631,26 +815,44 @@ function openAddModal() {
     $('#discount-section-wrapper').hide();
     $('#modal-total-card').removeClass('split-mode');
     $('#single-total-view').show(); $('#mrp-box-view,#net-box-view').hide();
-    $('#subunit-select').html('<option value="">Select</option>');
-    $('#item-select').html('<option value="">-- Search Item --</option>');
+    
+    $('#subunit-select').html('<option value="">Select</option>').trigger('change.select2');
+    $('#item-select').html('<option value="">-- Search Item --</option>').trigger('change.select2');
+    
     $('#sqft-inputs,#single-input').hide();
     $('#calc-type-display').val(''); $('#calc-type').val('');
     $('#rate-val,#nos-rate-hidden').val(0); $('#nos-rate-display').text('0.00');
     $('#auto-single-total,#auto-mrp,#auto-total').text('0.00');
+    
     $('#material-field-wrapper').show(); $('#nos-rate-wrapper').hide();
     $('#material-rate-select').prop('required', true);
-    $('#itemModal').css('display','flex').hide().fadeIn(200);
-    $('#material-rate-select,#item-select').select2({ dropdownParent:$('#itemModal'), width:'100%' });
+    
+    resetItemImageState();
+    isPrefilling = false;
+    
+    $('#itemModal').stop(true, true).css({ display: 'flex', opacity: 0 }).animate({ opacity: 1 }, 180, function() {
+         $('#unit-select, #subunit-select, #item-select, #material-rate-select').each(function() {
+              $(this).select2({ 
+                  dropdownParent: $(this).parent(), 
+                  width: '100%' 
+              });
+         });
+    });
+    $('#unit-select').val('').trigger('change.select2');
+    $('#material-rate-select').val('').trigger('change.select2');
 }
 
 $(document).on('click','.edit-btn', function() {
     const $b=$(this);
+    lastEditTarget = this; // Stores reference context to run local calculations
+
     const id=$b.data('id'), matId=$b.data('mat-id'), itemId=$b.data('item-id');
     const unitId=$b.data('unit-id'), subunitId=$b.data('subunit-id');
     const calcType=$b.data('calc-type'), itemRate=safeNum($b.data('item-rate'));
     const l=safeNum($b.data('l')), d=safeNum($b.data('d')), h=safeNum($b.data('h'));
     const qv=safeNum($b.data('qv')), count=safeNum($b.data('count'));
     const discType=$b.data('disc-type')||'percentage', discVal=safeNum($b.data('disc-val'));
+    const existingImg=$b.data('img') || '';
 
     $('#modal-title').text('Edit Item Detail'); $('#edit-id').val(id);
     $('#l-val').val(l); $('#d-val').val(d); $('#h-val').val(h);
@@ -660,27 +862,54 @@ $(document).on('click','.edit-btn', function() {
     updateDiscountLabel();
     $('#modal-total-card').addClass('split-mode');
     $('#single-total-view').hide(); $('#mrp-box-view,#net-box-view').show();
-    $('#itemModal').css('display','flex').hide().fadeIn(200);
-    $('#material-rate-select,#item-select').select2({ dropdownParent:$('#itemModal'), width:'100%' });
+    resetItemImageState();
+    currentExistingImg = existingImg;
 
+    $('#itemModal').stop(true, true).css({ display: 'flex', opacity: 0 });
+    
     isPrefilling = true;
-    $('#unit-select').val(unitId);
-    $.ajax({ url:"{% url 'ajax_load_subunits' %}", data:{unit:unitId}, success:function(data) {
-        $('#subunit-select').html(data).val(subunitId);
-        $.ajax({ url:"{% url 'ajax_load_items' %}", data:{subunit:subunitId}, success:function(data) {
-            $('#item-select').html(data).select2({ dropdownParent:$('#itemModal'), width:'100%' });
-            $('#item-select').val(itemId).trigger('change');
-            if (calcType==='nos') {
-                const nr=parseFloat(itemRate)||0;
-                $('#nos-rate-display').text(nr.toLocaleString('en-IN',{minimumFractionDigits:2}));
-                $('#nos-rate-hidden,#rate-val').val(nr);
-            } else { $('#material-rate-select').val(matId).trigger('change'); }
-            runMath(); isPrefilling=false;
-        }, error:function(){ isPrefilling=false; alert('Failed to load items.'); }});
-    }, error:function(){ isPrefilling=false; alert('Failed to load sub-units.'); }});
+    $('#unit-select').val(unitId).trigger('change.select2');
+    
+    $.ajax({ 
+        url: "{% url 'ajax_load_subunits' %}", 
+        data: { unit: unitId }, 
+        success: function(data) {
+            $('#subunit-select').html(data);
+            $('#subunit-select').val(subunitId).trigger('change.select2');
+            
+            $.ajax({ 
+                url: "{% url 'ajax_load_items' %}", 
+                data: { subunit: subunitId }, 
+                success: function(itemData) {
+                    $('#item-select').html(itemData);
+                    $('#item-select').val(itemId).trigger('change.select2');
+                    
+                    currentItemDefaultImg = $('#item-select').find(':selected').data('image') || '';
+                    showImagePreview(currentExistingImg || currentItemDefaultImg);
+                    
+                    if (calcType==='nos') {
+                        const nr=parseFloat(itemRate)||0;
+                        $('#nos-rate-display').text(nr.toLocaleString('en-IN',{minimumFractionDigits:2}));
+                        $('#nos-rate-hidden,#rate-val').val(nr);
+                    } else { 
+                        $('#material-rate-select').val(matId).trigger('change.select2'); 
+                    }
+                    
+                    runMath(); 
+                    isPrefilling = false;
+                    
+                    // Fade in and position the modal right in the middle of the clicked row
+                    $('#itemModal').animate({ opacity: 1 }, 180);
+                    positionItemModalNear(lastEditTarget);
+                }, 
+                error: function(){ isPrefilling=false; alert('Failed to load items.'); }
+            });
+        }, 
+        error: function(){ isPrefilling=false; alert('Failed to load sub-units.'); }
+    });
 });
 
-function closeModal()     { $('#itemModal').fadeOut(200); }
+function closeModal()     { $('#itemModal').fadeOut(200, resetModalPosition); }
 function closeUnitModal() { $('#unitDiscountModal').fadeOut(200); }
 
 function openUnitModal(id,name,cType,cVal) {
@@ -716,7 +945,16 @@ $(document).on('change','#item-select',function(){
         $('#nos-rate-display').text(iRate.toLocaleString('en-IN',{minimumFractionDigits:2}));
         $('#nos-rate-hidden,#rate-val').val(iRate);
     }
+
+    if (!isPrefilling) {
+        currentItemDefaultImg = $opt.data('image') || '';
+        const fileChosen = $('#item-image-input')[0] && $('#item-image-input')[0].files.length > 0;
+        if (!fileChosen) {
+            showImagePreview(currentExistingImg || currentItemDefaultImg);
+        }
+    }
     runMath();
+    if (lastEditTarget) positionItemModalNear(lastEditTarget);
 });
 
 function runMath(){
@@ -732,15 +970,53 @@ function runMath(){
     const fmt=v=>v.toLocaleString('en-IN',{minimumFractionDigits:2});
     $('#auto-single-total').text(fmt(mrp)); $('#auto-mrp').text(fmt(mrp)); $('#auto-total').text(fmt(net));
 }
+
 $(document).on('input change','.math-input',runMath);
 $(document).on('change','#material-rate-select',function(){ $('#rate-val').val($(this).find(':selected').data('rate')||0); runMath(); });
+
 $('#unit-select').change(function(){
     if(isPrefilling) return;
-    $.ajax({ url:"{% url 'ajax_load_subunits' %}", data:{unit:$(this).val()}, success:function(data){ $('#subunit-select').html(data); $('#item-select').html('<option value="">-- Select Item --</option>'); }});
+    const unitVal = $(this).val();
+    $('#item-select').html('<option value="">-- Select Item --</option>').trigger('change.select2');
+    resetItemImageState();
+    if(!unitVal){ 
+        $('#subunit-select').html('<option value="">Select</option>').trigger('change.select2'); 
+        return; 
+    }
+    $.ajax({
+        url:"{% url 'ajax_load_subunits' %}",
+        data:{ unit: unitVal },
+        success:function(data){ 
+            $('#subunit-select').html(data).trigger('change.select2'); 
+            if (lastEditTarget) positionItemModalNear(lastEditTarget);
+        },
+        error:function(xhr){
+            console.error('ajax_load_subunits failed', xhr.status, xhr.responseText);
+            $('#subunit-select').html('<option value="">⚠ Failed to load sub-units</option>').trigger('change.select2');
+        }
+    });
 });
+
 $('#subunit-select').change(function(){
     if(isPrefilling) return;
-    $.ajax({ url:"{% url 'ajax_load_items' %}", data:{subunit:$(this).val()}, success:function(data){ $('#item-select').html(data).select2({ dropdownParent:$('#itemModal'), width:'100%' }); }});
+    const subVal = $(this).val();
+    resetItemImageState();
+    if(!subVal){ 
+        $('#item-select').html('<option value="">-- Select Item --</option>').trigger('change.select2'); 
+        return; 
+    }
+    $.ajax({
+        url:"{% url 'ajax_load_items' %}",
+        data:{ subunit: subVal },
+        success:function(data){ 
+            $('#item-select').html(data).trigger('change.select2'); 
+            if (lastEditTarget) positionItemModalNear(lastEditTarget);
+        },
+        error:function(xhr){
+            console.error('ajax_load_items failed', xhr.status, xhr.responseText);
+            $('#item-select').html('<option value="">⚠ Failed to load items</option>').trigger('change.select2');
+        }
+    });
 });
 </script>
 {% endblock %}

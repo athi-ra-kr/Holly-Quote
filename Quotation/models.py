@@ -113,6 +113,9 @@ class QuotationItem(models.Model):
     item_count = models.PositiveIntegerField(default=1)
     rate = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
+    # ✅ Optional per-line image. If empty, the template falls back to the Item's own image.
+    image = models.ImageField(upload_to='quotation_item_images/', blank=True, null=True)
+
     discount_type = models.CharField(max_length=15, choices=DISCOUNT_TYPE_CHOICES, default='percentage')
     discount_value = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
