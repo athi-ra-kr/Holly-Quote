@@ -231,7 +231,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
     .material-table th { color: #000 !important; }
     .unit-heading-row    { background-color: var(--brand-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .subunit-heading-row { background-color: #e2e8f0 !important;           -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .unit-total-row      { background-color: #f8fafc !important;             -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .unit-total-row      { background-color: #f8fafc !important;              -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .grand-total-row, .grand-bar { background-color: var(--brand-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     #main-table.hide-rate .r-cell { display: none !important; }
     #main-table.hide-mrp  .m-cell { display: none !important; }
@@ -350,28 +350,8 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                             </td>
                             <td>
                                 <div style="font-weight:700;color:#0f172a;font-size:14px;">{{ q_item.item.name }}</div>
-                                <div style="font-size:11px;color:#6366f1;margin-top:6px;font-weight:600;display:inline-block;background:#e0e7ff;padding:2px 8px;border-radius:4px;">
-                                    {% if q_item.item.calculation_type == 'sqft' %}
-                                        <span style="color:#4f46e5;">Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm</span>
-                                    {% elif q_item.item.calculation_type == 'rm' %}
-                                        <span style="color:#4f46e5;">Running Meters: {{ q_item.qty_val }} m</span>
-                                    {% elif q_item.item.calculation_type == 'rf' %}
-                                        <span style="color:#4f46e5;">Running Feet: {{ q_item.qty_val }} ft</span>
-                                    {% else %}
-                                        <span style="color:#4f46e5;">Accessory</span>
-                                    {% endif %}
-                                </div>
-                                {% if q_item.item.calculation_type == 'sqft' %}
-                                    <div style="font-size:11px;color:#0ea5e9;margin-top:4px;font-weight:600;">Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft</div>
-                                {% endif %}
-                                {% if q_item.item.calculation_type != 'nos' %}
-                                <div style="font-size:11px;color:#64748b;margin-top:3px;">Material: <span style="font-weight:600;color:#475569;">{{ q_item.material.name }}</span></div>
-                                {% endif %}
                                 {% if q_item.item.description %}
-                                    <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:3px;padding-top:3px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
-                                {% endif %}
-                                {% if q_item.item.calculation_type != 'nos' and q_item.material.description %}
-                                    <div style="font-size:11px;color:#64748b;margin-top:4px;line-height:1.5;">{{ q_item.material.description }}</div>
+                                    <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:4px;padding-top:4px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
                                 {% endif %}
                             </td>
                             <td class="cell-center"><strong style="color:#0f172a;font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
@@ -813,9 +793,7 @@ function openAddModal() {
     $('#material-rate-select').val('').trigger('change.select2');
 }
 
-/* ═══════════════════════════════════════════
-    EDIT WORKFLOW CLICK MODIFICATION (PAGE AUTO-SCROLL TO TOP)
-    ═══════════════════════════════════════════ */
+/* ── EDIT WORKFLOW CLICK MODIFICATION ── */
 $(document).on('click','.edit-btn', function() {
     const $b=$(this);
 
@@ -838,10 +816,8 @@ $(document).on('click','.edit-btn', function() {
     resetItemImageState();
     currentExistingImg = existingImg;
 
-    // Forces viewport screen frame perspective to top immediately
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Show cleanly right in viewport center overlay instantly
     $('#itemModal').css('display', 'flex').hide().fadeIn(150);
     
     isPrefilling = true;

@@ -100,9 +100,6 @@
 
         /* ── Item tags ── */
         .item-desc     { font-size: 10.5px; color: #64748b; margin-top: 5px; line-height: 1.4; padding-top: 5px; border-top: 1px dotted #e2e8f0; }
-        .material-note { font-size: 10px; color: #64748b; margin-top: 4px; line-height: 1.4; }
-        .size-tag      { display: inline-block; background: #eff6ff; color: #2563eb; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; margin-top: 5px; border: 1px solid #dbeafe; }
-        .sqft-tag      { font-size: 10px; color: #0ea5e9; font-weight: 600; margin-top: 3px; }
 
         /* ── Row counter ── */
         .item-row { counter-increment: pdf-row-counter; }
@@ -195,18 +192,11 @@
             .col-hidden  { display: none !important; }
             body { padding: 0; margin: 0; }
 
-            /* ─────────────────────────────────────────────────────────────────
-               Removes the browser-injected URL, date, and page-number headers/
-               footers that appear in the page margins during printing.
-               Setting margin to 0 eliminates the margin area where the browser
-               draws those strings, then a padded wrapper keeps content inset.
-             ───────────────────────────────────────────────────────────────── */
             @page {
                 size: A4 portrait;
                 margin: 0;
             }
 
-            /* Compensate for @page margin:0 by padding the body instead */
             body {
                 padding: 13mm !important;
             }
@@ -301,25 +291,8 @@
                         </td>
                         <td>
                             <strong style="color:#0f172a; font-size:12px;">{{ q_item.item.name }}</strong>
-                            <div class="size-tag">
-                                {% if q_item.item.calculation_type == 'sqft' %}Size: {{ q_item.l_val }}L × {{ q_item.d_val }}D × {{ q_item.h_val }}H cm
-                                {% elif q_item.item.calculation_type == 'rm' %}Running Meters: {{ q_item.qty_val }} m
-                                {% elif q_item.item.calculation_type == 'rf' %}Running Feet: {{ q_item.qty_val }} ft
-                                {% else %}Accessory{% endif %}
-                            </div>
-                            {% if q_item.item.calculation_type == 'sqft' %}
-                                <div class="sqft-tag">Total SqFt: {{ q_item.quantity|floatformat:2 }} sqft</div>
-                            {% endif %}
-                            {% if q_item.item.calculation_type != 'nos' %}
-                            <div style="font-size:10px; color:#64748b; margin-top:3px;">
-                                Material: <span style="font-weight:600; color:#475569;">{{ q_item.material.name }}</span>
-                            </div>
-                            {% endif %}
                             {% if q_item.item.description %}
                                 <div class="item-desc">{{ q_item.item.description }}</div>
-                            {% endif %}
-                            {% if q_item.item.calculation_type != 'nos' and q_item.material.description %}
-                                <div class="material-note">{{ q_item.material.description }}</div>
                             {% endif %}
                         </td>
                         <td class="col-center"><strong>{{ q_item.item_count|default:"1" }}</strong></td>
