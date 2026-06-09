@@ -145,34 +145,58 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .vis-chip.off { background: #fef2f2; color: #ef4444; border-color: #fecaca; }
 .vis-chip:hover { filter: brightness(0.93); }
 
-/* ── Modal Main Layout ── */
+/* ── FIXED OVERLAY BACKGROUND MODAL STYLES (MATCHES IMAGE GEOMETRY) ── */
 .modal { 
     display: none; 
     position: fixed; 
-    z-index: 9999; 
+    z-index: 99999; 
     left: 0; 
     top: 0; 
-    width: 100%; 
-    height: 100%; 
-    background-color: rgba(15,23,42,0.6); 
-    align-items: flex-start; /* Keeps scrolling nice and responsive */
+    width: 100vw; 
+    height: 100vh; 
+    background-color: rgba(15, 23, 42, 0.45); 
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    align-items: center; 
     justify-content: center; 
-    overflow-y: auto; 
-    padding: 30px 0; 
+    overflow: hidden; 
 }
+
+/* Rounded Card Body Styling aligned directly with user wireframe image shapes */
 .modal-content { 
     background-color: var(--white); 
-    width: 540px; 
-    max-width: 90%; 
-    border-radius: 12px; 
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+    width: 550px; 
+    max-width: 92%; 
+    max-height: 90vh;
+    border-radius: 24px; /* Distinct high-radius curve matching the reference picture */
+    border: 3px solid #000000; /* Crisp thick container outline border matching reference picture shape */
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); 
     display: flex; 
     flex-direction: column; 
-    border: 1px solid var(--border-soft); 
+    overflow: hidden;
+    animation: popupScale 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between; align-items: center; }
+
+@keyframes popupScale {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header { 
+    padding: 20px 24px; 
+    border-bottom: 1px solid var(--border-soft); 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background: #f8fafc;
+}
 .modal-header h3 { font-size: 18px; margin: 0; color: var(--primary-dark); font-weight: 700; }
-.modal-body { padding: 24px; flex: 1; }
+.modal-body { 
+    padding: 24px; 
+    overflow-y: auto; /* Independent inner-scroll so modal card never gets skewed */
+    flex: 1; 
+}
+
 .form-group { margin-bottom: 18px; position: relative; }
 .form-group label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
 .form-group label i { color: var(--accent-blue); font-size: 12px; width: 14px; text-align: center; }
@@ -226,7 +250,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 </div>
 
 <div id="fetchTemplateModal" class="modal">
-    <div class="modal-content" style="width: 440px;">
+    <div class="modal-content" style="width: 440px; border-radius: 24px; border: 3px solid #000000;">
         <div class="modal-header">
             <h3><i class="fa-solid fa-layer-group" style="color: var(--brand-blue)"></i> Fetch From Template</h3>
             <span class="close-btn" onclick="closeFetchTemplateModal()"><i class="fa-solid fa-xmark"></i></span>
@@ -543,7 +567,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                         <div class="amount net" style="font-size:20px;margin-top:2px;">₹ <span id="auto-total">0.00</span></div>
                     </div>
                 </div>
-                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:15px;padding:14px;font-size:15px;">
+                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:15px;padding:14px;font-size:15px;border-radius:12px;">
                     Save Changes
                 </button>
             </form>
@@ -552,7 +576,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 </div>
 
 <div id="unitDiscountModal" class="modal">
-    <div class="modal-content" style="width:420px;">
+    <div class="modal-content" style="width:420px; border-radius: 24px; border: 3px solid #000000;">
         <div class="modal-header">
             <h3>Room Section Discount</h3>
             <span class="close-btn" onclick="closeUnitModal()"><i class="fa-solid fa-xmark"></i></span>
@@ -575,7 +599,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                     <label id="unit-discount-label">Discount Value</label>
                     <input type="number" step="0.01" id="unit-discount-value" name="unit_discount_value" class="form-control" value="0" min="0">
                 </div>
-                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:10px;padding:12px;">
+                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:10px;padding:12px;border-radius:12px;">
                     Apply Room Discount
                 </button>
             </form>
@@ -589,60 +613,10 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 let isPrefilling = false;
 let currentItemDefaultImg = '';   
 let currentExistingImg    = '';   
-let lastEditTarget        = null; // Tracks row button clicked for Edit view placement
-
-/* ═══════════════════════════════════════════
-    MODAL POSITIONING LOGIC
-   ═══════════════════════════════════════════ */
-function positionItemModalNear(targetEl) {
-    const $modal  = $('#itemModal');
-    const content = $modal.find('.modal-content')[0];
-    if (!content) return;
-
-    // If no row element target is passed (meaning Add Item was clicked), keep it centered near top!
-    if (!targetEl) { 
-        resetModalPosition(); 
-        return; 
-    }
-
-    const margin = 40;
-    const vw = window.innerWidth;
-    const cw = content.offsetWidth;
-    const rect = targetEl.getBoundingClientRect();
-
-    // Dynamically calculate top coordinate to sit near the row item clicked!
-    let top = window.scrollY + rect.top + (rect.height / 2) - (content.offsetHeight / 2);
-    top = Math.max(window.scrollY + margin, top);
-
-    let left = (vw - cw) / 2;
-
-    $modal.css({ 'align-items': 'flex-start', 'justify-content': 'flex-start' });
-    content.style.position = 'absolute';
-    content.style.top      = top  + 'px';
-    content.style.left     = left + 'px';
-    content.style.margin   = '0';
-}
-
-function resetModalPosition() {
-    const content = $('#itemModal').find('.modal-content')[0];
-    if (content) {
-        content.style.position = '';
-        content.style.top      = '40px'; // Places Add Modal beautifully near the top of viewport
-        content.style.left     = '';
-        content.style.margin   = '0 auto';
-    }
-    $('#itemModal').css({ 'align-items': 'flex-start', 'justify-content': 'center' });
-}
-
-$(window).on('resize scroll', function () {
-    if (lastEditTarget && $('#itemModal').is(':visible')) {
-        positionItemModalNear(lastEditTarget);
-    }
-});
 
 /* ═══════════════════════════════════════════
     INITIAL ENTRY WORKFLOW
-   ═══════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
 $(document).ready(function() {
     $('#mainContentWrapper').hide();
     const hasItems = $('.item-row').length > 0;
@@ -659,21 +633,21 @@ $(document).ready(function() {
 });
 
 function openFetchTemplateModal() {
-    $('#fetchTemplateModal').css('display', 'flex').hide().fadeIn(200);
+    $('#fetchTemplateModal').css('display', 'flex').hide().fadeIn(150);
 }
 
 function closeFetchTemplateModal() {
-    $('#fetchTemplateModal').fadeOut(200);
+    $('#fetchTemplateModal').fadeOut(150);
 }
 
 function dismissPromptAndShowTable() {
-    $('#templatePromptBox').fadeOut(200);
-    $('#mainContentWrapper').fadeIn(200);
+    $('#templatePromptBox').fadeOut(150);
+    $('#mainContentWrapper').fadeIn(150);
 }
 
 /* ═══════════════════════════════════════════
     COLUMN VISIBILITY
-   ═══════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
 const colHidden = {
     rate: sessionStorage.getItem('qd_hide_rate') === '1',
     mrp:  sessionStorage.getItem('qd_hide_mrp')  === '1',
@@ -713,7 +687,7 @@ document.addEventListener('DOMContentLoaded', syncColUI);
 
 /* ═══════════════════════════════════════════
     TEMPLATE DROPDOWN INITIALIZER
-   ═══════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
 function loadTemplateList() {
     const sel = document.getElementById('templateSelect');
     fetch("{% url 'ajax_templates' %}", { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
@@ -745,7 +719,7 @@ document.addEventListener('DOMContentLoaded', loadTemplateList);
 
 /* ═══════════════════════════════════════════
     MODAL ACTIONS LOGIC
-   ═══════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
 function safeNum(v) { return (v===null||v===undefined||v===''||v==='None') ? '0' : v; }
 
 function showImagePreview(url) {
@@ -805,9 +779,6 @@ function applyCalcTypeUI(type) {
 }
 
 function openAddModal() {
-    lastEditTarget = null; // Forces standard top-positioned setup context
-    resetModalPosition();
-
     $('#modal-title').text('Add New Item');
     $('#materialForm')[0].reset();
     $('#edit-id').val(''); $('#item-count').val(1);
@@ -830,7 +801,7 @@ function openAddModal() {
     resetItemImageState();
     isPrefilling = false;
     
-    $('#itemModal').stop(true, true).css({ display: 'flex', opacity: 0 }).animate({ opacity: 1 }, 180, function() {
+    $('#itemModal').css('display', 'flex').hide().fadeIn(150, function() {
          $('#unit-select, #subunit-select, #item-select, #material-rate-select').each(function() {
               $(this).select2({ 
                   dropdownParent: $(this).parent(), 
@@ -842,9 +813,11 @@ function openAddModal() {
     $('#material-rate-select').val('').trigger('change.select2');
 }
 
+/* ═══════════════════════════════════════════
+    EDIT WORKFLOW CLICK MODIFICATION (PAGE AUTO-SCROLL TO TOP)
+    ═══════════════════════════════════════════ */
 $(document).on('click','.edit-btn', function() {
     const $b=$(this);
-    lastEditTarget = this; // Stores reference context to run local calculations
 
     const id=$b.data('id'), matId=$b.data('mat-id'), itemId=$b.data('item-id');
     const unitId=$b.data('unit-id'), subunitId=$b.data('subunit-id');
@@ -865,7 +838,11 @@ $(document).on('click','.edit-btn', function() {
     resetItemImageState();
     currentExistingImg = existingImg;
 
-    $('#itemModal').stop(true, true).css({ display: 'flex', opacity: 0 });
+    // Forces viewport screen frame perspective to top immediately
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Show cleanly right in viewport center overlay instantly
+    $('#itemModal').css('display', 'flex').hide().fadeIn(150);
     
     isPrefilling = true;
     $('#unit-select').val(unitId).trigger('change.select2');
@@ -897,10 +874,6 @@ $(document).on('click','.edit-btn', function() {
                     
                     runMath(); 
                     isPrefilling = false;
-                    
-                    // Fade in and position the modal right in the middle of the clicked row
-                    $('#itemModal').animate({ opacity: 1 }, 180);
-                    positionItemModalNear(lastEditTarget);
                 }, 
                 error: function(){ isPrefilling=false; alert('Failed to load items.'); }
             });
@@ -909,8 +882,8 @@ $(document).on('click','.edit-btn', function() {
     });
 });
 
-function closeModal()     { $('#itemModal').fadeOut(200, resetModalPosition); }
-function closeUnitModal() { $('#unitDiscountModal').fadeOut(200); }
+function closeModal()     { $('#itemModal').fadeOut(150); }
+function closeUnitModal() { $('#unitDiscountModal').fadeOut(150); }
 
 function openUnitModal(id,name,cType,cVal) {
     $('#unit-name-display').val(name);
@@ -918,7 +891,7 @@ function openUnitModal(id,name,cType,cVal) {
     $('#unit-discount-value').val(cVal||0);
     $('#unitDiscountForm').attr('action','/quotation/{{ quotation.id }}/unit/'+id+'/discount/');
     updateUnitLabel();
-    $('#unitDiscountModal').css('display','flex').hide().fadeIn(200);
+    $('#unitDiscountModal').css('display','flex').hide().fadeIn(150);
 }
 function updateUnitLabel() {
     $('#unit-discount-label').text($('#unit-discount-type').val()==='percentage'?'Discount (%)':'Discount Value (₹)');
@@ -954,7 +927,6 @@ $(document).on('change','#item-select',function(){
         }
     }
     runMath();
-    if (lastEditTarget) positionItemModalNear(lastEditTarget);
 });
 
 function runMath(){
@@ -988,7 +960,6 @@ $('#unit-select').change(function(){
         data:{ unit: unitVal },
         success:function(data){ 
             $('#subunit-select').html(data).trigger('change.select2'); 
-            if (lastEditTarget) positionItemModalNear(lastEditTarget);
         },
         error:function(xhr){
             console.error('ajax_load_subunits failed', xhr.status, xhr.responseText);
@@ -1010,7 +981,6 @@ $('#subunit-select').change(function(){
         data:{ subunit: subVal },
         success:function(data){ 
             $('#item-select').html(data).trigger('change.select2'); 
-            if (lastEditTarget) positionItemModalNear(lastEditTarget);
         },
         error:function(xhr){
             console.error('ajax_load_items failed', xhr.status, xhr.responseText);
