@@ -187,6 +187,17 @@
         }
         .print-btn:hover { background: #3b7ab5; }
 
+        /* Editable Sections UI Helper Style (Does not show up on prints) */
+        [contenteditable="true"]:hover {
+            background-color: #f1f5f9;
+            outline: 1px dashed #528ec2;
+            cursor: dashed;
+        }
+        [contenteditable="true"]:focus {
+            background-color: #f8fafc;
+            outline: 2px solid #528ec2;
+        }
+
         /* ── Print ── */
         @media print {
             .print-btn   { display: none !important; }
@@ -364,15 +375,44 @@
     </div>
 
     <div class="doc-footer">
-        <div class="terms-block">
-            <strong>Terms &amp; Conditions</strong>
-            All prices are inclusive of applicable taxes unless stated otherwise.<br>
-            This quotation is valid for 30 days from the date of issue.<br>
-            Prices subject to change without prior notice.
+        <div class="terms-block" style="width: 70%;">
+            <div style="margin-bottom: 12px;">
+                <strong>Excluded Items:</strong>
+                <div contenteditable="true" id="editable-exclusions">Painting, décor items, movable furniture, decorative mirrors, shower partition, curtains, ceiling works, lights, electrical works, sink, granite countertop, hood, and hob are not included in this quotation</div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <strong>Terms &amp; Conditions</strong>
+                <div contenteditable="true" id="editable-terms">
+                    All prices are inclusive of applicable taxes unless stated otherwise.<br>
+                    This quotation is valid for 15 days from the date of issue.<br>
+                    Prices subject to change without prior notice.
+                </div>
+            </div>
+
+            <div>
+                <strong>Material Specs:</strong>
+                <div contenteditable="true" id="editable-specs">
+                    * Board :- 16 mm Marine 710 Grade Plywood (20 Years Warranty)<br>
+                    * Back Panels :- Multiwood Board<br>
+                    * Lamination :- All Shutters Are Double-Side Laminated (Laminate as Per Design)<br>
+                    * Hinges &amp; Sliders :- Soft-Close Hinges, Soft-Close Sliders, and Channels
+                </div>
+            </div>
         </div>
         <div style="height:40px;"></div>
         <div class="sig-box">Authorised Signatory</div>
     </div>
 
+    <script>
+        window.onbeforeprint = function() {
+            // Ensures the print system parses line breaks safely from editable boxes
+            const targets = ['editable-exclusions', 'editable-terms', 'editable-specs'];
+            targets.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) { el.style.whiteSpace = "pre-wrap"; }
+            });
+        };
+    </script>
 </body>
 </html>
