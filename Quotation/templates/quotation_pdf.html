@@ -100,6 +100,7 @@
 
         /* ── Item tags ── */
         .item-desc     { font-size: 10.5px; color: #64748b; margin-top: 5px; line-height: 1.4; padding-top: 5px; border-top: 1px dotted #e2e8f0; }
+        .pdf-calc-bar  { margin-top: 4px; font-size: 11px; color: #1e293b; display: flex; flex-direction: column; gap: 2px; line-height: 1.4; }
 
         /* ── Row counter ── */
         .item-row { counter-increment: pdf-row-counter; }
@@ -291,6 +292,24 @@
                         </td>
                         <td>
                             <strong style="color:#0f172a; font-size:12px;">{{ q_item.item.name }}</strong>
+                            
+                            <div class="pdf-calc-bar">
+                                {% if q_item.item.calculation_type == 'sqft' %}
+                                    <span style="color: #2563eb; font-weight: 600;">Size: {{ q_item.l_val|default:"0" }}L x {{ q_item.d_val|default:"0" }}D x {{ q_item.h_val|default:"0" }}H cm</span>
+                                    <span style="color: #0ea5e9; font-weight: 700;">Total SqFt: {{ q_item.qty_val|default:"0" }} sqft</span>
+                                {% elif q_item.item.calculation_type == 'rf' %}
+                                    <span style="color: #2563eb; font-weight: 700;">Running Feet: {{ q_item.qty_val|default:"0" }} ft</span>
+                                {% elif q_item.item.calculation_type == 'rm' %}
+                                    <span style="color: #2563eb; font-weight: 700;">Running Meters: {{ q_item.qty_val|default:"0" }} m</span>
+                                {% elif q_item.item.calculation_type == 'nos' %}
+                                    <span style="color: #2563eb; font-weight: 700;"> Unit Based (Numbers)</span>
+                                {% endif %}
+                                
+                                {% if q_item.material %}
+                                    <span style="color: #475569;">Material: {{ q_item.material.name }}</span>
+                                {% endif %}
+                            </div>
+
                             {% if q_item.item.description %}
                                 <div class="item-desc">{{ q_item.item.description }}</div>
                             {% endif %}

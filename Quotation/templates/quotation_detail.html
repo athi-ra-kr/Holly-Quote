@@ -157,7 +157,8 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
     background-color: rgba(15, 23, 42, 0.45); 
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    align-items: center; 
+    align-items: flex-start; /* Changed from center to align popups cleanly to the top */
+    padding-top: 40px;       /* Added comfortable top spacing */
     justify-content: center; 
     overflow: hidden; 
 }
@@ -167,7 +168,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
     background-color: var(--white); 
     width: 550px; 
     max-width: 92%; 
-    max-height: 90vh;
+    max-height: 90vh; 
     border-radius: 24px; /* Distinct high-radius curve matching the reference picture */
     border: 3px solid #000000; /* Crisp thick container outline border matching reference picture shape */
     box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); 
@@ -350,8 +351,26 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                             </td>
                             <td>
                                 <div style="font-weight:700;color:#0f172a;font-size:14px;">{{ q_item.item.name }}</div>
+                                
+                                <div style="margin-top: 6px; font-size: 12px; color: #1e293b; display: flex; flex-direction: column; gap: 4px; line-height: 1.5;">
+                                    {% if q_item.item.calculation_type == 'sqft' %}
+                                        <div style="color: #2563eb; font-weight: 600;">Size: {{ q_item.l_val|default:"0" }}L x {{ q_item.d_val|default:"0" }}D x {{ q_item.h_val|default:"0" }}H cm</div>
+                                        <div style="color: #0ea5e9; font-weight: 700;">Total SqFt: {{ q_item.qty_val|default:"0" }} sqft</div>
+                                    {% elif q_item.item.calculation_type == 'rf' %}
+                                        <div style="color: #2563eb; font-weight: 700;">Running Feet: {{ q_item.qty_val|default:"0" }} ft</div>
+                                    {% elif q_item.item.calculation_type == 'rm' %}
+                                        <div style="color: #2563eb; font-weight: 700;">Running Meters: {{ q_item.qty_val|default:"0" }} m</div>
+                                    {% elif q_item.item.calculation_type == 'nos' %}
+                                        <div style="color: #2563eb; font-weight: 700;"> Unit Based (Numbers)</div>
+                                    {% endif %}
+                                    
+                                    {% if q_item.material %}
+                                        <div style="color: #475569;">Material: {{ q_item.material.name }}</div>
+                                    {% endif %}
+                                </div>
+
                                 {% if q_item.item.description %}
-                                    <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:4px;padding-top:4px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
+                                    <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:6px;padding-top:4px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
                                 {% endif %}
                             </td>
                             <td class="cell-center"><strong style="color:#0f172a;font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
@@ -366,7 +385,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                             </td>
                             <td class="cell-center">
                                 <button type="button" class="action-btn edit-btn"
-                                    data-id="{{ q_item.id }}" data-mat-id="{{ q_item.material.id }}"
+                                    data-id="{{ q_item.id }}" data-mat-id="{% if q_item.material %}{{ q_item.material.id }}{% else %}{% endif %}"
                                     data-item-id="{{ q_item.item.id }}" data-unit-id="{{ q_item.item.unit.id }}"
                                     data-subunit-id="{{ q_item.item.sub_unit.id }}" data-calc-type="{{ q_item.item.calculation_type }}"
                                     data-item-rate="{{ q_item.item.rate|default:0 }}" data-l="{{ q_item.l_val|default:0 }}"
@@ -558,7 +577,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 <div id="unitDiscountModal" class="modal">
     <div class="modal-content" style="width:420px; border-radius: 24px; border: 3px solid #000000;">
         <div class="modal-header">
-            <h3>Room Section Discount</h3>
+            <h3>Unit Discount</h3>
             <span class="close-btn" onclick="closeUnitModal()"><i class="fa-solid fa-xmark"></i></span>
         </div>
         <div class="modal-body">
@@ -580,7 +599,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                     <input type="number" step="0.01" id="unit-discount-value" name="unit_discount_value" class="form-control" value="0" min="0">
                 </div>
                 <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:10px;padding:12px;border-radius:12px;">
-                    Apply Room Discount
+                    Apply Unit Discount
                 </button>
             </form>
         </div>
@@ -806,8 +825,10 @@ $(document).on('click','.edit-btn', function() {
     const existingImg=$b.data('img') || '';
 
     $('#modal-title').text('Edit Item Detail'); $('#edit-id').val(id);
+    
     $('#l-val').val(l); $('#d-val').val(d); $('#h-val').val(h);
     $('#qty-val').val(qv); $('#item-count').val(count);
+    
     $('#discount-section-wrapper').css('display','grid');
     $('#discount-type').val(discType); $('#discount-value').val(discVal);
     updateDiscountLabel();
@@ -840,12 +861,18 @@ $(document).on('click','.edit-btn', function() {
                     currentItemDefaultImg = $('#item-select').find(':selected').data('image') || '';
                     showImagePreview(currentExistingImg || currentItemDefaultImg);
                     
+                    applyCalcTypeUI(calcType);
+                    const names={sqft:'Square Feet',rm:'Running Meter',rf:'Running Feet',nos:'Unit Based (Fixed Rate)'};
+                    $('#calc-type-display').val(names[calcType]||'---');
+                    $('#calc-type').val(calcType);
+
                     if (calcType==='nos') {
                         const nr=parseFloat(itemRate)||0;
                         $('#nos-rate-display').text(nr.toLocaleString('en-IN',{minimumFractionDigits:2}));
                         $('#nos-rate-hidden,#rate-val').val(nr);
                     } else { 
                         $('#material-rate-select').val(matId).trigger('change.select2'); 
+                        $('#rate-val').val($('#material-rate-select').find(':selected').data('rate') || 0);
                     }
                     
                     runMath(); 
@@ -860,6 +887,14 @@ $(document).on('click','.edit-btn', function() {
 
 function closeModal()     { $('#itemModal').fadeOut(150); }
 function closeUnitModal() { $('#unitDiscountModal').fadeOut(150); }
+
+function openFetchTemplateModal() {
+    $('#fetchTemplateModal').css('display', 'flex').hide().fadeIn(150);
+}
+
+function closeFetchTemplateModal() {
+    $('#fetchTemplateModal').fadeOut(150);
+}
 
 function openUnitModal(id,name,cType,cVal) {
     $('#unit-name-display').val(name);
@@ -905,6 +940,7 @@ $(document).on('change','#item-select',function(){
     runMath();
 });
 
+/* ── Calculations logic ── */
 function runMath(){
     const type=$('#calc-type').val()||'', rate=parseFloat($('#rate-val').val())||0, count=parseFloat($('#item-count').val())||1;
     let base=0;

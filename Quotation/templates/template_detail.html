@@ -6,13 +6,23 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
-:root { --primary-dark: #0f172a; --accent-blue: #2563eb; --brand-blue: #528ec2; --border-soft: #e2e8f0; --text-main: #1e293b; --text-muted: #94a3b8; --white: #ffffff; }
+:root {
+    --primary-dark: #0f172a;
+    --accent-blue: #2563eb;
+    --brand-blue: #528ec2;
+    --border-soft: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #94a3b8;
+    --white: #ffffff;
+}
 body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text-main); }
 
+/* ── Counter ── */
 .material-table { width: 100%; border-collapse: collapse; counter-reset: row-counter; }
 .material-table tbody tr.item-row { counter-increment: row-counter; }
 .material-table tbody tr.item-row .row-number::before { content: counter(row-counter); }
 
+/* ── Layout ── */
 .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
 .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .client-info-bar { background: var(--white); padding: 18px 24px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; border: 1px solid var(--border-soft); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
@@ -21,17 +31,20 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .info-value { font-size: 14px; color: var(--primary-dark); font-weight: 600; }
 .table-container { background: var(--white); border-radius: 12px; border: 1px solid var(--border-soft); overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
 
+/* ── Table cells ── */
 .material-table th { background: #f8fafc; text-align: left; padding: 14px 16px; font-size: 11px; color: #000; font-weight: 800; border-bottom: 2px solid var(--border-soft); text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px; }
 .material-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-soft); font-size: 13px; vertical-align: middle; }
 .material-table tbody tr.item-row:hover { background-color: #f8fafc; }
 .cell-center { text-align: center; }
 .cell-right  { text-align: right; }
 
+/* ── Group headers ── */
 .unit-heading-row { background-color: var(--brand-blue) !important; }
 .unit-heading-text { font-size: 13px; font-weight: 800; color: #fff !important; text-transform: uppercase; letter-spacing: 2px; padding: 10px 16px !important; }
 .subunit-heading-row { background-color: #e2e8f0 !important; }
 .subunit-heading-text { font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 16px !important; border-bottom: 1px solid #cbd5e1; }
 
+/* ── Buttons ── */
 .btn-primary { background: var(--accent-blue); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .btn-primary:hover { background-color: #1d4ed8; }
 .action-btn { border: none; background: none; cursor: pointer; font-size: 16px; padding: 6px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; }
@@ -39,48 +52,121 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 .item-img  { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; }
 .no-image  { width: 65px; height: 65px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; }
 
-.th-eye { background: none; border: none; cursor: pointer; color: #c0cfe0; font-size: 11px; padding: 2px 5px; border-radius: 4px; transition: all 0.15s; display: inline-flex; align-items: center; vertical-align: middle; margin-left: 4px; }
+/* ── Eye button in th ── */
+.th-eye {
+    background: none; border: none; cursor: pointer; color: #c0cfe0;
+    font-size: 11px; padding: 2px 5px; border-radius: 4px;
+    transition: all 0.15s; display: inline-flex; align-items: center;
+    vertical-align: middle; margin-left: 4px;
+}
 .th-eye:hover { color: #64748b; background: #e2e8f0; }
-.th-eye.off { color: #ef4444; background: #fee2e2; }
+.th-eye.off   { color: #ef4444; background: #fee2e2; }
 .th-eye.off:hover { color: #b91c1c; background: #fecaca; }
 
+/* ── Column hide classes applied to <table> ── */
 #main-table.hide-rate .r-cell { display: none !important; }
-#main-table.hide-mrp  .m-cell { display: none !important; }
+#main-table.hide-mrp   .m-cell { display: none !important; }
 #main-table.hide-disc .d-cell { display: none !important; }
 
+/* ── Grand total row ── */
 .grand-total-row { background-color: var(--brand-blue) !important; }
-.grand-total-row td { background-color: var(--brand-blue) !important; border-bottom: none; padding: 0 !important; }
-.grand-bar { display: flex; align-items: center; justify-content: flex-end; gap: 32px; padding: 16px 20px; background-color: var(--brand-blue); }
-.grand-bar-label { font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 1px; margin-right: auto; }
+.grand-total-row td {
+    background-color: var(--brand-blue) !important;
+    border-bottom: none;
+    padding: 0 !important;
+}
+.grand-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 32px;
+    padding: 16px 20px;
+    background-color: var(--brand-blue);
+}
+.grand-bar-label {
+    font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.85);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-right: auto;
+}
 .grand-bar-item { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 .grand-bar-item .g-title { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.5px; }
-.grand-bar-item .g-val { font-size: 16px; font-weight: 800; color: #fff; white-space: nowrap; }
+.grand-bar-item .g-val   { font-size: 16px; font-weight: 800; color: #fff; white-space: nowrap; }
 .grand-bar-item .g-val.green { color: #4ade80; }
 
+/* ── Unit total ── */
 .unit-total-row { background-color: #f8fafc; border-top: 2px dashed var(--border-soft); border-bottom: 2px solid var(--border-soft); font-weight: 700; }
 .unit-total-row td { padding: 12px 16px; }
 .unit-total-label { text-align: right; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-.unit-total-mrp { color: #475569; font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; }
-.unit-total-net { color: #16a34a; font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; }
+.unit-total-mrp   { color: #475569; font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; }
+.unit-total-net   { color: #16a34a; font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; }
 .unit-discount-btn { background: #fff; color: #1e293b; border: 1px solid #cbd5e1; padding: 4px 10px; font-size: 11px; border-radius: 6px; cursor: pointer; font-weight: 700; transition: all 0.2s; margin-left: 10px; }
 .unit-discount-btn:hover { background: #f1f5f9; }
 
+/* ── NOS badge ── */
 .nos-rate-badge { display: inline-flex; align-items: center; gap: 6px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; padding: 8px 12px; font-size: 13px; font-weight: 700; color: #92400e; }
 .nos-rate-badge i { color: #d97706; }
 
+/* ── Visibility chip bar ── */
 .vis-bar { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; }
 .vis-bar-label { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
 .vis-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid; transition: all 0.15s; user-select: none; }
-.vis-chip.on { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+.vis-chip.on  { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
 .vis-chip.off { background: #fef2f2; color: #ef4444; border-color: #fecaca; }
 .vis-chip:hover { filter: brightness(0.93); }
 
-.modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15,23,42,0.6); align-items: flex-start; justify-content: center; overflow-y: auto; padding: 30px 0; }
-.modal-content { background-color: var(--white); width: 540px; max-width: 90%; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-soft); }
-.modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between; align-items: center; }
+/* ── FIXED OVERLAY BACKGROUND MODAL STYLES (MATCHES QUOTATION GEOMETRY) ── */
+.modal { 
+    display: none; 
+    position: fixed; 
+    z-index: 99999; 
+    left: 0; 
+    top: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    background-color: rgba(15, 23, 42, 0.45); 
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    align-items: center; 
+    justify-content: center; 
+    overflow: hidden; 
+}
+
+/* Rounded Card Body Styling aligned directly with the high-radius wireframe shapes */
+.modal-content { 
+    background-color: var(--white); 
+    width: 550px; 
+    max-width: 92%; 
+    max-height: 90vh; 
+    border-radius: 24px; /* Distinct high-radius curve matching the quotation setup */
+    border: 3px solid #000000; /* Crisp thick container outline border */
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden;
+    animation: popupScale 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popupScale {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header { 
+    padding: 20px 24px; 
+    border-bottom: 1px solid var(--border-soft); 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background: #f8fafc;
+}
 .modal-header h3 { font-size: 18px; margin: 0; color: var(--primary-dark); font-weight: 700; }
-.modal-body { padding: 24px; flex: 1; overflow-y: auto; }
-.form-group { margin-bottom: 18px; }
+.modal-body { 
+    padding: 24px; 
+    overflow-y: auto; /* Independent inner-scroll so modal card never gets skewed */
+    flex: 1; 
+}
+
+.form-group { margin-bottom: 18px; position: relative; }
 .form-group label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
 .form-group label i { color: var(--accent-blue); font-size: 12px; width: 14px; text-align: center; }
 .form-control { width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; }
@@ -161,8 +247,27 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                         </td>
                         <td>
                             <div style="font-weight:700;color:#0f172a;font-size:14px;">{{ q_item.item.name }}</div>
+                            
+                            <div style="margin-top: 6px; font-size: 12px; color: #1e293b; display: flex; flex-direction: column; gap: 4px; line-height: 1.5;">
+                                {% if q_item.item.calculation_type == 'sqft' %}
+                                    <div style="color: #2563eb; font-weight: 600;">Size: {{ q_item.l_val|default:"0" }}L x {{ q_item.d_val|default:"0" }}D x {{ q_item.h_val|default:"0" }}H cm</div>
+                                    <div style="color: #0ea5e9; font-weight: 700;">Total SqFt: {{ q_item.qty_val|default:"0" }} sqft</div>
+                                </div>
+                                {% elif q_item.item.calculation_type == 'rf' %}
+                                    <div style="color: #2563eb; font-weight: 700;">Running Feet: {{ q_item.qty_val|default:"0" }} ft</div>
+                                {% elif q_item.item.calculation_type == 'rm' %}
+                                    <div style="color: #2563eb; font-weight: 700;">Running Meters: {{ q_item.qty_val|default:"0" }} m</div>
+                                {% elif q_item.item.calculation_type == 'nos' %}
+                                    <div style="color: #2563eb; font-weight: 700;"> Unit Based (Numbers)</div>
+                                {% endif %}
+                                
+                                {% if q_item.material %}
+                                    <div style="color: #475569;">Material: {{ q_item.material.name }}</div>
+                                {% endif %}
+                            </div>
+
                             {% if q_item.item.description %}
-                                <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:3px;padding-top:3px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
+                                <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:6px;padding-top:4px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
                             {% endif %}
                         </td>
                         <td class="cell-center"><strong style="color:#0f172a;font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
@@ -177,7 +282,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                         </td>
                         <td class="cell-center">
                             <button type="button" class="action-btn edit-btn"
-                                data-id="{{ q_item.id }}" data-mat-id="{{ q_item.material.id }}"
+                                data-id="{{ q_item.id }}" data-mat-id="{% if q_item.material %}{{ q_item.material.id }}{% else %}{% endif %}"
                                 data-item-id="{{ q_item.item.id }}" data-unit-id="{{ q_item.item.unit.id }}"
                                 data-subunit-id="{{ q_item.item.sub_unit.id }}" data-calc-type="{{ q_item.item.calculation_type }}"
                                 data-item-rate="{{ q_item.item.rate|default:0 }}" data-l="{{ q_item.l_val|default:0 }}"
@@ -202,7 +307,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                         </button>
                     </td>
                     <td class="r-cell"></td>
-                    <td class="unit-total-mrp">
+                    <td class="unit-total-mrp m-cell">
                         {% for room, data in unit_data.items %}{% if room.id == unit_group.grouper.id %}₹{{ data.mrp_total|floatformat:2 }}{% endif %}{% endfor %}
                     </td>
                     <td class="unit-total-net d-cell">
@@ -249,24 +354,31 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
                     <div class="form-group">
                         <label><i class="fa-solid fa-door-open"></i> Room (Unit)</label>
-                        <select id="unit-select" class="form-control" name="unit" required>
-                            <option value="">Select</option>
-                            {% for u in units %}<option value="{{ u.id }}">{{ u.name }}</option>{% endfor %}
-                        </select>
+                        <div class="select2-wrapper">
+                            <select id="unit-select" class="form-control" name="unit" required>
+                                <option value="">Select</option>
+                                {% for u in units %}<option value="{{ u.id }}">{{ u.name }}</option>{% endfor %}
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label><i class="fa-solid fa-layer-group"></i> Sub Unit</label>
-                        <select id="subunit-select" class="form-control" name="sub_unit" required>
-                            <option value="">Select</option>
-                        </select>
+                        <div class="select2-wrapper">
+                            <select id="subunit-select" class="form-control" name="sub_unit" required>
+                                <option value="">Select</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label><i class="fa-solid fa-cube"></i> Item Selection</label>
-                    <select id="item-select" class="form-control" name="item" required>
-                        <option value="">-- Search Item --</option>
-                    </select>
+                    <div class="select2-wrapper">
+                        <select id="item-select" class="form-control" name="item" required>
+                            <option value="">-- Search Item --</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div class="form-group">
                     <label><i class="fa-solid fa-calculator"></i> Calculation</label>
                     <input type="text" id="calc-type-display" class="form-control" readonly style="background:#f1f5f9;">
@@ -288,18 +400,20 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                     </div>
                     <div class="form-group" id="material-field-wrapper">
                         <label>Material</label>
-                        <select id="material-rate-select" class="form-control" name="material">
-                            <option value="">-- Choose --</option>
-                            {% for mat in materials_list %}
-                            <option value="{{ mat.id }}" data-rate="{{ mat.rate }}">{{ mat.name }} (₹{{ mat.rate }})</option>
-                            {% endfor %}
-                        </select>
+                        <div class="select2-wrapper">
+                            <select id="material-rate-select" class="form-control" name="material">
+                                <option value="">-- Choose --</option>
+                                {% for mat in materials_list %}
+                                <option value="{{ mat.id }}" data-rate="{{ mat.rate }}">{{ mat.name }} (₹{{ mat.rate }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <input type="hidden" id="rate-val" value="0">
                     </div>
                 </div>
                 <div id="nos-rate-wrapper" style="display:none;margin-bottom:18px;">
                     <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
-                        <i class="fa-solid fa-tag" style="color:var(--accent-blue);"></i> Item Rate
+                        <i class="fa-solid fa-indian-rupee-sign"></i> Item Rate
                     </div>
                     <div class="nos-rate-badge">
                         <i class="fa-solid fa-indian-rupee-sign"></i>
@@ -335,7 +449,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                         <div class="amount net" style="font-size:20px;margin-top:2px;">₹ <span id="auto-total">0.00</span></div>
                     </div>
                 </div>
-                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:15px;padding:14px;font-size:15px;">
+                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:15px;padding:14px;font-size:15px;border-radius:12px;">
                     Save Changes
                 </button>
             </form>
@@ -344,7 +458,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 </div>
 
 <div id="unitDiscountModal" class="modal">
-    <div class="modal-content" style="width:420px;">
+    <div class="modal-content" style="width:420px; border-radius: 24px; border: 3px solid #000000;">
         <div class="modal-header">
             <h3>Room Section Discount</h3>
             <span class="close-btn" onclick="closeUnitModal()"><i class="fa-solid fa-xmark"></i></span>
@@ -367,7 +481,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                     <label id="unit-discount-label">Discount Value</label>
                     <input type="number" step="0.01" id="unit-discount-value" name="unit_discount_value" class="form-control" value="0" min="0">
                 </div>
-                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:10px;padding:12px;">
+                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:10px;padding:12px;border-radius:12px;">
                     Apply Room Discount
                 </button>
             </form>
@@ -380,6 +494,21 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 <script>
 let isPrefilling = false;
 
+/* ═══════════════════════════════════════════
+    INITIAL SELECT2 SETUP
+    ═══════════════════════════════════════════ */
+$(document).ready(function() {
+    $('#unit-select, #subunit-select, #item-select, #material-rate-select').each(function() {
+        $(this).select2({
+            dropdownParent: $(this).parent(),
+            width: '100%'
+        });
+    });
+});
+
+/* ═══════════════════════════════════════════
+    COLUMN VISIBILITY
+    ═══════════════════════════════════════════ */
 const colHidden = {
     rate: sessionStorage.getItem('td_hide_rate') === '1',
     mrp:  sessionStorage.getItem('td_hide_mrp')  === '1',
@@ -388,6 +517,7 @@ const colHidden = {
 
 function syncColUI() {
     const table = document.getElementById('main-table');
+    if(!table) return;
     ['rate','mrp','disc'].forEach(col => {
         const hidden = colHidden[col];
         const cls = { rate:'hide-rate', mrp:'hide-mrp', disc:'hide-disc' }[col];
@@ -410,10 +540,18 @@ function safeNum(v) { return (v===null||v===undefined||v===''||v==='None') ? '0'
 
 function applyCalcTypeUI(type) {
     const isNos = type === 'nos';
-    $('#material-field-wrapper').toggle(!isNos);
-    $('#nos-rate-wrapper').toggle(isNos);
-    $('#material-rate-select').prop('required', !isNos);
-    if (isNos) $('#material-rate-select').val('');
+    
+    if (isNos) {
+        $('#material-field-wrapper').hide();
+        $('#material-rate-select').prop('required', false).val('').trigger('change.select2');
+        $('#nos-rate-wrapper').show();
+    } else {
+        $('#nos-rate-wrapper').hide();
+        $('#material-field-wrapper').show();
+        $('#material-rate-select').prop('required', true);
+        $('#material-rate-select').select2({ dropdownParent: $('#material-field-wrapper'), width: '100%' });
+    }
+    
     $('#sqft-inputs').toggle(type === 'sqft');
     $('#single-input').toggle(type === 'rm' || type === 'rf');
     if (type === 'rm') $('#qty-label').html('<i class="fa-solid fa-ruler-horizontal"></i> Total Running Meters');
@@ -428,16 +566,30 @@ function openAddModal() {
     $('#discount-section-wrapper').hide();
     $('#modal-total-card').removeClass('split-mode');
     $('#single-total-view').show(); $('#mrp-box-view,#net-box-view').hide();
-    $('#subunit-select').html('<option value="">Select</option>');
-    $('#item-select').html('<option value="">-- Search Item --</option>');
+    
+    $('#subunit-select').html('<option value="">Select</option>').trigger('change.select2');
+    $('#item-select').html('<option value="">-- Search Item --</option>').trigger('change.select2');
+    
     $('#sqft-inputs,#single-input').hide();
     $('#calc-type-display').val(''); $('#calc-type').val('');
     $('#rate-val,#nos-rate-hidden').val(0); $('#nos-rate-display').text('0.00');
     $('#auto-single-total,#auto-mrp,#auto-total').text('0.00');
+    
     $('#material-field-wrapper').show(); $('#nos-rate-wrapper').hide();
     $('#material-rate-select').prop('required', true);
-    $('#itemModal').css('display','flex').hide().fadeIn(200);
-    $('#material-rate-select,#item-select').select2({ dropdownParent:$('#itemModal'), width:'100%' });
+    
+    isPrefilling = false;
+    
+    $('#itemModal').css('display', 'flex').hide().fadeIn(150, function() {
+         $('#unit-select, #subunit-select, #item-select, #material-rate-select').each(function() {
+              $(this).select2({ 
+                  dropdownParent: $(this).parent(), 
+                  width: '100%' 
+              });
+         });
+    });
+    $('#unit-select').val('').trigger('change.select2');
+    $('#material-rate-select').val('').trigger('change.select2');
 }
 
 $(document).on('click','.edit-btn', function() {
@@ -452,33 +604,59 @@ $(document).on('click','.edit-btn', function() {
     $('#modal-title').text('Edit Item Detail'); $('#edit-id').val(id);
     $('#l-val').val(l); $('#d-val').val(d); $('#h-val').val(h);
     $('#qty-val').val(qv); $('#item-count').val(count);
+    
     $('#discount-section-wrapper').css('display','grid');
     $('#discount-type').val(discType); $('#discount-value').val(discVal);
     updateDiscountLabel();
     $('#modal-total-card').addClass('split-mode');
     $('#single-total-view').hide(); $('#mrp-box-view,#net-box-view').show();
-    $('#itemModal').css('display','flex').hide().fadeIn(200);
-    $('#material-rate-select,#item-select').select2({ dropdownParent:$('#itemModal'), width:'100%' });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    $('#itemModal').css('display', 'flex').hide().fadeIn(150);
 
     isPrefilling = true;
-    $('#unit-select').val(unitId);
-    $.ajax({ url:"{% url 'ajax_load_subunits' %}", data:{unit:unitId}, success:function(data) {
-        $('#subunit-select').html(data).val(subunitId);
-        $.ajax({ url:"{% url 'ajax_load_items' %}", data:{subunit:subunitId}, success:function(data) {
-            $('#item-select').html(data).select2({ dropdownParent:$('#itemModal'), width:'100%' });
-            $('#item-select').val(itemId).trigger('change');
-            if (calcType==='nos') {
-                const nr=parseFloat(itemRate)||0;
-                $('#nos-rate-display').text(nr.toLocaleString('en-IN',{minimumFractionDigits:2}));
-                $('#nos-rate-hidden,#rate-val').val(nr);
-            } else { $('#material-rate-select').val(matId).trigger('change'); }
-            runMath(); isPrefilling=false;
-        }, error:function(){ isPrefilling=false; alert('Failed to load items.'); }});
-    }, error:function(){ isPrefilling=false; alert('Failed to load sub-units.'); }});
+    $('#unit-select').val(unitId).trigger('change.select2');
+    
+    $.ajax({ 
+        url: "{% url 'ajax_load_subunits' %}", 
+        data: { unit: unitId }, 
+        success: function(data) {
+            $('#subunit-select').html(data);
+            $('#subunit-select').val(subunitId).trigger('change.select2');
+            
+            $.ajax({ 
+                url: "{% url 'ajax_load_items' %}", 
+                data: { subunit: subunitId }, 
+                success: function(itemData) {
+                    $('#item-select').html(itemData);
+                    $('#item-select').val(itemId).trigger('change.select2');
+                    
+                    applyCalcTypeUI(calcType);
+                    const names={sqft:'Square Feet',rm:'Running Meter',rf:'Running Feet',nos:'Unit Based (Fixed Rate)'};
+                    $('#calc-type-display').val(names[calcType]||'---');
+                    $('#calc-type').val(calcType);
+
+                    if (calcType==='nos') {
+                        const nr=parseFloat(itemRate)||0;
+                        $('#nos-rate-display').text(nr.toLocaleString('en-IN',{minimumFractionDigits:2}));
+                        $('#nos-rate-hidden,#rate-val').val(nr);
+                    } else { 
+                        $('#material-rate-select').val(matId).trigger('change.select2'); 
+                        $('#rate-val').val($('#material-rate-select').find(':selected').data('rate') || 0);
+                    }
+                    
+                    runMath(); 
+                    isPrefilling = false;
+                }, 
+                error: function(){ isPrefilling=false; alert('Failed to load items.'); }
+            });
+        }, 
+        error: function(){ isPrefilling=false; alert('Failed to load sub-units.'); }
+    });
 });
 
-function closeModal()     { $('#itemModal').fadeOut(200); }
-function closeUnitModal() { $('#unitDiscountModal').fadeOut(200); }
+function closeModal()     { $('#itemModal').fadeOut(150); }
+function closeUnitModal() { $('#unitDiscountModal').fadeOut(150); }
 
 function openUnitModal(id,name,cType,cVal) {
     $('#unit-name-display').val(name);
@@ -486,7 +664,7 @@ function openUnitModal(id,name,cType,cVal) {
     $('#unit-discount-value').val(cVal||0);
     $('#unitDiscountForm').attr('action','/templates/{{ template.id }}/unit/'+id+'/discount/');
     updateUnitLabel();
-    $('#unitDiscountModal').css('display','flex').hide().fadeIn(200);
+    $('#unitDiscountModal').css('display','flex').hide().fadeIn(150);
 }
 function updateUnitLabel() {
     $('#unit-discount-label').text($('#unit-discount-type').val()==='percentage'?'Discount (%)':'Discount Value (₹)');
@@ -530,13 +708,46 @@ function runMath(){
 }
 $(document).on('input change','.math-input',runMath);
 $(document).on('change','#material-rate-select',function(){ $('#rate-val').val($(this).find(':selected').data('rate')||0); runMath(); });
+
 $('#unit-select').change(function(){
     if(isPrefilling) return;
-    $.ajax({ url:"{% url 'ajax_load_subunits' %}", data:{unit:$(this).val()}, success:function(data){ $('#subunit-select').html(data); $('#item-select').html('<option value="">-- Select Item --</option>'); }});
+    const unitVal = $(this).val();
+    $('#item-select').html('<option value="">-- Select Item --</option>').trigger('change.select2');
+    if(!unitVal){ 
+        $('#subunit-select').html('<option value="">Select</option>').trigger('change.select2'); 
+        return; 
+    }
+    $.ajax({
+        url:"{% url 'ajax_load_subunits' %}",
+        data:{ unit: unitVal },
+        success:function(data){ 
+            $('#subunit-select').html(data).trigger('change.select2'); 
+        },
+        error:function(xhr){
+            console.error('ajax_load_subunits failed', xhr.status, xhr.responseText);
+            $('#subunit-select').html('<option value="">⚠ Failed to load sub-units</option>').trigger('change.select2');
+        }
+    });
 });
+
 $('#subunit-select').change(function(){
     if(isPrefilling) return;
-    $.ajax({ url:"{% url 'ajax_load_items' %}", data:{subunit:$(this).val()}, success:function(data){ $('#item-select').html(data).select2({ dropdownParent:$('#itemModal'), width:'100%' }); }});
+    const subVal = $(this).val();
+    if(!subVal){ 
+        $('#item-select').html('<option value="">-- Select Item --</option>').trigger('change.select2'); 
+        return; 
+    }
+    $.ajax({
+        url:"{% url 'ajax_load_items' %}",
+        data:{ subunit: subVal },
+        success:function(data){ 
+            $('#item-select').html(data).trigger('change.select2'); 
+        },
+        error:function(xhr){
+            console.error('ajax_load_items failed', xhr.status, xhr.responseText);
+            $('#item-select').html('<option value="">⚠ Failed to load items</option>').trigger('change.select2');
+        }
+    });
 });
 </script>
 {% endblock %}
