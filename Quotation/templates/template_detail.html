@@ -252,7 +252,6 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                                 {% if q_item.item.calculation_type == 'sqft' %}
                                     <div style="color: #2563eb; font-weight: 600;">Size: {{ q_item.l_val|default:"0" }}L x {{ q_item.d_val|default:"0" }}D x {{ q_item.h_val|default:"0" }}H cm</div>
                                     <div style="color: #0ea5e9; font-weight: 700;">Total SqFt: {{ q_item.qty_val|default:"0" }} sqft</div>
-                                </div>
                                 {% elif q_item.item.calculation_type == 'rf' %}
                                     <div style="color: #2563eb; font-weight: 700;">Running Feet: {{ q_item.qty_val|default:"0" }} ft</div>
                                 {% elif q_item.item.calculation_type == 'rm' %}
@@ -268,6 +267,10 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 
                             {% if q_item.item.description %}
                                 <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:6px;padding-top:4px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
+                            {% endif %}
+
+                            {% if q_item.material.description %}
+                                <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:4px;font-style:italic;"> {{ q_item.material.description }}</div>
                             {% endif %}
                         </td>
                         <td class="cell-center"><strong style="color:#0f172a;font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>

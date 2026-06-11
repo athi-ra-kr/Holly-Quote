@@ -324,6 +324,10 @@
                             {% if q_item.item.description %}
                                 <div class="item-desc">{{ q_item.item.description }}</div>
                             {% endif %}
+
+                            {% if q_item.material.description %}
+                                <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:10.5px;margin-top:4px;font-style:italic;"> {{ q_item.material.description }}</div>
+                            {% endif %}
                         </td>
                         <td class="col-center"><strong>{{ q_item.item_count|default:"1" }}</strong></td>
                         <td class="col-rate-val {{ cls_rate }}">₹ {{ q_item.rate }}</td>

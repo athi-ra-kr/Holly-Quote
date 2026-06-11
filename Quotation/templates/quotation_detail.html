@@ -232,7 +232,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
     .material-table th { color: #000 !important; }
     .unit-heading-row    { background-color: var(--brand-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .subunit-heading-row { background-color: #e2e8f0 !important;           -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .unit-total-row      { background-color: #f8fafc !important;              -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .unit-total-row      { background-color: #f8fafc !important;               -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .grand-total-row, .grand-bar { background-color: var(--brand-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     #main-table.hide-rate .r-cell { display: none !important; }
     #main-table.hide-mrp  .m-cell { display: none !important; }
@@ -371,6 +371,10 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
 
                                 {% if q_item.item.description %}
                                     <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:6px;padding-top:4px;border-top:1px dotted #e2e8f0;">{{ q_item.item.description }}</div>
+                                {% endif %}
+
+                                {% if q_item.material.description %}
+                                    <div style="max-width:280px;line-height:1.4;color:#64748b;font-size:12px;margin-top:4px;font-style:italic;"> {{ q_item.material.description }}</div>
                                 {% endif %}
                             </td>
                             <td class="cell-center"><strong style="color:#0f172a;font-size:14px;">{{ q_item.item_count|default:"1" }}</strong></td>
@@ -881,7 +885,7 @@ $(document).on('click','.edit-btn', function() {
                 error: function(){ isPrefilling=false; alert('Failed to load items.'); }
             });
         }, 
-        error: function(){ isPrefilling=false; alert('Failed to load sub-units.'); }
+                error: function(){ isPrefilling=false; alert('Failed to load sub-units.'); }
     });
 });
 
