@@ -361,7 +361,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                                     {% elif q_item.item.calculation_type == 'rm' %}
                                         <div style="color: #2563eb; font-weight: 700;">Running Meters: {{ q_item.qty_val|default:"0" }} m</div>
                                     {% elif q_item.item.calculation_type == 'nos' %}
-                                        <div style="color: #2563eb; font-weight: 700;"> Unit Based (Numbers)</div>
+                                        
                                     {% endif %}
                                     
                                     {% if q_item.material %}
@@ -889,7 +889,7 @@ $(document).on('click','.edit-btn', function() {
     });
 });
 
-function closeModal()     { $('#itemModal').fadeOut(150); }
+function closeModal()      { $('#itemModal').fadeOut(150); }
 function closeUnitModal() { $('#unitDiscountModal').fadeOut(150); }
 
 function openFetchTemplateModal() {

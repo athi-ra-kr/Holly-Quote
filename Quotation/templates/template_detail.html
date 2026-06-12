@@ -252,12 +252,13 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                                 {% if q_item.item.calculation_type == 'sqft' %}
                                     <div style="color: #2563eb; font-weight: 600;">Size: {{ q_item.l_val|default:"0" }}L x {{ q_item.d_val|default:"0" }}D x {{ q_item.h_val|default:"0" }}H cm</div>
                                     <div style="color: #0ea5e9; font-weight: 700;">Total SqFt: {{ q_item.qty_val|default:"0" }} sqft</div>
+                                Mentioned logic for running feet calculation can stay as it is here
                                 {% elif q_item.item.calculation_type == 'rf' %}
                                     <div style="color: #2563eb; font-weight: 700;">Running Feet: {{ q_item.qty_val|default:"0" }} ft</div>
                                 {% elif q_item.item.calculation_type == 'rm' %}
                                     <div style="color: #2563eb; font-weight: 700;">Running Meters: {{ q_item.qty_val|default:"0" }} m</div>
                                 {% elif q_item.item.calculation_type == 'nos' %}
-                                    <div style="color: #2563eb; font-weight: 700;"> Unit Based (Numbers)</div>
+                                    
                                 {% endif %}
                                 
                                 {% if q_item.material %}
