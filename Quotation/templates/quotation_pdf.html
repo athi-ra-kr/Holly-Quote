@@ -269,7 +269,7 @@
         <thead>
             <tr>
                 <th style="width:4%; text-align:left;">No</th>
-                <th style="width:7%; text-align:left;">Image</th>
+                <th style="width:7%; text-align:left;"></th>
                 <th style="text-align:left;">Item Details</th>
                 <th class="col-center" style="width:8%;">Qty</th>
                 <th class="col-right {{ cls_rate }}" style="width:12%;">Material Rate</th>
@@ -295,10 +295,12 @@
                     <tr class="item-row">
                         <td class="row-num"></td>
                         <td>
-                            {% if q_item.item.image %}
+                            {% if q_item.image %}
+                                <img src="{{ q_item.image.url }}" class="pdf-img">
+                            {% elif q_item.item.image %}
                                 <img src="{{ q_item.item.image.url }}" class="pdf-img">
                             {% else %}
-                                <div class="no-img">No Image</div>
+                                <span style="color:#94a3b8; font-size:12px;">-</span>
                             {% endif %}
                         </td>
                         <td>
