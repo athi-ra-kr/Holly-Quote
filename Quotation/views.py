@@ -252,25 +252,43 @@ def material_delete(request,id): Material.objects.get(id=id).delete(); return re
 
 
 # ── QUOTATION DETAIL ──
-def _build_unit_data(quotation_items):
+def _build_unit_data(quotation_items, quotation=None, request=None):
     unit_data = {}
     for q_item in quotation_items:
         u = q_item.item.unit
         if u not in unit_data:
-            unit_data[u] = {'mrp_total': 0.0, 'final_total': 0.0, 'discount_display': ''}
-        unit_data[u]['mrp_total']   += float(q_item.mrp_total)
+            unit_data[u] = {
+                'mrp_total': 0.0,
+                'final_total': 0.0,
+                'discount_display': '',
+                'discount_type': 'percentage',
+                'discount_value': 0.0,
+            }
+        unit_data[u]['mrp_total'] += float(q_item.mrp_total)
         unit_data[u]['final_total'] += float(q_item.final_total)
+
     for u, t in unit_data.items():
         base = t['final_total']
-        val  = float(u.discount_value)
+        discount_type = 'percentage'
+        discount_value = 0.0
+
+        if quotation and request and request.session:
+            override = request.session.get(f'unit_discount_{quotation.id}_{u.id}')
+            if override:
+                discount_type = override.get('discount_type', 'percentage')
+                discount_value = float(override.get('discount_value', 0) or 0)
+
         disc = 0.0
-        if val > 0:
-            if u.discount_type == 'percentage':
-                disc = (base * val) / 100.0
-                t['discount_display'] = f"{val}% Off (-₹{disc:,.2f})"
+        if discount_value > 0:
+            if discount_type == 'percentage':
+                disc = (base * discount_value) / 100.0
+                t['discount_display'] = f"{discount_value}% Off (-₹{disc:,.2f})"
             else:
-                disc = val
-                t['discount_display'] = f"₹{val} Off"
+                disc = discount_value
+                t['discount_display'] = f"₹{discount_value} Off"
+
+        t['discount_type'] = discount_type
+        t['discount_value'] = discount_value
         t['unit_grand_total'] = max(0.0, base - disc)
     return unit_data
 
@@ -285,7 +303,7 @@ def quotation_detail(request, id):
         'item__unit', 'item__sub_unit', 'material'
     ).order_by('item__unit__id', 'item__sub_unit__id', 'id')
 
-    unit_data       = _build_unit_data(all_items)
+    unit_data       = _build_unit_data(all_items, quotation=quotation, request=request)
     grand_mrp_total = sum(t['mrp_total']       for t in unit_data.values())
     grand_net_total = sum(t['unit_grand_total'] for t in unit_data.values())
 
@@ -333,7 +351,7 @@ def quotation_detail(request, id):
                 quotation=quotation, item_id=item_id, material=mat_obj,
                 l_val=l, d_val=d, h_val=h, qty_val=qv,
                 quantity=final_qty, item_count=item_count,
-                rate=current_rate, discount_type='percentage', discount_value=0
+                rate=current_rate, discount_type=disc_type, discount_value=disc_val
             )
             if uploaded_image:
                 qi.image = uploaded_image
@@ -355,9 +373,17 @@ def quotation_detail(request, id):
 def update_unit_discount(request, quotation_id, unit_id):
     if request.method == "POST":
         u = get_object_or_404(Unit, id=unit_id)
-        u.discount_type  = request.POST.get('unit_discount_type', 'percentage')
-        u.discount_value = float(request.POST.get('unit_discount_value', 0) or 0)
-        u.save()
+        discount_type = request.POST.get('unit_discount_type', 'percentage')
+        discount_value = float(request.POST.get('unit_discount_value', 0) or 0)
+
+        if discount_value > 0:
+            request.session[f'unit_discount_{quotation_id}_{unit_id}'] = {
+                'discount_type': discount_type,
+                'discount_value': discount_value,
+            }
+        else:
+            request.session.pop(f'unit_discount_{quotation_id}_{unit_id}', None)
+
         messages.success(request, f"Discount updated for {u.name}!")
     return redirect('quotation_detail', id=quotation_id)
 
@@ -403,7 +429,7 @@ def quotation_pdf(request, id):
         'item__unit', 'item__sub_unit', 'material'
     ).order_by('item__unit__id', 'item__sub_unit__id', 'id')
 
-    unit_data = _build_unit_data(quotation_items)
+    unit_data = _build_unit_data(quotation_items, quotation=quotation, request=request)
     for q_item in quotation_items:
         u = q_item.item.unit
         if 'items' not in unit_data[u]:

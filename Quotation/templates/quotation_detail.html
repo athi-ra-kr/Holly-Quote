@@ -410,7 +410,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(-
                     <tr class="unit-total-row">
                         <td colspan="4" class="unit-total-label">
                             Unit Total:
-                            <button class="unit-discount-btn" onclick="openUnitModal('{{ unit_group.grouper.id }}','{{ unit_group.grouper.name }}','{{ unit_group.grouper.discount_type }}','{{ unit_group.grouper.discount_value }}')">
+                            <button class="unit-discount-btn" onclick="openUnitModal('{{ unit_group.grouper.id }}','{{ unit_group.grouper.name }}','{% for room, data in unit_data.items %}{% if room.id == unit_group.grouper.id %}{{ data.discount_type }}{% endif %}{% endfor %}','{% for room, data in unit_data.items %}{% if room.id == unit_group.grouper.id %}{{ data.discount_value }}{% endif %}{% endfor %}')">
                                 <i class="fa-solid fa-tag" style="color:#2563eb;"></i> Set Discount
                             </button>
                         </td>

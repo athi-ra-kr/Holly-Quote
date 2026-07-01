@@ -2,10 +2,11 @@ import tempfile
 from io import BytesIO
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, override_settings
+from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
 from PIL import Image
 
+from . import views
 from .models import Customer, Item, Quotation, QuotationItem, SubUnit, Unit
 
 
@@ -56,3 +57,68 @@ class QuotationPdfImageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'quotation-image.png')
         self.assertNotContains(response, 'item-image.png')
+
+    def test_new_item_uses_posted_discount_when_created(self):
+        session = self.client.session
+        session['user'] = 'test-user'
+        session.save()
+
+        response = self.client.post(
+            reverse('quotation_detail', args=[self.quotation.id]),
+            {
+                'item': self.item.id,
+                'material': '',
+                'calc_type': 'nos',
+                'item_count': 1,
+                'discount_type': 'flat',
+                'discount_value': 25,
+                'l_val': 0,
+                'd_val': 0,
+                'h_val': 0,
+                'qty_val': 0,
+            },
+            follow=False,
+        )
+
+        self.assertEqual(response.status_code, 302)
+        created_item = QuotationItem.objects.filter(quotation=self.quotation).latest('id')
+        self.assertEqual(created_item.discount_type, 'flat')
+        self.assertEqual(created_item.discount_value, 25)
+
+    def test_unit_discount_only_affects_target_quotation(self):
+        session = self.client.session
+        session['user'] = 'test-user'
+        session.save()
+
+        other_customer = Customer.objects.create(name='Other Customer', mobile='8888888888')
+        other_quotation = Quotation.objects.create(customer=other_customer, project_type='Other')
+
+        QuotationItem.objects.create(quotation=other_quotation, item=self.item, quantity=1, rate=100)
+
+        session[f'unit_discount_{self.quotation.id}_{self.unit.id}'] = {
+            'discount_type': 'flat',
+            'discount_value': 10,
+        }
+        session.save()
+
+        response = self.client.post(
+            reverse('update_unit_discount', args=[self.quotation.id, self.unit.id]),
+            {
+                'unit_discount_type': 'flat',
+                'unit_discount_value': 10,
+            },
+            follow=False,
+        )
+
+        self.assertEqual(response.status_code, 302)
+
+        request = self.client.get(reverse('quotation_detail', args=[self.quotation.id])).wsgi_request
+        unit_data_for_current = views._build_unit_data(self.quotation.items.all(), quotation=self.quotation, request=request)
+        current_unit = next(iter(unit_data_for_current))
+        self.assertEqual(unit_data_for_current[current_unit]['unit_grand_total'], 90.0)
+
+        request_other = self.client.get(reverse('quotation_detail', args=[other_quotation.id])).wsgi_request
+        unit_data_for_other = views._build_unit_data(other_quotation.items.all(), quotation=other_quotation, request=request_other)
+        other_unit = next(iter(unit_data_for_other))
+        self.assertEqual(unit_data_for_other[other_unit]['unit_grand_total'], 100.0)
+
